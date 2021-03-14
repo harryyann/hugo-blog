@@ -8,13 +8,12 @@
     <language>en</language>
     <lastBuildDate>Fri, 12 Mar 2021 23:55:43 +0800</lastBuildDate><atom:link href="https://yanghairui.life/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>First</title>
-      <link>https://yanghairui.life/post/first/</link>
+      <title>k8s核心库client-go的Informer机制</title>
+      <link>https://yanghairui.life/post/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/</link>
       <pubDate>Fri, 12 Mar 2021 23:55:43 +0800</pubDate>
       
-      <guid>https://yanghairui.life/post/first/</guid>
-      <description>?????
-测试</description>
+      <guid>https://yanghairui.life/post/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/</guid>
+      <description>client-go与其他语言版本的k8s不同的地方在于，它不仅仅是一个k8s的客户端，而且还是一个k8s的核心库，k8s中各个组件与api-server之间的通信都是通过client-go的iformer机制实现的快速无延迟的数据同步。</description>
     </item>
     
     <item>
@@ -23,7 +22,7 @@
       <pubDate>Fri, 12 Mar 2021 23:55:16 +0800</pubDate>
       
       <guid>https://yanghairui.life/about/</guid>
-      <description></description>
+      <description>Hi,there.I&amp;rsquo;m Harry Yang.I am keened to be a programmer majored in Golang and Python.</description>
     </item>
     
   </channel>
