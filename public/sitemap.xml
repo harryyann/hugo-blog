@@ -3,31 +3,31 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://localhost:1313/post/first/</loc>
+    <loc>https://yanghairui.life/post/first/</loc>
     <lastmod>2021-03-12T23:55:43+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://localhost:1313/post/</loc>
+    <loc>https://yanghairui.life/post/</loc>
     <lastmod>2021-03-12T23:55:43+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://localhost:1313/</loc>
+    <loc>https://yanghairui.life/</loc>
     <lastmod>2021-03-12T23:55:43+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://localhost:1313/about/</loc>
+    <loc>https://yanghairui.life/about/</loc>
     <lastmod>2021-03-12T23:55:16+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://localhost:1313/categories/</loc>
+    <loc>https://yanghairui.life/categories/</loc>
   </url>
   
   <url>
-    <loc>http://localhost:1313/tags/</loc>
+    <loc>https://yanghairui.life/tags/</loc>
   </url>
   
 </urlset>

@@ -1,98 +1,70 @@
-baseURL = "https://yanghairui.life/"
+baseURL = "https://yanghairui.life"
 languageCode = "en-us"
-title = "Timer | Responsive Multipurpose Bootstrap Hugo Template"
-theme = "timer-hugo"
+title = "LeaveIt"
+theme = "LeaveIt"
 
-# We Used Ionicons Icon font for Icon, for more details check this link - https://ionicons.com/
+paginate = 12
+enableEmoji = true
+enableRobotsTXT = true
+googleAnalytics = ""
 
-# Navbar Menus
-[[menu.main]]
-name    = "Home"
-url     = "/"
-weight  = 1
-[[menu.main]]
-name    = "About"
-url     = "about"
-weight  = 2
-[[menu.main]]
-name    = "Service"
-url     = "service"
-weight  = 3
-[[menu.main]]
-name    = "Gallery"
-url     = "gallery"
-weight  = 4
-[[menu.main]]
-name    = "Blog"
-url     = "blog"
-weight  = 5
-[[menu.main]]
-name    = "Contact"
-url     = "contact"
-weight  = 6
+preserveTaxonomyNames = true
 
-# Site Params
+[blackfriday]
+  hrefTargetBlank = true
+  nofollowLinks = true
+  noreferrerLinks = true
+
+[Permalinks]
+ posts = "/:year/:filename/"
+
+[menu]
+  [[menu.main]]
+    name = "Blog"
+    url = "/posts/"
+    weight = 1
+
+  [[menu.main]]
+    name = "Categories"
+    url = "/categories/"
+    weight = 2
+
+  [[menu.main]]
+    name = "Tags"
+    url = "/tags/"
+    weight = 3
+
+  [[menu.main]]
+    name = "About"
+    url = "/about/"
+    weight = 4
+
 [params]
-home = "Home"
-logo = "images/logo.png"
-dateFormat = "6 January 2006"
-# Meta data
-description = "Airspace Hugo theme"
-author = "Themefisher"
-# Google Analitycs
-googleAnalitycsID = "Your ID"
-# contact form action
-contactFormAction = "#" # contact form works with https://formspree.io
+    since = 2011
+    author = "Covey.Liu"                           # Author's name
+    avatar = "/images/me/avatar.jpeg"           # Author's avatar
+    subtitle = "我会更好，因为我没有停止"         # Subtitle
+    cdn_url = ""           # Base CDN URL
+    home_mode = "" # post or other
 
-# Banner Section
-[params.banner]
-enable  = true
-bgImage = "images/slider.jpg"
-heading = "HI, MY NAME IS JONATHON & I AM A"
-description = "WITH 10 YEARS EXPERIENCE, I'VE OCCUPIED MANY ROLES INCLUDING DIGITAL DESIGN DIRECTOR, WEB DESIGNER AND DEVELOPER. THIS SITE SHOWCASES SOME OF MY WORK."
-# button
-btn     = true
-btnText = "Download More"
-btnURL  = "https://themefisher.com/"
+    google_verification = ""
+   
+    description = "" # site description
+    keywords = "" # site keywords
 
-# flip text
-[[params.banner.flipText]]
-title   = "DESIGNER"
-[[params.banner.flipText]]
-title   = "DEVELOPER"
-[[params.banner.flipText]]
-title   = "FATHER"
+    beian = ""
+    baiduAnalytics = ""
 
-# Homepage About Section
-[params.about]
-enable  = true
-title   = "ABOUT ME"
-content = "Hello, I’m a UI/UX Designer & Front End Developer from Victoria, Australia. I hold a master degree of Web Design from the World University.And scrambled it to make a type specimen book. It has survived not only five centuries. <br> <br> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error, adipisci voluptatum repudiandae, natus impedit repellat aut officia illum at assumenda iusto reiciendis placeat. Temporibus, vero."
-image   = "images/about/about.jpg"
+    license= '本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可'
 
-# Call to Action
-[params.cta]
-enable  = true
-title   = "SO WHAT YOU THINK ?"
-content = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis,<br>possimus commodi, fugiat magnam temporibus vero magni recusandae? Dolore, maxime praesentium."
-btnText = "Contact with me"
-btnURL  = "/contact"
+[params.social]
+    GitHub = "xxoo"
+    Twitter = "xxoo"
+    Email   = "xxoo"
+    Instagram = "xxoo"
+    Wechat = "/images/me/wechat.png"  # Wechat QRcode image
+    Facebook = "xxoo"
+    Telegram = "xxoo"
+    Dribbble = "xxoo"
+    Medium = "xxoo"
 
-# Portfolio Section On Homepage
-[params.portfolio]
-enable  = true
-title   = "Latest Works"
-subtitle= "Aliquam lobortis. Maecenas vestibulum mollis diam. Pellentesque auctor neque nec urna. Nulla sit amet est. Aenean posuere tortor sed cursus feugiat, nunc augue blandit nunc, eu sollicitudin urna dolor sagittis lacus."
-
-# social icon
-[[params.socialIcon]]
-icon = "ion-social-facebook"
-url = "#"
-
-[[params.socialIcon]]
-icon = "ion-social-instagram"
-url = "#"
-
-[[params.socialIcon]]
-icon = "ion-social-linkedin"
-url = "#"
