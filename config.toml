@@ -1,70 +1,108 @@
 baseURL = "https://yanghairui.life"
-languageCode = "en-us"
-title = "LeaveIt"
-theme = "LeaveIt"
-
-paginate = 12
+languageCode = "en"
+DefaultContentLanguage = "en"
+title = "Website of Harry Yang"
+theme = "anatole"
+summarylength = 10
 enableEmoji = true
 enableRobotsTXT = true
-googleAnalytics = ""
 
-preserveTaxonomyNames = true
+# Enable Disqus
+#disqusShortname = ""
 
-[blackfriday]
-  hrefTargetBlank = true
-  nofollowLinks = true
-  noreferrerLinks = true
+# Google Analytics
+#googleAnalytics = "UA-123-45"
 
-[Permalinks]
- posts = "/:year/:filename/"
+# Syntax highlighting
+pygmentsUseClasses = true
+pygmentsCodeFences = true
+pygmentsCodefencesGuessSyntax = true
+
+[params]
+title = "Hary Yang's Blog"
+author = "Harry Yang"
+#copyright = "2020-2021"
+description = "Per aspera ad astra."
+profilePicture = "images/profile.jpg"
+keywords = ""
+favicon = "favicons/"
+# example ["css/custom.css"]
+customCss = []
+# example ["js/custom.js"]
+customJs = [] 
+mainSections = ["post"]
+images = ["images/site-feature-image.png"]
+doNotLoadAnimations = false
+# Form Spree Contact Form
+#contactFormAction = "https://formspree.io/f/your-form-hash-here"
+# Google Site Verify
+#googleSiteVerify = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+# indexDateFormat = "Mon, Jan 2, 2006"
+# listDateFormat = "Jan 2"
+# singleDateFormat = "Mon, Jan 2, 2006"
+# Commento Comments
+# CommentoURL = "https://commento.example.com/js/commento.js"
+
+[params.simpleAnalytics]
+# enable = true
+# customurl = "https://analytics.example.com"
+
+## Math settings
+[params.math]
+enable = true # options: true, false. Enable math support globally, default: false. You can always enable math on per page.
+use = "katex"  # options: "katex", "mathjax". default is "katex".
+
+## Social links
+# use 'fab' when brand icons, use 'fas' when standard solid icons.
+[[params.socialIcons]]
+icon = "fab fa-linkedin"
+title = "Linkedin"
+url = "https://de.linkedin.com/"
+
+[[params.socialIcons]]
+icon = "fab fa-github"
+title = "GitHub"
+url = "https://github.com/harryyann"
+
+[[params.socialIcons]]
+icon = "fab fa-instagram"
+title = "instagram"
+url = "https://www.instagram.com/"
+
+[[params.socialIcons]]
+icon = "fas fa-envelope"
+title = "e-mail"
+url = "horace27149@gmail.com"
+
+## Menu items
 
 [menu]
   [[menu.main]]
-    name = "Blog"
-    url = "/posts/"
-    weight = 1
+  name = "Home"
+  identifier = "home"
+  weight = 100
+  url = "/"
 
   [[menu.main]]
-    name = "Categories"
-    url = "/categories/"
-    weight = 2
+  name = "Posts"
+  weight = 200
+  identifier = "posts"
+  url = "/post/"
 
   [[menu.main]]
-    name = "Tags"
-    url = "/tags/"
-    weight = 3
+  name = "About"
+  weight = 300
+  identifier = "about"
+  url = "/about/"
 
   [[menu.main]]
-    name = "About"
-    url = "/about/"
-    weight = 4
+  name = "Contact"
+  weight = 400
+  identifier = "contact"
+  url = "/contact/"
 
-[params]
-    since = 2011
-    author = "Covey.Liu"                           # Author's name
-    avatar = "/images/me/avatar.jpeg"           # Author's avatar
-    subtitle = "我会更好，因为我没有停止"         # Subtitle
-    cdn_url = ""           # Base CDN URL
-    home_mode = "" # post or other
-
-    google_verification = ""
-   
-    description = "" # site description
-    keywords = "" # site keywords
-
-    beian = ""
-    baiduAnalytics = ""
-
-    license= '本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可'
-
-[params.social]
-    GitHub = "xxoo"
-    Twitter = "xxoo"
-    Email   = "xxoo"
-    Instagram = "xxoo"
-    Wechat = "/images/me/wechat.png"  # Wechat QRcode image
-    Facebook = "xxoo"
-    Telegram = "xxoo"
-    Dribbble = "xxoo"
-    Medium = "xxoo"
-
+  [[menu.main]]
+  name = "Pictures"
+  weight = 400
+  identifier = "pictures"
+  url = "/pictures/"
