@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Website of Harry Yang</title>
-    <link>https://harryyann.github.io/</link>
-    <description>Recent content on Website of Harry Yang</description>
+    <title>Timer | Responsive Multipurpose Bootstrap Hugo Template</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content on Timer | Responsive Multipurpose Bootstrap Hugo Template</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <lastBuildDate>Fri, 12 Mar 2021 23:55:43 +0800</lastBuildDate><atom:link href="https://harryyann.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Fri, 12 Mar 2021 23:55:43 +0800</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>First</title>
-      <link>https://harryyann.github.io/post/first/</link>
+      <link>http://localhost:1313/post/first/</link>
       <pubDate>Fri, 12 Mar 2021 23:55:43 +0800</pubDate>
       
-      <guid>https://harryyann.github.io/post/first/</guid>
+      <guid>http://localhost:1313/post/first/</guid>
       <description>?????
 测试</description>
     </item>
     
     <item>
       <title>About</title>
-      <link>https://harryyann.github.io/about/</link>
+      <link>http://localhost:1313/about/</link>
       <pubDate>Fri, 12 Mar 2021 23:55:16 +0800</pubDate>
       
-      <guid>https://harryyann.github.io/about/</guid>
+      <guid>http://localhost:1313/about/</guid>
       <description></description>
     </item>
     
