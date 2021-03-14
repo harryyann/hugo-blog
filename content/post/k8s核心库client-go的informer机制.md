@@ -10,4 +10,5 @@ client-go与其他语言版本的k8s不同的地方在于，它不仅仅是一�
 
 ### informer机制
 
-![Image](C:\Users\Horace\AppData\Local\Temp\Image.png)
+![Image](/images/informer.png)
+
