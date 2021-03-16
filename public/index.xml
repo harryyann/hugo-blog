@@ -6,7 +6,18 @@
     <description>Recent content on Website of Harry Yang</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 12 Mar 2021 23:55:43 +0800</lastBuildDate><atom:link href="https://yanghairui.life/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 16 Mar 2021 22:22:10 +0800</lastBuildDate><atom:link href="https://yanghairui.life/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Swagger-Gin自动生成API文档</title>
+      <link>https://yanghairui.life/post/swagger-gin%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90api%E6%96%87%E6%A1%A3/</link>
+      <pubDate>Tue, 16 Mar 2021 22:22:10 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/post/swagger-gin%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90api%E6%96%87%E6%A1%A3/</guid>
+      <description>swagger swagger是通用的API文档生成工具，那么对于go语言的gin框架，也有专用的swagger工具swagger-gin
+使用 swagger-gin的使用非常简单，只需要下载包、添加注释、添加路由、命令行生成swagger文档即可。
+ 安装依赖包：  $ go get github.</description>
+    </item>
+    
     <item>
       <title>k8s核心库client-go的Informer机制</title>
       <link>https://yanghairui.life/post/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/</link>
