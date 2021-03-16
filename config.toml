@@ -19,10 +19,10 @@ pygmentsCodeFences = true
 pygmentsCodefencesGuessSyntax = true
 
 [params]
-title = "Hary Yang's Blog"
+title = "Per aspera ad astra."
 author = "Harry Yang"
 #copyright = "2020-2021"
-description = "Per aspera ad astra."
+description = "循此苦旅，终抵群星。"
 profilePicture = "images/profile.jpg"
 keywords = ""
 favicon = "favicons/"
