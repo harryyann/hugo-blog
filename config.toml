@@ -1,6 +1,6 @@
 baseURL = "https://yanghairui.life"
-languageCode = "en"
-DefaultContentLanguage = "en"
+languageCode = "zh-cn"
+DefaultContentLanguage = "zh-cn"
 title = "Website of Harry Yang"
 theme = "anatole"
 summarylength = 10
@@ -14,17 +14,17 @@ enableRobotsTXT = true
 #googleAnalytics = "UA-123-45"
 
 # Syntax highlighting
-pygmentsUseClasses = true
+pygmentsUseClasses = true 
 pygmentsCodeFences = true
 pygmentsCodefencesGuessSyntax = true
 
 [params]
 title = "Per aspera ad astra."
 author = "Harry Yang"
-#copyright = "2020-2021"
+copyright = "2020-2021"
 description = "循此苦旅，终抵群星。"
-profilePicture = "images/profile.jpg"
-keywords = ""
+profilePicture = "images/profile5.jpg"
+keywords = "tech/life"
 favicon = "favicons/"
 # example ["css/custom.css"]
 customCss = []
@@ -90,19 +90,26 @@ url = "horace27149@gmail.com"
   url = "/post/"
 
   [[menu.main]]
-  name = "About"
+  name = "Pictures"
   weight = 300
+  identifier = "pictures"
+  url = "/pictures/"
+
+  [[menu.main]]
+  name = "About"
+  weight = 400
   identifier = "about"
   url = "/about/"
 
   [[menu.main]]
   name = "Contact"
-  weight = 400
+  weight = 500
   identifier = "contact"
   url = "/contact/"
 
-  [[menu.main]]
-  name = "Pictures"
-  weight = 400
-  identifier = "pictures"
-  url = "/pictures/"
+
+[blackfriday]
+  angledQuotes = true
+  fractions = false
+  plainIDAnchors = true
+  extensions = ["hardLineBreak"]
