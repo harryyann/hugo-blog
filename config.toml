@@ -1,3 +1,4 @@
+publishdir = "public"
 baseURL = "https://yanghairui.life"
 languageCode = "zh-cn"
 DefaultContentLanguage = "zh-cn"
@@ -19,6 +20,7 @@ pygmentsCodeFences = true
 pygmentsCodefencesGuessSyntax = true
 
 [params]
+disableThemeSwitcher = true
 title = "Per aspera ad astra."
 author = "Harry Yang"
 copyright = "2020-2021"
@@ -31,7 +33,7 @@ customCss = []
 # example ["js/custom.js"]
 customJs = [] 
 mainSections = ["post"]
-images = ["images/site-feature-image.png"]
+#images = ["images/site-feature-image.png"]
 doNotLoadAnimations = false
 # Form Spree Contact Form
 #contactFormAction = "https://formspree.io/f/your-form-hash-here"
