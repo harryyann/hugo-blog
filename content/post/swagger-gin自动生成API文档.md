@@ -1,5 +1,5 @@
 ---
-title: "Swagger-Gin自动生成API文档"
+title: "swagger-gin自动生成API文档"
 date: 2021-03-16T22:22:10+08:00
 Description: ""
 Tags: []
@@ -24,9 +24,9 @@ $ go get github.com/swaggo/files
 ```
 
 - 在你的代码中添加注释
-
+  
   swagger-gin主要就是根据这些注释生成API文档的。
-
+  
   首先，在你的main函数所在的.go文件中添加这些注释，这些都是一些元信息
 
 ```go
@@ -55,7 +55,7 @@ $ go get github.com/swaggo/files
 ```
 
 - 生成API文档
-
+  
   在main函数所在文件的路径下，使用命令
 
 ```bash
@@ -65,7 +65,7 @@ $ swag init
 可以在根路径下看到生成了一个docs目录，里面有三个文件，就是我们的swagger文档了
 
 - 添加路由
-
+  
   在你的路由中添加一行，即可
 
 ```go
