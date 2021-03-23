@@ -8,6 +8,26 @@
     <language>zh-cn</language>
     <lastBuildDate>Tue, 16 Mar 2021 22:22:10 +0800</lastBuildDate><atom:link href="https://yanghairui.life/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Contact</title>
+      <link>https://yanghairui.life/contact/</link>
+      <pubDate>Tue, 23 Mar 2021 22:52:05 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/contact/</guid>
+      <description>QQ: 941811450
+gmail: horace27149@gmail.com
+wechat: misfit40520</description>
+    </item>
+    
+    <item>
+      <title>Pictures</title>
+      <link>https://yanghairui.life/pictures/</link>
+      <pubDate>Tue, 23 Mar 2021 22:45:14 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/pictures/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>swagger-gin自动生成API文档</title>
       <link>https://yanghairui.life/post/swagger-gin%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90api%E6%96%87%E6%A1%A3/</link>
       <pubDate>Tue, 16 Mar 2021 22:22:10 +0800</pubDate>
@@ -34,7 +54,9 @@ Informer机制 </description>
       <pubDate>Fri, 12 Mar 2021 23:55:16 +0800</pubDate>
       
       <guid>https://yanghairui.life/about/</guid>
-      <description>Hi,there.I&amp;rsquo;m Harry Yang.I am keened to be a programmer majored in Golang and Python.</description>
+      <description>这里是Harry Yang的个人站点。我是一个自学编程的程序员，兼不入流摄影师。本站会分享我学习过程中的计算机基础知识，算法，和其他我比较感兴趣的内容，同时也会分享一些生活中的感悟。希望每一个来访的朋友都能有所收获！
+ 网站的标题是我比较喜欢的一句话，送给大家：
+​ Per aspera ad astra.</description>
     </item>
     
   </channel>
