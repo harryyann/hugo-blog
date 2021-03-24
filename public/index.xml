@@ -6,7 +6,18 @@
     <description>Recent content on Website of Harry Yang</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 16 Mar 2021 22:22:10 +0800</lastBuildDate><atom:link href="https://yanghairui.life/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 24 Mar 2021 21:38:51 +0800</lastBuildDate><atom:link href="https://yanghairui.life/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>计算机网络体系结构概览</title>
+      <link>https://yanghairui.life/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E6%A6%82%E8%A7%88/</link>
+      <pubDate>Wed, 24 Mar 2021 21:38:51 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E6%A6%82%E8%A7%88/</guid>
+      <description>名词说明  计算机网络的组成  计算机网络由若干结点(node)和连接这些结点的链路(link)组成，结点可以是计算机、集线器、交换机、路由器等。
+路由器或网关可以把多个不同的网络连接起来，成为互连网，而互联网，则是全球范围内的互联网(也叫因特网，或Internet)。
+ ISP  ISP是互联网服务提供商(比如我国的电信、移动、联通)。ISP可以从互联网管理机构获得许多IP地址，个人想要接入互联网需要向ISP缴纳一定的费用</description>
+    </item>
+    
     <item>
       <title>Contact</title>
       <link>https://yanghairui.life/contact/</link>
