@@ -24,7 +24,7 @@ disableThemeSwitcher = true
 title = "Per aspera ad astra."
 author = "Harry Yang"
 copyright = "2020-2021"
-description = "Harry-Yang's blog"
+description = "Harry Yang's blog"
 profilePicture = "images/profile5.jpg"
 keywords = "tech/life"
 favicon = "favicons/"
@@ -57,9 +57,9 @@ use = "katex"  # options: "katex", "mathjax". default is "katex".
 ## Social links
 # use 'fab' when brand icons, use 'fas' when standard solid icons.
 [[params.socialIcons]]
-icon = "fab fa-linkedin"
+icon = "fab fa-stack-overflow"
 title = "Linkedin"
-url = "https://de.linkedin.com/"
+url = "https://stackoverflow.com/users/12924262/horace-yang"
 
 [[params.socialIcons]]
 icon = "fab fa-github"
@@ -67,14 +67,14 @@ title = "GitHub"
 url = "https://github.com/harryyann"
 
 [[params.socialIcons]]
-icon = "fab fa-instagram"
-title = "instagram"
-url = "https://www.instagram.com/"
+icon = "fab fa-zhihu"
+title = "zhihu"
+url = "https://www.zhihu.com/people/yang-hai-rui-88"
 
 [[params.socialIcons]]
 icon = "fas fa-envelope"
 title = "e-mail"
-url = "horace27149@gmail.com"
+url = "http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=941811450@qq.com"
 
 ## Menu items
 

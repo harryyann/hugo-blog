@@ -6,7 +6,16 @@
     <description>Recent content on Website of Harry Yang</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 25 Mar 2021 20:45:07 +0800</lastBuildDate><atom:link href="https://yanghairui.life/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 25 Mar 2021 21:23:48 +0800</lastBuildDate><atom:link href="https://yanghairui.life/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>client-go的四种客户端</title>
+      <link>https://yanghairui.life/post/client-go%E7%9A%84%E5%9B%9B%E7%A7%8D%E5%AE%A2%E6%88%B7%E7%AB%AF/</link>
+      <pubDate>Thu, 25 Mar 2021 21:23:48 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/post/client-go%E7%9A%84%E5%9B%9B%E7%A7%8D%E5%AE%A2%E6%88%B7%E7%AB%AF/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>学习编写Makefile</title>
       <link>https://yanghairui.life/post/%E5%AD%A6%E4%B9%A0%E7%BC%96%E5%86%99makefile/</link>
@@ -38,7 +47,8 @@ Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需
       <guid>https://yanghairui.life/contact/</guid>
       <description>QQ: 941811450
 gmail: horace27149@gmail.com
-wechat: misfit40520</description>
+wechat:
+      </description>
     </item>
     
     <item>
@@ -77,7 +87,7 @@ Informer机制 </description>
       <pubDate>Fri, 12 Mar 2021 23:55:16 +0800</pubDate>
       
       <guid>https://yanghairui.life/about/</guid>
-      <description>这里是Harry Yang的个人站点。我是一个通过自学转行IT的程序员，兼不入流摄影师。本站会分享我学习过程中的计算机知识，算法，和其他感兴趣的内容。同时也会分享一些生活中的感悟。希望每一个来访的朋友都能有所收获！
+      <description>这里是Harry Yang的个人站点。我是一名由机械专业通过自学转行IT的程序员，兼不入流的摄影师。我会在这里分享我学习过程中的计算机知识，算法，和其他感兴趣的内容。同时也会分享一些生活中的感悟。希望每一个来访的朋友都能有所收获！
  网站的标题是一句拉丁文谚语：
 ​ Per aspera ad astra.</description>
     </item>
