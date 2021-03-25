@@ -6,7 +6,19 @@
     <description>Recent content on Website of Harry Yang</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 24 Mar 2021 21:38:51 +0800</lastBuildDate><atom:link href="https://yanghairui.life/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 25 Mar 2021 20:45:07 +0800</lastBuildDate><atom:link href="https://yanghairui.life/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>学习编写Makefile</title>
+      <link>https://yanghairui.life/post/%E5%AD%A6%E4%B9%A0%E7%BC%96%E5%86%99makefile/</link>
+      <pubDate>Thu, 25 Mar 2021 20:45:07 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/post/%E5%AD%A6%E4%B9%A0%E7%BC%96%E5%86%99makefile/</guid>
+      <description>make工具介绍 项目构建往往要经过一系列的过程，尤其是C项目，可能需要先编译这个，再编译那个，再添加个链接，完了再打个docker镜像，会有很多的文件需要创建和更改。这些动作，我们既可以通过手工的方式，一步步完成，不免显得繁琐。或者也可以写个shell脚本自动完成。但是make是专门做这件事的。
+make的环境准备 对于linux或者mac系统，只要有gcc，一般都会有make，通过命令make -v可以检查你当前的环境有没有make，而在windows上想使用make还是比较复杂的，尽管网上有很多教程，但我都没有尝试成功，推荐还是尽量在linux或者mac环境下使用make构建你的项目
+make的使用 make的使用非常简单，笔者不是make大神，使用make都是通过一条 make 命令和编写一个Makefile文件即可。
+Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需要有哪些前置操作，或者需要哪些前置文件，最终又生成了什么文件。</description>
+    </item>
+    
     <item>
       <title>计算机网络体系结构概览</title>
       <link>https://yanghairui.life/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E6%A6%82%E8%A7%88/</link>
@@ -65,8 +77,8 @@ Informer机制 </description>
       <pubDate>Fri, 12 Mar 2021 23:55:16 +0800</pubDate>
       
       <guid>https://yanghairui.life/about/</guid>
-      <description>这里是Harry Yang的个人站点。我是一个自学编程的程序员，兼不入流摄影师。本站会分享我学习过程中的计算机基础知识，算法，和其他我比较感兴趣的内容，同时也会分享一些生活中的感悟。希望每一个来访的朋友都能有所收获！
- 网站的标题是我比较喜欢的一句话，送给大家：
+      <description>这里是Harry Yang的个人站点。我是一个通过自学转行IT的程序员，兼不入流摄影师。本站会分享我学习过程中的计算机知识，算法，和其他感兴趣的内容。同时也会分享一些生活中的感悟。希望每一个来访的朋友都能有所收获！
+ 网站的标题是一句拉丁文谚语：
 ​ Per aspera ad astra.</description>
     </item>
     

@@ -3,7 +3,7 @@ title: "swagger-gin自动生成API文档"
 date: 2021-03-16T22:22:10+08:00
 Description: "使用swagger-gin对gin框架生成的后端服务自动生成API文档"
 Tags: [swagger,gin]
-Categories: [其他]
+Categories: [工具使用]
 DisableComments: false
 ---
 
