@@ -1,4 +1,3 @@
-publishdir = "public"
 baseURL = "https://yanghairui.life"
 languageCode = "zh-cn"
 DefaultContentLanguage = "zh-cn"
@@ -20,7 +19,7 @@ pygmentsCodeFences = true
 pygmentsCodefencesGuessSyntax = true
 
 [params]
-disableThemeSwitcher = false
+disableThemeSwitcher = true
 title = "Per aspera ad astra."
 author = "Harry Yang"
 copyright = "2020-2021"
@@ -108,3 +107,10 @@ url = "http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=941811450@qq.com"
   weight = 500
   identifier = "contact"
   url = "/contact/"
+
+
+[blackfriday]
+  angledQuotes = true
+  fractions = false
+  plainIDAnchors = true
+  extensions = ["hardLineBreak"]
