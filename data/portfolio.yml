@@ -1,0 +1,28 @@
+portfolioitems:
+  # portfolio category
+  - title: Travel
+    portfolioitem:
+      - name: 大连
+        image: '/images/portfolio/dalian-main.jpg'
+        link: https://yanghairui.life/records
+        description: '大连之旅'
+        tags:
+          - Travel
+          - Dalian
+        status: 'Finished'
+        start: '2021-10-01'
+        end: '2021-10-06'
+
+  # portfolio category
+  #- title: Life
+   # portfolioitem:
+    #  - name: Project 1
+     #   image: '/images/portfolio/sunset.png'
+      #  link: https://gohugo.io/
+       # description: 'A description'
+        #tags:
+         # - Tag 1
+          #- Tag 2
+        #status: 'Finished'
+        #start: '2021'
+        #end: '2021'

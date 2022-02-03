@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Website of Harry Yang</title>
+    <link>https://yanghairui.life/posts/</link>
+    <description>Recent content in Posts on Website of Harry Yang</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 04 May 2021 22:10:47 +0800</lastBuildDate><atom:link href="https://yanghairui.life/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MySQL的事务</title>
+      <link>https://yanghairui.life/posts/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/</link>
+      <pubDate>Tue, 04 May 2021 22:10:47 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/posts/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/</guid>
+      
+        <description>&lt;h3 id=&#34;事务&#34;&gt;事务&lt;/h3&gt;
+&lt;p&gt;事务就是一组原子性的SQL语句。这一组SQL语句要么全部执行成功，要么全部不执行。只要有任何一条语句因为崩溃或其他原因无法执行，那么所有的语句都不会执行。事务处理系统需要包含以下四个特性(ACID)：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;原子性(atomicity)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;一个事务必须被看作 是不可分割的最小工作单元。不可能执行成功其中的一部分操作，要么全部提交成功，要么全部失败回滚。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一致性(consistency)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;数据库总是从一个一致性的状态，转换到另一个一致性的状态。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;隔离性(isolation)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;一个事务所作的修改，在提交之前，通常对其他事务是不可见的。（后面再谈到事务的隔离等级的时候会解释为什么说&amp;quot;通常&amp;quot;）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;持久性(durability)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;一旦事务提交，那么所作的修改就会永久保存到数据库中。&lt;/p&gt;
+&lt;h3 id=&#34;事务隔离等级&#34;&gt;事务隔离等级&lt;/h3&gt;
+&lt;p&gt;关于上述的第三点，隔离性，实际上比较复杂。SQL标准中定义了四种隔离等级，规定了一个事务中所作的修改，哪些在事务内和事务间是可见的，哪些是不可见的。以下介绍一下四种隔离等级。&lt;/p&gt;
+&lt;h4 id=&#34;read-uncommitted未提交读&#34;&gt;READ UNCOMMITTED(未提交读)&lt;/h4&gt;
+&lt;p&gt;在未提交读这个级别下，所有事务中的修改，即使没有提交，其他事务也可以看到，这就叫做&lt;code&gt;脏读&lt;/code&gt;。显而易见，这个级别会导致很多问题，并且性能上来说，也没有比其他隔离级别好很多，所以几乎是没人用的。&lt;/p&gt;
+&lt;h4 id=&#34;read-committed提交读&#34;&gt;READ COMMITTED(提交读)&lt;/h4&gt;
+&lt;p&gt;顾名思义，和上一个等级的差别就在于，该隔离等级下，每个事务是能读取到当前已提交的事务所作的修改，即一个事务在提交之前，对其他事务都是不可见的。这个等级是大多数数据库的默认隔离等级，但不是MySQL的。该级别下存在&lt;code&gt;不可重复读&lt;/code&gt;的问题。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不可重复读&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果在一个事务执行过程中，有另一个事务从未提交状态，转变为了提交状态。那么那个事务所修改的行就会发生改变。如果在当前事务中前后两次查询这个行，就有可能两次查到的信息不一致。&lt;/p&gt;
+&lt;h4 id=&#34;repeatable-read可重复读&#34;&gt;REPEATABLE READ(可重复读)&lt;/h4&gt;
+&lt;p&gt;顾名思义，和上一个等级的差别在于，这个等级解决了上述的不可重复读的问题，保证了在一次事务中多次读取同一行数据的结果是一致的。解决方法是，在第一次SELECT的时候缓存查询记录，然后在后续的SELECT中复用这个缓存。但是可重复读无法解决&lt;code&gt;幻读&lt;/code&gt;的问题。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;幻读&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所谓幻读，就是指在某个事务中多次读取某个范围的记录时，另一个事务在该范围中插入了一条记录并提交，则该事务后续的某次读取会出现多了一行的问题，这一行叫幻行，这就叫幻读。&lt;/p&gt;
+&lt;p&gt;MySQL通过MVCC(多版本并发控制)和间隙锁(next-key locking)解决了幻读的问题。&lt;/p&gt;
+&lt;h4 id=&#34;serializable可串行化&#34;&gt;SERIALIZABLE(可串行化)&lt;/h4&gt;
+&lt;p&gt;最高的隔离级别。通过强制事务串行执行，避免前述的幻读的问题。可串行化隔离级别下会在每一行数据上都加锁，所以效率也是最低的。只有在非常需要保证数据的一致性的时候且可以接受没有并发的情况，才会采用该级别。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;隔离级别&lt;/th&gt;
+&lt;th&gt;是否脏读&lt;/th&gt;
+&lt;th&gt;是否不可重复读&lt;/th&gt;
+&lt;th&gt;是否幻读&lt;/th&gt;
+&lt;th&gt;是否加锁&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;未提交读&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;提交读&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;可重复读&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;可串行化&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;死锁&#34;&gt;死锁&lt;/h3&gt;
+&lt;p&gt;死锁是指两个或者多个事务在同一个资源上相互占用，并请求锁定对方占用的资源，从而导致恶行循环的问题。比如以下两个事务：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;START ACTION1;
+UPDATE StockTable SET close=45 WHERE stock_id=4;
+UPDATE StockTable SET close=19 WHERE stock_id=3;
+COMMIT;
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;START ACTION2;
+UPDATE StockTable SET high=20 WHERE stock_id=3;
+UPDATE StockTable SET high=47 WHERE stock_id=4;
+COMMIT;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;以上两个事务当执行完第一条语句后，改行会被锁定，当他们都去执行第二条语句的时候，发现改行都被对方锁定，然后两个事务都会等待对方释放锁，而陷入死循环。除非有外部因素介入才能解除死锁。&lt;/p&gt;
+&lt;p&gt;为了解决死锁的问题，不同的数据库都实现了各种死锁检测和超时机制。InnoDB目前的处理方式是：将持有最少行级排他锁的事务进行回滚。&lt;/p&gt;
+&lt;p&gt;死锁发生以后，只有部分或完全回滚其中一个事务才能打破死锁。所以应用程序在设计时需要考虑死锁导致的回滚，尽量添加超时重试机制。&lt;/p&gt;
+&lt;h3 id=&#34;事务日志&#34;&gt;事务日志&lt;/h3&gt;
+&lt;p&gt;事务日志可以提高事务的效率。使用事务日志，存储引擎在修改表的数据时只需要修改其内存拷贝，再把该行为持久化到磁盘的事务日志中。然后根据事务日志在后台慢慢把数据刷回磁盘。即采用事件日志时修改数据，需要写两次磁盘。&lt;/p&gt;
+&lt;h3 id=&#34;多版本并发控制mvcc&#34;&gt;多版本并发控制(MVCC)&lt;/h3&gt;
+&lt;p&gt;MySQL的大多数事务型存储引擎实现的都不是简单的行锁，由于行锁的开销较大，基于提升并发性的考虑，一般都会实现多版本并发控制(MVCC)，可以认为MVCC是行锁的一个变种，他在很多情况下避免了加锁操作，从而降低开销。&lt;/p&gt;
+&lt;p&gt;不同的存储引擎对MVCC的实现也不尽相同，典型的有乐观并发控制、悲观并发控制。以下简要索命InnoDB存储引擎的MVCC。&lt;/p&gt;
+&lt;h4 id=&#34;innodb的mvcc实现方式&#34;&gt;InnoDB的MVCC实现方式&lt;/h4&gt;
+&lt;p&gt;InnoDB的MVCC，是通过在每行记录后面隐藏两个字段来实现的，两个字段一个保存了行的创建时间，另一个保存了行的过期时间(或删除时间)，当然存储的并非是时间戳，而是系统的版本号，系统版本号全局递增的，没开启一个新的事务，该事务就会把当前的系统版本号作为事务的版本号&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>学习编写Makefile</title>
+      <link>https://yanghairui.life/posts/%E5%AD%A6%E4%B9%A0%E7%BC%96%E5%86%99makefile/</link>
+      <pubDate>Thu, 25 Mar 2021 20:45:07 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/posts/%E5%AD%A6%E4%B9%A0%E7%BC%96%E5%86%99makefile/</guid>
+      
+        <description>&lt;h3 id=&#34;make工具介绍&#34;&gt;make工具介绍&lt;/h3&gt;
+&lt;p&gt;项目构建往往要经过一系列的过程，尤其是C项目，可能需要先编译这个，再编译那个，再添加个链接，完了再打个docker镜像，会有很多的文件需要创建和更改。这些动作，我们既可以通过手工的方式，一步步完成，不免显得繁琐。或者也可以写个shell脚本自动完成。但是make是专门做这件事的。&lt;/p&gt;
+&lt;h4 id=&#34;make的环境准备&#34;&gt;make的环境准备&lt;/h4&gt;
+&lt;p&gt;对于linux或者mac系统，只要有gcc，一般都会有make，通过命令&lt;code&gt;make -v&lt;/code&gt;可以检查你当前的环境有没有make，而在windows上想使用make还是比较复杂的，尽管网上有很多教程，但我都没有尝试成功，推荐还是尽量在linux或者mac环境下使用make构建你的项目&lt;/p&gt;
+&lt;h4 id=&#34;make的使用&#34;&gt;make的使用&lt;/h4&gt;
+&lt;p&gt;make的使用非常简单，笔者不是make大神，使用make都是通过一条 &lt;code&gt;make&lt;/code&gt; 命令和编写一个Makefile文件即可。&lt;/p&gt;
+&lt;h3 id=&#34;makefile的编写&#34;&gt;Makefile的编写&lt;/h3&gt;
+&lt;p&gt;Makefile中需要指明要进行哪些操作，这些操作需要有哪些前置操作，或者需要哪些前置文件，最终又生成了什么文件。&lt;/p&gt;
+&lt;p&gt;Makefile的通用格式为：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&amp;lt;target&amp;gt; : &amp;lt;prerequisites&amp;gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;tab&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;  &amp;lt;commands&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;target是这个操作要实现的目标，可以只是一个标签，也可以是一个文件名&lt;/li&gt;
+&lt;li&gt;prerequisites指的是这个操作的需要的前置条件，这个没有可以不写，前置条件既可以是一个文件名，也可以是一个标签&lt;/li&gt;
+&lt;li&gt;tab是一个制表符，注意是制表符，不是空格&lt;/li&gt;
+&lt;li&gt;commands就是我们需要执行的shell命令了，一个操作可以有一个或多个命令，多个命令可以用&lt;code&gt;\&lt;/code&gt;进行换行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;举个例子&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;NAME &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; test
+VERSION &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;`&lt;/span&gt;date +%Y%m%d&lt;span style=&#34;color:#e6db74&#34;&gt;`&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;# 今天的日期&lt;/span&gt;
+NCR &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; ncr.nie.com/yanghairui/
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# docker-push是target,docker-build是这个操作的前置操作
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;docker-push&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; docker-build
+   docker push &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;NCR&lt;span style=&#34;color:#66d9ef&#34;&gt;)$(&lt;/span&gt;NAME&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;:&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;VERSION&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;docker-build&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; go-build
+   docker build . -t &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;NCR&lt;span style=&#34;color:#66d9ef&#34;&gt;)$(&lt;/span&gt;NAME&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;:&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;VERSION&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;go-build&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;
+   GO111MODULE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;on &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;   GOOS&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;linux&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;   GOARCH&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;amd64&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;   go build -o test 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在Makefile所在的目录输入&lt;code&gt;make&lt;/code&gt;，然后按回车，会按以下顺序执行操作：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;上面这个例子执行会先执行go-build标签的内容，编译一个go项目&lt;/li&gt;
+&lt;li&gt;然后执行docker-build，打一个docker镜像&lt;/li&gt;
+&lt;li&gt;最后将这个docker镜像push到远程仓库、&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;#&lt;/code&gt; 号后是注释&lt;/li&gt;
+&lt;li&gt;变量在定义完用&lt;code&gt;$(变量名)&lt;/code&gt;引用&lt;/li&gt;
+&lt;li&gt;还有一些内置变量，但是并不常用，如：&lt;code&gt;$(CC)&lt;/code&gt;指当前使用的编译器，&lt;code&gt;$(MAKE)&lt;/code&gt;指当前使用的make工具&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>k8s核心库client-go的Informer机制</title>
+      <link>https://yanghairui.life/posts/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/</link>
+      <pubDate>Fri, 12 Mar 2021 23:55:43 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/posts/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/</guid>
+      
+        <description>&lt;h3 id=&#34;client-go&#34;&gt;Client-go&lt;/h3&gt;
+&lt;p&gt;client-go与其他语言版本的k8s不同的地方在于，它不仅仅是一个k8s的客户端，而且还是一个k8s的核心库，k8s中各个组件与api-server之间的通信都是通过client-go的iformer机制实现的快速无延迟的数据同步。&lt;/p&gt;
+&lt;h3 id=&#34;informer机制&#34;&gt;Informer机制&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://yanghairui.life/images/informer.png&#34; alt=&#34;Image&#34;&gt;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

@@ -1,40 +1,53 @@
-publishdir = "public"
+publishDir = "docs"
 baseURL = "https://yanghairui.life"
 languageCode = "zh-cn"
 DefaultContentLanguage = "zh-cn"
 title = "Website of Harry Yang"
-theme = "anatole"
+theme = "hugo-anatole"
 summarylength = 10
 enableEmoji = true
 enableRobotsTXT = true
+
+
+[author]
+  name = "Harry Yang"
+  homepage = "https://yanghairui.life"
 
 # Enable Disqus
 #disqusShortname = ""
 
 # Google Analytics
-#googleAnalytics = "UA-123-45"
+# googleAnalytics = "UA-123-45"
 
 # Syntax highlighting
 pygmentsUseClasses = true 
 pygmentsCodeFences = true
 pygmentsCodefencesGuessSyntax = true
 
+[outputs]
+  home = ["HTML"]
+  section = ["HTML", "RSS"]
+  taxonomy = ["HTML"]
+  term = ["HTML"]
+
 [params]
 disableThemeSwitcher = false
-title = "Per aspera ad astra."
+title = "Harry Yang's Website"
 author = "Harry Yang"
-copyright = "2020-2021"
-description = "Harry Yang's blog"
+copyright = "2021-2022"
+description = "Per aspera ad astra."
 profilePicture = "images/profile5.jpg"
-keywords = "tech/life"
+keywords = "tech/lifestyle"
 favicon = "favicons/"
-# example ["css/custom.css"]
+contentratio = 0.75
+readMore = true
 customCss = []
-# example ["js/custom.js"]
 customJs = [] 
-mainSections = ["post"]
+mainSections = ["posts","records"]
 #images = ["images/site-feature-image.png"]
 doNotLoadAnimations = false
+rssFullContent = true
+
 # Form Spree Contact Form
 #contactFormAction = "https://formspree.io/f/your-form-hash-here"
 # Google Site Verify
@@ -45,20 +58,21 @@ doNotLoadAnimations = false
 # Commento Comments
 # CommentoURL = "https://commento.example.com/js/commento.js"
 
-[params.simpleAnalytics]
+
+# [params.simpleAnalytics]
 # enable = true
 # customurl = "https://analytics.example.com"
 
 ## Math settings
 [params.math]
-enable = true # options: true, false. Enable math support globally, default: false. You can always enable math on per page.
-use = "katex"  # options: "katex", "mathjax". default is "katex".
+# enable = true # options: true, false. Enable math support globally, default: false. You can always enable math on per page.
+# use = "katex"  # options: "katex", "mathjax". default is "katex".
 
 ## Social links
 # use 'fab' when brand icons, use 'fas' when standard solid icons.
 [[params.socialIcons]]
 icon = "fab fa-stack-overflow"
-title = "Linkedin"
+title = "StackOverFlow"
 url = "https://stackoverflow.com/users/12924262/horace-yang"
 
 [[params.socialIcons]]
@@ -77,7 +91,6 @@ title = "e-mail"
 url = "http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=941811450@qq.com"
 
 ## Menu items
-
 [menu]
   [[menu.main]]
   name = "Home"
@@ -89,13 +102,19 @@ url = "http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=941811450@qq.com"
   name = "Posts"
   weight = 200
   identifier = "posts"
-  url = "/post/"
+  url = "/posts/"
 
   [[menu.main]]
-  name = "Pictures"
+  name = "Records"
   weight = 300
-  identifier = "pictures"
-  url = "/pictures/"
+  identifier = "records"
+  url = "/records/"
+
+  [[menu.main]]
+  name = "Portfolio"
+  weight = 350
+  identifier = "portfolio"
+  url = "/portfolio/"
 
   [[menu.main]]
   name = "About"
@@ -108,3 +127,22 @@ url = "http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=941811450@qq.com"
   weight = 500
   identifier = "contact"
   url = "/contact/"
+
+[taxonomies]
+    category = "categories"
+    series = "series"
+    tag = "tags"
+
+#[Languages]
+#  [Languages.en]
+ # title = "Harry Yang's Website"
+ # weight = 1
+ # contentDir = "content"
+ # LanguageName = "EN"
+
+#  [Languages.zh]
+#  title = "杨海瑞的个人博客"
+#  description = "循此苦旅，终抵群星"
+ # contentDir = "content"
+# weight = 2
+#  LanguageName = "ZH"

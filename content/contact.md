@@ -1,16 +1,15 @@
 ---
 title: "Contact"
 date: 2021-03-23T22:52:05+08:00
-draft: true
+draft: false
 ---
 
-QQ:  941811450
+**QQ**:  `941811450`
 
-gmail: horace27149@gmail.com
+**gmail**: `horace27149@gmail.com`
 
-wechat: 
+**wechat**: `redamancy40520`
 
-> > > ![wechat](/images/wechat.png)
-
-
-
+<center>
+<img width="400" src="/images/wechat.png">
+</center>
