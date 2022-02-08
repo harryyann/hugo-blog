@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>kubernetes on Website of Harry Yang</title>
+    <link>https://yanghairui.life/tags/kubernetes/</link>
+    <description>Recent content in kubernetes on Website of Harry Yang</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 12 Mar 2021 23:55:43 +0800</lastBuildDate><atom:link href="https://yanghairui.life/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>k8s核心库client-go的Informer机制</title>
+      <link>https://yanghairui.life/posts/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/</link>
+      <pubDate>Fri, 12 Mar 2021 23:55:43 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/posts/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/</guid>
+      
+        <description>Client-go client-go与其他语言版本的k8s不同的地方在于，它不仅仅是一个k8s的客户端，而且还是一个k8s的核心库，k8s中各个组件与api-server之间的通信都是通过client-go的iformer机制实现的快速无延迟的数据同步。
+Informer机制 </description>
+      
+    </item>
+    
+  </channel>
+</rss>

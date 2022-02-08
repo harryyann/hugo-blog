@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Website of Harry Yang</title>
-    <link>https://yanghairui.life/posts/</link>
-    <description>Recent content in Posts on Website of Harry Yang</description>
+    <title>Website of Harry Yang</title>
+    <link>https://yanghairui.life/</link>
+    <description>Recent content on Website of Harry Yang</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 04 May 2021 22:10:47 +0800</lastBuildDate><atom:link href="https://yanghairui.life/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 04 May 2021 22:10:47 +0800</lastBuildDate><atom:link href="https://yanghairui.life/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>MySQL的事务</title>
       <link>https://yanghairui.life/posts/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/</link>
@@ -35,6 +35,19 @@ Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需
     </item>
     
     <item>
+      <title>Contact</title>
+      <link>https://yanghairui.life/contact/</link>
+      <pubDate>Tue, 23 Mar 2021 22:52:05 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/contact/</guid>
+      
+        <description>QQ: 941811450
+gmail: horace27149@gmail.com
+wechat: redamancy40520</description>
+      
+    </item>
+    
+    <item>
       <title>k8s核心库client-go的Informer机制</title>
       <link>https://yanghairui.life/posts/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/</link>
       <pubDate>Fri, 12 Mar 2021 23:55:43 +0800</pubDate>
@@ -43,6 +56,17 @@ Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需
       
         <description>Client-go client-go与其他语言版本的k8s不同的地方在于，它不仅仅是一个k8s的客户端，而且还是一个k8s的核心库，k8s中各个组件与api-server之间的通信都是通过client-go的iformer机制实现的快速无延迟的数据同步。
 Informer机制 </description>
+      
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://yanghairui.life/about/</link>
+      <pubDate>Fri, 12 Mar 2021 23:55:16 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/about/</guid>
+      
+        <description>我出生于黑龙江省海伦市，成长于黑龙江省双鸭山市； 我本科毕业于郑州大学机械系； 我通过自学成为了一名码农； 我喜欢写代码，也喜欢探索一切未知的事物； 我目前单身； 我相信人有前世。  ​ 网站的副标题是一句拉丁谚语：</description>
       
     </item>
     

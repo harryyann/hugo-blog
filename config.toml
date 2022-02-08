@@ -1,4 +1,4 @@
-publishDir = "docs"
+publishdir = "docs"
 baseURL = "https://yanghairui.life"
 languageCode = "zh-cn"
 DefaultContentLanguage = "zh-cn"
@@ -24,12 +24,6 @@ pygmentsUseClasses = true
 pygmentsCodeFences = true
 pygmentsCodefencesGuessSyntax = true
 
-[outputs]
-  home = ["HTML"]
-  section = ["HTML", "RSS"]
-  taxonomy = ["HTML"]
-  term = ["HTML"]
-
 [params]
 disableThemeSwitcher = false
 title = "Harry Yang's Website"
@@ -46,7 +40,7 @@ customJs = []
 mainSections = ["posts","records"]
 #images = ["images/site-feature-image.png"]
 doNotLoadAnimations = false
-rssFullContent = true
+rssFullContent = false
 
 # Form Spree Contact Form
 #contactFormAction = "https://formspree.io/f/your-form-hash-here"
