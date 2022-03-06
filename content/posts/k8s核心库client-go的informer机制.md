@@ -1,9 +1,9 @@
 ---
-title: "k8s核心库client-go的Informer机制"
+title: "k8s的Informer机制"
 date: 2021-03-12T23:55:43+08:00
 Description: ""
 draft: false
-Tags: [kubernetes,golang]
+Tags: [k8s,golang]
 Categories: [k8s]
 DisableComments: false
 ---

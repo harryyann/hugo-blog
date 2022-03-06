@@ -6,9 +6,9 @@
 ><head>
   <title>
     
-      Harry Yang
+      杨海瑞
         |
-        MySQL的事务
+        MySQL事务详解
 
 
       
@@ -18,11 +18,11 @@
   </title>
 
   
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.81.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta
     name="description"
     content="
-      Per aspera ad astra.
+      关于MySQL中的事务相关知识的整理
 
 
     "
@@ -32,8 +32,8 @@
   
   <link
     rel="stylesheet"
-    href="/css/main.min.85be0e4ea4ca1c19b0330f541e2e261921e89980a11fa5f1f9df9582be535877.css"
-    integrity="sha256-hb4OTqTKHBmwMw9UHi4mGSHomYChH6Xx&#43;d&#43;Vgr5TWHc="
+    href="/css/main.min.f973b2d131b2161c2c7b6273828227d3fe579ddae99021e3b915d9f43d469f57.css"
+    integrity="sha256-&#43;XOy0TGyFhwse2JzgoIn0/5XndrpkCHjuRXZ9D1Gn1c="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -41,8 +41,8 @@
   
   <link
     rel="stylesheet"
-    href="/css/markupHighlight.min.8f07fad4abedfd5eb1396c6fef85ba7ec00ec867a79fb545c9db18df87f6760a.css"
-    integrity="sha256-jwf61Kvt/V6xOWxv74W6fsAOyGenn7VFydsY34f2dgo="
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -67,8 +67,8 @@
   
   <script
     type="text/javascript"
-    src="/js/anatole-header.min.413f798d8aa82610bef17a5ca1d7e962ec185be395f1aeb3f45d1891af568b65.js"
-    integrity="sha256-QT95jYqoJhC&#43;8XpcodfpYuwYW&#43;OV8a6z9F0Yka9Wi2U="
+    src="/js/anatole-header.min.2a2cd9614b7d007dfbb75e8da19e3a0fa872ceab53c6d000c00b7a0c89b85bfc.js"
+    integrity="sha256-KizZYUt9AH37t16NoZ46D6hyzqtTxtAAwAt6DIm4W/w="
     crossorigin="anonymous"
   ></script>
 
@@ -77,22 +77,18 @@
     
     <script
       type="text/javascript"
-      src="/js/anatole-theme-switcher.min.fcf9526f15b3b4e08472de192969ab28a4cdcb32ac94f83e85a8b84e9b45acd2.js"
-      integrity="sha256-/PlSbxWztOCEct4ZKWmrKKTNyzKslPg&#43;hai4TptFrNI="
+      src="/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js"
+      integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus="
       crossorigin="anonymous"
     ></script>
-
-  
 
   
 
 
   
   <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="MySQL的事务"/>
-<meta name="twitter:description" content="事务 事务就是一组原子性的SQL语句。这一组SQL语句要么全部执行成功，要么全部不执行。只要有任何一条语句因为崩溃或其他原因无法执行，那么所有的语句都不会执行。事务处理系统需要包含以下四个特性(ACID)：
- 原子性(atomicity)  一个事务必须被看作 是不可分割的最小工作单元。不可能执行成功其中的一部分操作，要么全部提交成功，要么全部失败回滚。
- 一致性(consistency)  数据库总是从一个一致性的状态，转换到另一个一致性的状态。"/>
+<meta name="twitter:title" content="MySQL事务详解"/>
+<meta name="twitter:description" content="关于MySQL中的事务相关知识的整理"/>
 
 
 
@@ -108,15 +104,11 @@
         "@context": "http://schema.org",
         "@type": "BlogPosting",
         "articleSection": "posts",
-        "name": "MySQL的事务",
-        "headline": "MySQL的事务",
+        "name": "MySQL事务详解",
+        "headline": "MySQL事务详解",
         "alternativeHeadline": "",
         "description": "
-      
-        事务 事务就是一组原子性的SQL语句。这一组SQL语句要么全部执行成功，要么全部不执行。只要有任何一条语句因为崩溃或其他原因无法执行，那么所有的语句都不会执行。事务处理系统需要包含以下四个特性(ACID)：\n 原子性(atomicity)  一个事务必须被看作 是不可分割的最小工作单元。不可能执行成功其中的一部分操作，要么全部提交成功，要么全部失败回滚。\n 一致性(consistency)  数据库总是从一个一致性的状态，转换到另一个一致性的状态。
-
-
-      
+      关于MySQL中的事务相关知识的整理
 
 
     ",
@@ -128,19 +120,19 @@
         },
         "author" : {
             "@type": "Person",
-            "name": "Harry Yang"
+            "name": "杨海瑞"
         },
         "creator" : {
             "@type": "Person",
-            "name": "Harry Yang"
+            "name": "杨海瑞"
         },
         "accountablePerson" : {
             "@type": "Person",
-            "name": "Harry Yang"
+            "name": "杨海瑞"
         },
         "copyrightHolder" : {
             "@type": "Person",
-            "name": "Harry Yang"
+            "name": "杨海瑞"
         },
         "copyrightYear" : "2021",
         "dateCreated": "2021-05-04T22:10:47.00Z",
@@ -148,7 +140,7 @@
         "dateModified": "2021-05-04T22:10:47.00Z",
         "publisher":{
             "@type":"Organization",
-            "name": "Harry Yang",
+            "name": "杨海瑞",
             "url": "https://yanghairui.life",
             "logo": {
                 "@type": "ImageObject",
@@ -163,13 +155,20 @@
 
     ,
         "url" : "https:\/\/yanghairui.life\/posts\/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1\/",
-        "wordCount" : "97",
+        "wordCount" : "56",
         "genre" : [ 
       
-      "数据库"
+      "MySQL"
 
     ],
         "keywords" : [ 
+      
+      "Database"
+
+    
+      
+        ,
+
       
       "MySQL"
 
@@ -298,7 +297,7 @@
         <img src="/images/profile5.jpg" alt="profile picture" />
         <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
         <div class="description">
-          <p>Per aspera ad astra.</p>
+          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
         </div>
       </div>
     </div>
@@ -350,8 +349,8 @@
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
     crossorigin="anonymous"
   ></script></div>
 </aside>
@@ -367,7 +366,7 @@
     <div class="post-content">
       
       <div class="post-title">
-        <h1>MySQL的事务</h1>
+        <h1>MySQL事务详解</h1>
         
       </div><h3 id="事务">事务</h3>
 <p>事务就是一组原子性的SQL语句。这一组SQL语句要么全部执行成功，要么全部不执行。只要有任何一条语句因为崩溃或其他原因无法执行，那么所有的语句都不会执行。事务处理系统需要包含以下四个特性(ACID)：</p>
@@ -447,31 +446,12 @@
 </tr>
 </tbody>
 </table>
-<h3 id="死锁">死锁</h3>
-<p>死锁是指两个或者多个事务在同一个资源上相互占用，并请求锁定对方占用的资源，从而导致恶行循环的问题。比如以下两个事务：</p>
-<pre><code>START ACTION1;
-UPDATE StockTable SET close=45 WHERE stock_id=4;
-UPDATE StockTable SET close=19 WHERE stock_id=3;
-COMMIT;
-</code></pre><pre><code>START ACTION2;
-UPDATE StockTable SET high=20 WHERE stock_id=3;
-UPDATE StockTable SET high=47 WHERE stock_id=4;
-COMMIT;
-</code></pre><p>以上两个事务当执行完第一条语句后，改行会被锁定，当他们都去执行第二条语句的时候，发现改行都被对方锁定，然后两个事务都会等待对方释放锁，而陷入死循环。除非有外部因素介入才能解除死锁。</p>
 <p>为了解决死锁的问题，不同的数据库都实现了各种死锁检测和超时机制。InnoDB目前的处理方式是：将持有最少行级排他锁的事务进行回滚。</p>
-<p>死锁发生以后，只有部分或完全回滚其中一个事务才能打破死锁。所以应用程序在设计时需要考虑死锁导致的回滚，尽量添加超时重试机制。</p>
-<h3 id="事务日志">事务日志</h3>
-<p>事务日志可以提高事务的效率。使用事务日志，存储引擎在修改表的数据时只需要修改其内存拷贝，再把该行为持久化到磁盘的事务日志中。然后根据事务日志在后台慢慢把数据刷回磁盘。即采用事件日志时修改数据，需要写两次磁盘。</p>
-<h3 id="多版本并发控制mvcc">多版本并发控制(MVCC)</h3>
-<p>MySQL的大多数事务型存储引擎实现的都不是简单的行锁，由于行锁的开销较大，基于提升并发性的考虑，一般都会实现多版本并发控制(MVCC)，可以认为MVCC是行锁的一个变种，他在很多情况下避免了加锁操作，从而降低开销。</p>
-<p>不同的存储引擎对MVCC的实现也不尽相同，典型的有乐观并发控制、悲观并发控制。以下简要索命InnoDB存储引擎的MVCC。</p>
-<h4 id="innodb的mvcc实现方式">InnoDB的MVCC实现方式</h4>
-<p>InnoDB的MVCC，是通过在每行记录后面隐藏两个字段来实现的，两个字段一个保存了行的创建时间，另一个保存了行的过期时间(或删除时间)，当然存储的并非是时间戳，而是系统的版本号，系统版本号全局递增的，没开启一个新的事务，该事务就会把当前的系统版本号作为事务的版本号</p>
 </div>
     <div class="post-footer">
       <div class="info">
         
-          <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
+          <span class="separator"><a class="category" href="/categories/mysql/">MySQL</a></span>
 
 
 
@@ -479,7 +459,7 @@ COMMIT;
         
 
         
-          <span class="separator"><a class="tag" href="/tags/mysql/">MySQL</a></span>
+          <span class="separator"><a class="tag" href="/tags/database/">Database</a><a class="tag" href="/tags/mysql/">MySQL</a></span>
 
 
 
@@ -512,8 +492,8 @@ COMMIT;
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
     crossorigin="anonymous"
   ></script></body>
 </html>

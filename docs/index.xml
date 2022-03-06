@@ -8,7 +8,7 @@
     <language>zh-cn</language>
     <lastBuildDate>Tue, 04 May 2021 22:10:47 +0800</lastBuildDate><atom:link href="https://yanghairui.life/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>MySQL的事务</title>
+      <title>MySQL事务详解</title>
       <link>https://yanghairui.life/posts/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/</link>
       <pubDate>Tue, 04 May 2021 22:10:47 +0800</pubDate>
       
@@ -21,7 +21,7 @@
     </item>
     
     <item>
-      <title>学习编写Makefile</title>
+      <title>编写Makefile</title>
       <link>https://yanghairui.life/posts/%E5%AD%A6%E4%B9%A0%E7%BC%96%E5%86%99makefile/</link>
       <pubDate>Thu, 25 Mar 2021 20:45:07 +0800</pubDate>
       
@@ -48,7 +48,7 @@ wechat: redamancy40520</description>
     </item>
     
     <item>
-      <title>k8s核心库client-go的Informer机制</title>
+      <title>k8s的Informer机制</title>
       <link>https://yanghairui.life/posts/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/</link>
       <pubDate>Fri, 12 Mar 2021 23:55:43 +0800</pubDate>
       
@@ -66,7 +66,10 @@ Informer机制 </description>
       
       <guid>https://yanghairui.life/about/</guid>
       
-        <description>我出生于黑龙江省海伦市，成长于黑龙江省双鸭山市； 我本科毕业于郑州大学机械系； 我通过自学成为了一名码农； 我喜欢写代码，也喜欢探索一切未知的事物； 我目前单身； 我相信人有前世。  ​ 网站的副标题是一句拉丁谚语：</description>
+        <description>我出生于黑龙江省海伦市，成长于黑龙江省双鸭山市，在这座边境小城度过了我小学和中学的时光；
+  2018年我从郑州大学机械工程学院毕业，主修机械工程专业；
+  我通过自学成为了一名码农，我喜欢写代码，也喜欢探索一切未知的事物；
+  业余时间我喜欢看电影，通过电影体验不同的人生；</description>
       
     </item>
     

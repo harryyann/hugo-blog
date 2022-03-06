@@ -1,9 +1,9 @@
 ---
-title: "学习编写Makefile"
+title: "编写Makefile"
 date: 2021-03-25T20:45:07+08:00
-Description: ""
-Tags: [make]
-Categories: [工具使用]
+Description: "Makefile使用方法的整理"
+Tags: [makefile]
+Categories: [工具]
 DisableComments: false
 ---
 

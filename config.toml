@@ -3,6 +3,7 @@ baseURL = "https://yanghairui.life"
 languageCode = "zh-cn"
 DefaultContentLanguage = "zh-cn"
 title = "Website of Harry Yang"
+# 主题要用1.6.0版本的，否则不能调整sidebar比率
 theme = "hugo-anatole"
 summarylength = 10
 enableEmoji = true
@@ -20,20 +21,23 @@ enableRobotsTXT = true
 # googleAnalytics = "UA-123-45"
 
 # Syntax highlighting
-pygmentsUseClasses = true 
-pygmentsCodeFences = true
-pygmentsCodefencesGuessSyntax = true
+pygmentsUseClasses = false
+pygmentsCodeFences = false
+pygmentsCodefencesGuessSyntax = false
 
 [params]
 disableThemeSwitcher = false
 title = "Harry Yang's Website"
-author = "Harry Yang"
+author = "杨海瑞"
 copyright = "2021-2022"
-description = "Per aspera ad astra."
+description = """
+Per aspera ad astra.
+循此苦旅，终抵群星。
+"""
 profilePicture = "images/profile5.jpg"
-keywords = "tech/lifestyle"
+keywords = "tech/life"
 favicon = "favicons/"
-contentratio = 0.75
+contentRatio = 0.75
 readMore = true
 customCss = []
 customJs = [] 
@@ -43,9 +47,9 @@ doNotLoadAnimations = false
 rssFullContent = false
 
 # Form Spree Contact Form
-#contactFormAction = "https://formspree.io/f/your-form-hash-here"
+# contactFormAction = "https://formspree.io/f/your-form-hash-here"
 # Google Site Verify
-#googleSiteVerify = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+# googleSiteVerify = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 # indexDateFormat = "Mon, Jan 2, 2006"
 # listDateFormat = "Jan 2"
 # singleDateFormat = "Mon, Jan 2, 2006"

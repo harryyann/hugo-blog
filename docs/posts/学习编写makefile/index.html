@@ -6,9 +6,9 @@
 ><head>
   <title>
     
-      Harry Yang
+      杨海瑞
         |
-        学习编写Makefile
+        编写Makefile
 
 
       
@@ -18,11 +18,11 @@
   </title>
 
   
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.81.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta
     name="description"
     content="
-      Per aspera ad astra.
+      Makefile使用方法的整理
 
 
     "
@@ -32,8 +32,8 @@
   
   <link
     rel="stylesheet"
-    href="/css/main.min.85be0e4ea4ca1c19b0330f541e2e261921e89980a11fa5f1f9df9582be535877.css"
-    integrity="sha256-hb4OTqTKHBmwMw9UHi4mGSHomYChH6Xx&#43;d&#43;Vgr5TWHc="
+    href="/css/main.min.f973b2d131b2161c2c7b6273828227d3fe579ddae99021e3b915d9f43d469f57.css"
+    integrity="sha256-&#43;XOy0TGyFhwse2JzgoIn0/5XndrpkCHjuRXZ9D1Gn1c="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -41,8 +41,8 @@
   
   <link
     rel="stylesheet"
-    href="/css/markupHighlight.min.8f07fad4abedfd5eb1396c6fef85ba7ec00ec867a79fb545c9db18df87f6760a.css"
-    integrity="sha256-jwf61Kvt/V6xOWxv74W6fsAOyGenn7VFydsY34f2dgo="
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -67,8 +67,8 @@
   
   <script
     type="text/javascript"
-    src="/js/anatole-header.min.413f798d8aa82610bef17a5ca1d7e962ec185be395f1aeb3f45d1891af568b65.js"
-    integrity="sha256-QT95jYqoJhC&#43;8XpcodfpYuwYW&#43;OV8a6z9F0Yka9Wi2U="
+    src="/js/anatole-header.min.2a2cd9614b7d007dfbb75e8da19e3a0fa872ceab53c6d000c00b7a0c89b85bfc.js"
+    integrity="sha256-KizZYUt9AH37t16NoZ46D6hyzqtTxtAAwAt6DIm4W/w="
     crossorigin="anonymous"
   ></script>
 
@@ -77,23 +77,18 @@
     
     <script
       type="text/javascript"
-      src="/js/anatole-theme-switcher.min.fcf9526f15b3b4e08472de192969ab28a4cdcb32ac94f83e85a8b84e9b45acd2.js"
-      integrity="sha256-/PlSbxWztOCEct4ZKWmrKKTNyzKslPg&#43;hai4TptFrNI="
+      src="/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js"
+      integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus="
       crossorigin="anonymous"
     ></script>
-
-  
 
   
 
 
   
   <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="学习编写Makefile"/>
-<meta name="twitter:description" content="make工具介绍 项目构建往往要经过一系列的过程，尤其是C项目，可能需要先编译这个，再编译那个，再添加个链接，完了再打个docker镜像，会有很多的文件需要创建和更改。这些动作，我们既可以通过手工的方式，一步步完成，不免显得繁琐。或者也可以写个shell脚本自动完成。但是make是专门做这件事的。
-make的环境准备 对于linux或者mac系统，只要有gcc，一般都会有make，通过命令make -v可以检查你当前的环境有没有make，而在windows上想使用make还是比较复杂的，尽管网上有很多教程，但我都没有尝试成功，推荐还是尽量在linux或者mac环境下使用make构建你的项目
-make的使用 make的使用非常简单，笔者不是make大神，使用make都是通过一条 make 命令和编写一个Makefile文件即可。
-Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需要有哪些前置操作，或者需要哪些前置文件，最终又生成了什么文件。"/>
+<meta name="twitter:title" content="编写Makefile"/>
+<meta name="twitter:description" content="Makefile使用方法的整理"/>
 
 
 
@@ -109,15 +104,11 @@ Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需
         "@context": "http://schema.org",
         "@type": "BlogPosting",
         "articleSection": "posts",
-        "name": "学习编写Makefile",
-        "headline": "学习编写Makefile",
+        "name": "编写Makefile",
+        "headline": "编写Makefile",
         "alternativeHeadline": "",
         "description": "
-      
-        make工具介绍 项目构建往往要经过一系列的过程，尤其是C项目，可能需要先编译这个，再编译那个，再添加个链接，完了再打个docker镜像，会有很多的文件需要创建和更改。这些动作，我们既可以通过手工的方式，一步步完成，不免显得繁琐。或者也可以写个shell脚本自动完成。但是make是专门做这件事的。\nmake的环境准备 对于linux或者mac系统，只要有gcc，一般都会有make，通过命令make -v可以检查你当前的环境有没有make，而在windows上想使用make还是比较复杂的，尽管网上有很多教程，但我都没有尝试成功，推荐还是尽量在linux或者mac环境下使用make构建你的项目\nmake的使用 make的使用非常简单，笔者不是make大神，使用make都是通过一条 make 命令和编写一个Makefile文件即可。\nMakefile的编写 Makefile中需要指明要进行哪些操作，这些操作需要有哪些前置操作，或者需要哪些前置文件，最终又生成了什么文件。
-
-
-      
+      Makefile使用方法的整理
 
 
     ",
@@ -129,19 +120,19 @@ Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需
         },
         "author" : {
             "@type": "Person",
-            "name": "Harry Yang"
+            "name": "杨海瑞"
         },
         "creator" : {
             "@type": "Person",
-            "name": "Harry Yang"
+            "name": "杨海瑞"
         },
         "accountablePerson" : {
             "@type": "Person",
-            "name": "Harry Yang"
+            "name": "杨海瑞"
         },
         "copyrightHolder" : {
             "@type": "Person",
-            "name": "Harry Yang"
+            "name": "杨海瑞"
         },
         "copyrightYear" : "2021",
         "dateCreated": "2021-03-25T20:45:07.00Z",
@@ -149,7 +140,7 @@ Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需
         "dateModified": "2021-03-25T20:45:07.00Z",
         "publisher":{
             "@type":"Organization",
-            "name": "Harry Yang",
+            "name": "杨海瑞",
             "url": "https://yanghairui.life",
             "logo": {
                 "@type": "ImageObject",
@@ -167,12 +158,12 @@ Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需
         "wordCount" : "67",
         "genre" : [ 
       
-      "工具使用"
+      "工具"
 
     ],
         "keywords" : [ 
       
-      "make"
+      "makefile"
 
     ]
     }
@@ -299,7 +290,7 @@ Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需
         <img src="/images/profile5.jpg" alt="profile picture" />
         <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
         <div class="description">
-          <p>Per aspera ad astra.</p>
+          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
         </div>
       </div>
     </div>
@@ -351,8 +342,8 @@ Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
     crossorigin="anonymous"
   ></script></div>
 </aside>
@@ -368,7 +359,7 @@ Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需
     <div class="post-content">
       
       <div class="post-title">
-        <h1>学习编写Makefile</h1>
+        <h1>编写Makefile</h1>
         
       </div><h3 id="make工具介绍">make工具介绍</h3>
 <p>项目构建往往要经过一系列的过程，尤其是C项目，可能需要先编译这个，再编译那个，再添加个链接，完了再打个docker镜像，会有很多的文件需要创建和更改。这些动作，我们既可以通过手工的方式，一步步完成，不免显得繁琐。或者也可以写个shell脚本自动完成。但是make是专门做这件事的。</p>
@@ -417,7 +408,7 @@ NCR <span style="color:#f92672">=</span> ncr.nie.com/yanghairui/
     <div class="post-footer">
       <div class="info">
         
-          <span class="separator"><a class="category" href="/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/">工具使用</a></span>
+          <span class="separator"><a class="category" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a></span>
 
 
 
@@ -425,7 +416,7 @@ NCR <span style="color:#f92672">=</span> ncr.nie.com/yanghairui/
         
 
         
-          <span class="separator"><a class="tag" href="/tags/make/">make</a></span>
+          <span class="separator"><a class="tag" href="/tags/makefile/">makefile</a></span>
 
 
 
@@ -458,8 +449,8 @@ NCR <span style="color:#f92672">=</span> ncr.nie.com/yanghairui/
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
     crossorigin="anonymous"
   ></script></body>
 </html>
