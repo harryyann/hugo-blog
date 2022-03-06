@@ -10,6 +10,5 @@ draft: false
 
 **wechat**: `redamancy40520`
 
-<center>
-<img width="400" src="/images/wechat.png">
-</center>
+
+
