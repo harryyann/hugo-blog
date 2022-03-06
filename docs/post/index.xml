@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Website of Harry Yang</title>
-    <link>https://yanghairui.life/</link>
-    <description>Recent content on Website of Harry Yang</description>
+    <title>Posts on Website of Harry Yang</title>
+    <link>https://yanghairui.life/post/</link>
+    <description>Recent content in Posts on Website of Harry Yang</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 06 Mar 2022 17:42:42 +0800</lastBuildDate><atom:link href="https://yanghairui.life/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 06 Mar 2022 17:42:42 +0800</lastBuildDate><atom:link href="https://yanghairui.life/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Redis缓存击穿、雪崩和穿透</title>
       <link>https://yanghairui.life/post/redis%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E9%9B%AA%E5%B4%A9%E5%92%8C%E7%A9%BF%E9%80%8F/</link>
@@ -39,19 +39,6 @@
         <description>如何评判一个系统的性能  Throughput  吞吐量
  Latency  请求耗时
  ErrorRate  错误率</description>
-      
-    </item>
-    
-    <item>
-      <title>性能优化的分析思路</title>
-      <link>https://yanghairui.life/posts/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E5%88%86%E6%9E%90%E6%80%9D%E8%B7%AF/</link>
-      <pubDate>Sun, 06 Mar 2022 17:38:15 +0800</pubDate>
-      
-      <guid>https://yanghairui.life/posts/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E5%88%86%E6%9E%90%E6%80%9D%E8%B7%AF/</guid>
-      
-        <description>系统性能的定义   Throughput：吞吐量
-  Latency：请求耗时
-  Error rate：错误率</description>
       
     </item>
     
@@ -272,72 +259,6 @@
       <guid>https://yanghairui.life/post/mysql%E7%9A%84%E9%94%81/</guid>
       
         <description></description>
-      
-    </item>
-    
-    <item>
-      <title>MySQL事务详解</title>
-      <link>https://yanghairui.life/posts/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/</link>
-      <pubDate>Tue, 04 May 2021 22:10:47 +0800</pubDate>
-      
-      <guid>https://yanghairui.life/posts/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/</guid>
-      
-        <description>事务 事务就是一组原子性的SQL语句。这一组SQL语句要么全部执行成功，要么全部不执行。只要有任何一条语句因为崩溃或其他原因无法执行，那么所有的语句都不会执行。事务处理系统需要包含以下四个特性(ACID)：
- 原子性(atomicity)  一个事务必须被看作 是不可分割的最小工作单元。不可能执行成功其中的一部分操作，要么全部提交成功，要么全部失败回滚。
- 一致性(consistency)  数据库总是从一个一致性的状态，转换到另一个一致性的状态。</description>
-      
-    </item>
-    
-    <item>
-      <title>编写Makefile</title>
-      <link>https://yanghairui.life/posts/%E5%AD%A6%E4%B9%A0%E7%BC%96%E5%86%99makefile/</link>
-      <pubDate>Thu, 25 Mar 2021 20:45:07 +0800</pubDate>
-      
-      <guid>https://yanghairui.life/posts/%E5%AD%A6%E4%B9%A0%E7%BC%96%E5%86%99makefile/</guid>
-      
-        <description>make工具介绍 项目构建往往要经过一系列的过程，尤其是C项目，可能需要先编译这个，再编译那个，再添加个链接，完了再打个docker镜像，会有很多的文件需要创建和更改。这些动作，我们既可以通过手工的方式，一步步完成，不免显得繁琐。或者也可以写个shell脚本自动完成。但是make是专门做这件事的。
-make的环境准备 对于linux或者mac系统，只要有gcc，一般都会有make，通过命令make -v可以检查你当前的环境有没有make，而在windows上想使用make还是比较复杂的，尽管网上有很多教程，但我都没有尝试成功，推荐还是尽量在linux或者mac环境下使用make构建你的项目
-make的使用 make的使用非常简单，笔者不是make大神，使用make都是通过一条 make 命令和编写一个Makefile文件即可。
-Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需要有哪些前置操作，或者需要哪些前置文件，最终又生成了什么文件。</description>
-      
-    </item>
-    
-    <item>
-      <title>Contact</title>
-      <link>https://yanghairui.life/contact/</link>
-      <pubDate>Tue, 23 Mar 2021 22:52:05 +0800</pubDate>
-      
-      <guid>https://yanghairui.life/contact/</guid>
-      
-        <description>QQ: 941811450
-gmail: horace27149@gmail.com
-wechat: redamancy40520</description>
-      
-    </item>
-    
-    <item>
-      <title>k8s的Informer机制</title>
-      <link>https://yanghairui.life/posts/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/</link>
-      <pubDate>Fri, 12 Mar 2021 23:55:43 +0800</pubDate>
-      
-      <guid>https://yanghairui.life/posts/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/</guid>
-      
-        <description>Client-go client-go与其他语言版本的k8s不同的地方在于，它不仅仅是一个k8s的客户端，而且还是一个k8s的核心库，k8s中各个组件与api-server之间的通信都是通过client-go的iformer机制实现的快速无延迟的数据同步。
-Informer机制 </description>
-      
-    </item>
-    
-    <item>
-      <title>About</title>
-      <link>https://yanghairui.life/about/</link>
-      <pubDate>Fri, 12 Mar 2021 23:55:16 +0800</pubDate>
-      
-      <guid>https://yanghairui.life/about/</guid>
-      
-        <description>我出生于黑龙江省海伦市，成长于黑龙江省双鸭山市，在这座边境小城度过了我小学和中学的时光；
-  2018年我从郑州大学机械工程学院毕业，主修机械工程专业；
-  我通过自学成为了一名码农，我喜欢写代码，也喜欢探索一切未知的事物；
-  业余时间我喜欢看电影，通过电影体验不同的人生；</description>
       
     </item>
     

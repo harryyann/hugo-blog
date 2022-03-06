@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="zh-cn"
+  data-theme=""
+><head>
+  <title>
+    
+      杨海瑞
+        |
+        性能优化的分析思路
+
+
+      
+
+
+    
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.81.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta
+    name="description"
+    content="
+      关于系统性能优化的一些思路和方法
+
+
+    "
+  />
+  
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://yanghairui.life/posts/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E5%88%86%E6%9E%90%E6%80%9D%E8%B7%AF/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.2a2cd9614b7d007dfbb75e8da19e3a0fa872ceab53c6d000c00b7a0c89b85bfc.js"
+    integrity="sha256-KizZYUt9AH37t16NoZ46D6hyzqtTxtAAwAt6DIm4W/w="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js"
+      integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus="
+      crossorigin="anonymous"
+    ></script>
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="性能优化的分析思路"/>
+<meta name="twitter:description" content="关于系统性能优化的一些思路和方法"/>
+
+
+
+  
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "posts",
+        "name": "性能优化的分析思路",
+        "headline": "性能优化的分析思路",
+        "alternativeHeadline": "",
+        "description": "
+      关于系统性能优化的一些思路和方法
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/posts\/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E5%88%86%E6%9E%90%E6%80%9D%E8%B7%AF\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2022",
+        "dateCreated": "2022-03-06T17:38:15.00Z",
+        "datePublished": "2022-03-06T17:38:15.00Z",
+        "dateModified": "2022-03-06T17:38:15.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/posts\/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E5%88%86%E6%9E%90%E6%80%9D%E8%B7%AF\/",
+        "wordCount" : "126",
+        "genre" : [ 
+      
+      "性能优化"
+
+    ],
+        "keywords" : [ 
+      
+      "性能优化"
+
+    ]
+    }
+  </script>
+
+
+
+</head>
+<body>
+    <header><div
+  class="page-top 
+    animated fadeInDown
+
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>
+  <nav>
+    <ul class="nav__list" id="navMenu">
+      <div class="nav__links">
+        
+        
+          
+          <li>
+            <a
+              
+              href="/"
+              
+              title=""
+              >Home</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/posts/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/records/"
+              
+              title=""
+              >Records</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/portfolio/"
+              
+              title=""
+              >Portfolio</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >About</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/contact/"
+              
+              title=""
+              >Contact</a
+            >
+          </li>
+
+        
+      </div>
+      <ul>
+        
+        
+          <li>
+            <a class="theme-switch" title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </li>
+
+        
+      </ul>
+    </ul>
+  </nav>
+</div>
+</header>
+    <div class="wrapper">
+      <aside><div
+  class="sidebar
+    animated fadeInDown
+
+  "
+>
+  <div class="sidebar__content">
+    <div class="logo-title">
+      <div class="title">
+        <img src="/images/profile5.jpg" alt="profile picture" />
+        <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
+        <div class="description">
+          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+        <li>
+          <a href="https://stackoverflow.com/users/12924262/horace-yang" rel="me" aria-label="StackOverFlow" title="StackOverFlow">
+            <i class="fab fa-stack-overflow fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://github.com/harryyann" rel="me" aria-label="GitHub" title="GitHub">
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://www.zhihu.com/people/yang-hai-rui-88" rel="me" aria-label="zhihu" title="zhihu">
+            <i class="fab fa-zhihu fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=941811450@qq.com" rel="me" aria-label="e-mail" title="e-mail">
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+    </ul>
+  </div><footer class="footer footer--sidebar">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></div>
+</aside>
+      <main>
+        <div class="autopagerize_page_element">
+          <div class="content">
+  <div
+    class="post 
+      animated fadeInDown
+
+    "
+  >
+    <div class="post-content">
+      
+      <div class="post-title">
+        <h1>性能优化的分析思路</h1>
+        
+      </div><h1 id="系统性能的定义">系统性能的定义</h1>
+<ul>
+<li>
+<p><strong>Throughput</strong>：吞吐量</p>
+</li>
+<li>
+<p><strong>Latency</strong>：请求耗时</p>
+</li>
+<li>
+<p><strong>Error rate</strong>：错误率</p>
+</li>
+</ul>
+<p>以上三点条件是衡量一个系统性能好坏的常用指标。三者也是缺一不可的。比如如果吞吐量能达到很高，但是延迟也很高，还都是错误，那就没有任何意义。一般在满足错误率为定值时，latency越低，throughput越高，因为响应速度越快，那么单位时间能处理的请求就更多。同时如果throughput越高，那么latency也会变高，系统变得繁忙，自然响应速度就会降低，甚至错误率也会提升。测试一个系统的性能，实际上就是收集这几个参数，找到满足业务要求时的最优值，比如满足error rate为0和latency在一定数值时（比如小于50ms）的throughput。</p>
+<h1 id="系统性能测试">系统性能测试</h1>
+<h3 id="定义好可以接受的latency的值">定义好可以接受的latency的值</h3>
+<p>这个可以根据实际业务来定，或者在微服务中，根据系统的总请求耗时拆分各个微服务的最大请求耗时，把这个值作为服务可以接受的最大latency。</p>
+<h2 id="进行性能测试">进行性能测试</h2>
+<p>然后就可以使用一些性能测试工具，通过制造尽可能高的throughput，找到满足指定latency条件下的最大值，就是这个系统的最大负载了。压测的过程可能比较长，以保证能拿到准确而丰富的数据。</p>
+<p>压测时有一些点是需要注意的：</p>
+<ol>
+<li>
+<p>当throughput比较小时，latency往往比较稳定，当逐步加大throughput时，latency往往会出现剧烈的抖动，需要测量latency的分布，比如99分位的latency是多少时是可以接受的。很多压测工具一般都可以提供这个参数，比如我经常使用的<a href="https://github.com/locustio/locust">Locust</a>和<a href="https://github.com/grafana/k6">K6</a>，或者老牌的压测工具<a href="https://github.com/apache/jmeter">Jmeter</a>。</p>
+</li>
+<li>
+<p>通过不断提升throughput值，找到满足条件的最大throughput以得到系统的最大负载，然后可以取该值的2/3作为一个软警戒线，80%作为一个硬警戒线，是我们能承受的最大值。</p>
+</li>
+<li>
+<p>最好长时间比如连续7天不间断的压测，看看系统是不是稳定的。</p>
+</li>
+<li>
+<p>使用burst test。比如运行5分钟的最大throughput，然后运行一分钟的极限throughput，循环执行一段时间，看看系统是否仍然稳定。</p>
+</li>
+<li>
+<p>还要测试一下throughput较小时系统的性能，因为在QPS较小时，可能会因为TCP的粘包等的问题，导致latency反而提高了，这种情况下往往是系统TCP连接的相关参数没有设置对。</p>
+</li>
+</ol>
+<h1 id="定位性能瓶颈">定位性能瓶颈</h1>
+<p>这个十分重要，因为如果无法找到系统的性能瓶颈，那性能优化就无从下手。而往往一个系统很复杂的情况下，性能瓶颈也不是那么好找。可以从以下几个方面入手</p>
+<h2 id="查看操作系统的负载">查看操作系统的负载</h2>
+<p>首先要看的是<strong>CPU利用率</strong>、<strong>内存利用率</strong>、<strong>磁盘IO吞吐量</strong>、<strong>网络IO吞吐量</strong>这些参数。</p>
+<p>如果CPU利用率不高，但是throughput却上不去，那就说明我们的应用程序没有忙于计算，可能是忙于IO，这时就要看看是不是因为IO导致的性能上不去。Linux下有很多工具可以查看CPU使用率。</p>
+<pre><code>Tips:
+
+对于多核CPU来说，还需要关注CPU 0，要保证它的负载不能过高，因为各个核是通过CPU 0进行调度的，CPU 0的负载过高会影响整体的性能。
+</code></pre><p>如果CPU不大，那么就看看IO，主要看三个方面</p>
+<ol>
+<li>
+<p>磁盘文件IO：</p>
+<p>linux有很多工具可以查看当前的磁盘IO，比如<code>sar</code>、<code>iostat</code>、<code>vmstat</code>等。比如：</p>
+</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ sar -d -p <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span>
+Linux 4.19.0-13-amd64 <span style="color:#f92672">(</span>cld-ipv6client3-30001.i.nease.net<span style="color:#f92672">)</span>       2022年03月02日  _x86_64_        <span style="color:#f92672">(</span><span style="color:#ae81ff">48</span> CPU<span style="color:#f92672">)</span>
+
+11时24分43秒       DEV       tps     rkB/s     wkB/s   areq-sz    aqu-sz     await     svctm     %util
+11时24分44秒       sda      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+11时24分45秒       sda     21.00      0.00    260.00     12.38      0.14      7.00      0.38      0.80
+Average:          sda     10.50      0.00    130.00     12.38      0.07      7.00      0.38      0.40
+</code></pre></div><ol start="2">
+<li>
+<p>驱动程序IO:</p>
+<p>比如网卡，也可以通过<code>iostat</code>测量</p>
+</li>
+<li>
+<p>内存换页率</p>
+<p>linux内核会把某些进程暂时不用的内存页保存到磁盘中，当进程需要用到某块当前内存中没有而存在磁盘的数据时，就需要从磁盘中再读回内存，内存淘汰用的是LRU算法，以实现系统可用的内存远大于实际真实的物理内存。如果内存换页太频繁，肯定会影响程序性能</p>
+</li>
+</ol>
+<p>如果CPU不高，IO也不高，性能还是差，那就可以看看<strong>网络带宽</strong>。可能是带宽过小了，导致网络传输效率低，这个可以有很多命令可以用，<code>iftop</code>、<code>iptraf</code>、<code>tcpdump</code>或者也可以使用wireshark。</p>
+<p>如果网络带宽也没问题，那就大概率是应用程序的性能问题是当前系统的瓶颈，接下来我们讨论一下。</p>
+<h1 id="应用程序性能瓶颈和优化">应用程序性能瓶颈和优化</h1>
+<p>通过一些profile工具对应用程序进行benchmark，比如golang官方的<strong>pprof</strong>，找到各个函数或方法的运行时间以及调用的次数，对于CPU的使用率等，如果关注CPU缓存行的调优，可以使用<a href="https://www.intel.com/content/www/us/en/developer/tools/oneapi/vtune-profiler.html">Vtune</a>。</p>
+<p>需要重点观察哪些调用次数较多的函数，因为对这些函数进行小小的提升，对整个应用程序的提升最大，比如一个函数被调用了1000次，那么优化它1ms，那就有整整1s的优化。</p>
+<p>一个应用程序的性能分布往往也遵循二八定律。20%的代码消耗了整体80%的性能，那么找到这20%的代码，对它进行重点优化。</p>
+<h2 id="代码优化的常见方式">代码优化的常见方式</h2>
+<ul>
+<li>
+<p>算法优化。比如：遍历能不能改成二分，能不能用空间换时间比如使用hash，能不能分治等等。降低算法的时间复杂度以提高代码执行效率。</p>
+</li>
+<li>
+<p>代码逻辑的优化。比如：</p>
+<ol>
+<li>
+<p>字符串的优化，拼接方式、匹配子串、系列化和反序列化等</p>
+</li>
+<li>
+<p>多用并发操作，这一点golang有天然的优势</p>
+</li>
+<li>
+<p>内存优化，尽量减少内存碎片，比如golang的内存对齐，成员变量存储在一起更节省空间，也更容易利用到CPU缓存行，减少内存的随机访问</p>
+</li>
+<li>
+<p>异步，代码逻辑可不可以用异步的方式执行</p>
+</li>
+<li>
+<p>第三方包的使用，有些包可能会有效率问题，看能不能换成效率更好的，比如golang官方的json包</p>
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="网络调优">网络调优</h2>
+<p>TCP调优，尽量配置KeepAlive参数，及时关闭连接，节省资源的消耗，还有就是如果流量较大的话，增大缓冲区，不要让一个包分成多次传输。</p>
+<p>UDP调优，注意MTU最大传输单元，一个包尽量装满了再发。</p>
+<p>网卡，一些网卡的配置参数，比如txquenelen，receive buffer等。</p>
+<h2 id="系统调优">系统调优</h2>
+<p>IO模型。各种IO模型的使用，尽量采用多路复用。</p>
+<p>多核CPU的使用，尽量利用到多核CPU，同时注意CPU 0。</p>
+<p>文件系统调优，linux的文件系统也是有cache的，<strong>os buffer</strong>，尽量利用到系统的优化，这一点MySQL有很多值得参考的地方。</p>
+<h2 id="数据库调优">数据库调优</h2>
+<p>数据库调优有很多值得写的地方。大体上可以分成<strong>索引的合理使用</strong>、<strong>查询方式的优化</strong>、<strong>表结构的优化</strong>、**引擎的配置*等。</p>
+<h2 id="其他方面的一些优化策略">其他方面的一些优化策略</h2>
+<ol>
+<li>空间换时间</li>
+</ol>
+<p>比如各种cache的使用，减少IO，或者把IO放到异步，通过缓存提升性能。</p>
+<p>使用CDN，静态资源加速。</p>
+<ol start="2">
+<li>时间换空间</li>
+</ol>
+<p>如果瓶颈在网络传输，或者使用了压缩算法，那么空间对效率的影响可能要高于时间，那就可以通过时间换空间的思路，整体上进行优化。</p>
+<ol start="3">
+<li>用好并行</li>
+</ol>
+<p>充分利用CPU的多核特性，单个CPU也别让他太闲。</p>
+<ol start="4">
+<li>分布式</li>
+</ol>
+<p>实在不行可以搞分布式，通过负载均衡提高系统性能，也就是加机器。</p>
+</div>
+    <div class="post-footer">
+      <div class="info">
+        
+          <span class="separator"><a class="category" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a></span>
+
+
+
+
+        
+
+        
+          <span class="separator"><a class="tag" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a></span>
+
+
+
+
+        
+      </div>
+    </div>
+
+    
+  </div>
+
+
+          </div>
+        </div>
+      </main>
+    </div><footer class="footer footer--base">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></body>
+</html>

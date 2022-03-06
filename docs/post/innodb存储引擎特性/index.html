@@ -8,7 +8,7 @@
     
       杨海瑞
         |
-        Website of Harry Yang
+        Innodb存储引擎特性
 
 
       
@@ -62,12 +62,9 @@ Per aspera ad astra.
   <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
 
-  <link rel="canonical" href="https://yanghairui.life/" />
+  <link rel="canonical" href="https://yanghairui.life/post/innodb%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E7%89%B9%E6%80%A7/" />
 
   
-  <link rel="alternate" type="application/rss+xml" href="/index.xml" title="Website of Harry Yang" />
-
-
   
   
   
@@ -93,27 +90,81 @@ Per aspera ad astra.
 
   
   <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Website of Harry Yang"/>
-<meta name="twitter:description" content="
-Per aspera ad astra.
-循此苦旅，终抵群星。
-"/>
+<meta name="twitter:title" content="Innodb存储引擎特性"/>
+<meta name="twitter:description" content=""/>
 
 
 
   
 
 
+  
+  
+  
   
   <script type="application/ld+json">
     {
-      "@context": "http://schema.org",
-      "@type": "WebSite",
-      "name": "Website of Harry Yang",
-      "url": "https:\/\/yanghairui.life",
-      "description": "\r\nPer aspera ad astra.\r\n循此苦旅，终抵群星。\r\n",
-      "thumbnailUrl": "https:\/\/yanghairui.life",
-      "license": "2021-2022"
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "post",
+        "name": "Innodb存储引擎特性",
+        "headline": "Innodb存储引擎特性",
+        "alternativeHeadline": "",
+        "description": "
+      
+        
+
+
+      
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/post\/innodb%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E7%89%B9%E6%80%A7\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2022",
+        "dateCreated": "2022-03-06T17:09:16.00Z",
+        "datePublished": "2022-03-06T17:09:16.00Z",
+        "dateModified": "2022-03-06T17:09:16.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/post\/innodb%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E7%89%B9%E6%80%A7\/",
+        "wordCount" : "0",
+        "genre" : [ ],
+        "keywords" : [ ]
     }
   </script>
 
@@ -140,9 +191,6 @@ Per aspera ad astra.
           
           <li>
             <a
-              
-                class="current"
-
               
               href="/"
               
@@ -307,44 +355,11 @@ Per aspera ad astra.
 
     "
   >
-    <div class="post-title post-content">
-      
-    </div>
-
-    
-  </div>
-
-  
-
-  
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
+    <div class="post-content">
       
       <div class="post-title">
-        <h3><a href="/posts/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E5%88%86%E6%9E%90%E6%80%9D%E8%B7%AF/">性能优化的分析思路</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              系统性能的定义   Throughput：吞吐量
-  Latency：请求耗时
-  Error rate：错误率
-
-
-            
-          </p>
-          <a href="/posts/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E5%88%86%E6%9E%90%E6%80%9D%E8%B7%AF/" class="read_more">继续阅读</a></div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
+        <h1>Innodb存储引擎特性</h1>
+        
           <div class="info">
             <em class="fas fa-calendar-day"></em>
             <span class="date"
@@ -354,201 +369,21 @@ Per aspera ad astra.
 
               </span
             >
-            
-              <span class="separator"><a class="category" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a></span>
-
-
-
-
-            
+            <em class="fas fa-stopwatch"></em>
+            <span class="reading-time">阅读时间 0 分钟</span>
           </div>
-        </div>
+
+        
+      </div></div>
+    <div class="post-footer">
+      <div class="info">
+        
+
+        
       </div>
     </div>
 
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
-        <h3><a href="/posts/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/">MySQL事务详解</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              事务 事务就是一组原子性的SQL语句。这一组SQL语句要么全部执行成功，要么全部不执行。只要有任何一条语句因为崩溃或其他原因无法执行，那么所有的语句都不会执行。事务处理系统需要包含以下四个特性(ACID)：
- 原子性(atomicity)  一个事务必须被看作 是不可分割的最小工作单元。不可能执行成功其中的一部分操作，要么全部提交成功，要么全部失败回滚。
- 一致性(consistency)  数据库总是从一个一致性的状态，转换到另一个一致性的状态。
-
-
-            
-          </p>
-          <a href="/posts/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/" class="read_more">继续阅读</a></div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Tue, May 4, 2021
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/mysql/">MySQL</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/database/">Database</a><a class="tag" href="/tags/mysql/">MySQL</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
-        <h3><a href="/posts/%E5%AD%A6%E4%B9%A0%E7%BC%96%E5%86%99makefile/">编写Makefile</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              make工具介绍 项目构建往往要经过一系列的过程，尤其是C项目，可能需要先编译这个，再编译那个，再添加个链接，完了再打个docker镜像，会有很多的文件需要创建和更改。这些动作，我们既可以通过手工的方式，一步步完成，不免显得繁琐。或者也可以写个shell脚本自动完成。但是make是专门做这件事的。
-make的环境准备 对于linux或者mac系统，只要有gcc，一般都会有make，通过命令make -v可以检查你当前的环境有没有make，而在windows上想使用make还是比较复杂的，尽管网上有很多教程，但我都没有尝试成功，推荐还是尽量在linux或者mac环境下使用make构建你的项目
-make的使用 make的使用非常简单，笔者不是make大神，使用make都是通过一条 make 命令和编写一个Makefile文件即可。
-Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需要有哪些前置操作，或者需要哪些前置文件，最终又生成了什么文件。
-
-
-            
-          </p>
-          <a href="/posts/%E5%AD%A6%E4%B9%A0%E7%BC%96%E5%86%99makefile/" class="read_more">继续阅读</a></div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Thu, Mar 25, 2021
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/makefile/">makefile</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
-        <h3><a href="/posts/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/">k8s的Informer机制</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              Client-go client-go与其他语言版本的k8s不同的地方在于，它不仅仅是一个k8s的客户端，而且还是一个k8s的核心库，k8s中各个组件与api-server之间的通信都是通过client-go的iformer机制实现的快速无延迟的数据同步。
-Informer机制 
-
-
-            
-          </p>
-          </div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Fri, Mar 12, 2021
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/k8s/">k8s</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/k8s/">k8s</a><a class="tag" href="/tags/golang/">golang</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-  <div class="pagination">
     
-
   </div>
 
 
