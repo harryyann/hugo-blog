@@ -1,6 +1,3 @@
 [submodule "harryyann.github.io"]
 	path = harryyann.github.io
 	url = git@github.com:harryyann/harryyann.github.io.git
-[submodule "themes/themes/hugo-anatole"]
-	path = themes/themes/hugo-anatole
-	url = https://github.com/lxndrblz/anatole.git
