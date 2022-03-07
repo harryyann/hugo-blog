@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="zh-cn"
+  data-theme=""
+><head>
+  <title>
+    
+      杨海瑞
+        |
+        MySQL的复制
+
+
+      
+
+
+    
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.81.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta
+    name="description"
+    content="
+      详解MySQL的复制
+
+
+    "
+  />
+  
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://yanghairui.life/posts/mysql%E5%A4%8D%E5%88%B6/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.2a2cd9614b7d007dfbb75e8da19e3a0fa872ceab53c6d000c00b7a0c89b85bfc.js"
+    integrity="sha256-KizZYUt9AH37t16NoZ46D6hyzqtTxtAAwAt6DIm4W/w="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js"
+      integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus="
+      crossorigin="anonymous"
+    ></script>
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="MySQL的复制"/>
+<meta name="twitter:description" content="详解MySQL的复制"/>
+
+
+
+  
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "posts",
+        "name": "MySQL的复制",
+        "headline": "MySQL的复制",
+        "alternativeHeadline": "",
+        "description": "
+      详解MySQL的复制
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/posts\/mysql%E5%A4%8D%E5%88%B6\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-05-06T17:09:30.00Z",
+        "datePublished": "2021-05-06T17:09:30.00Z",
+        "dateModified": "2021-05-06T17:09:30.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/posts\/mysql%E5%A4%8D%E5%88%B6\/",
+        "wordCount" : "198",
+        "genre" : [ 
+      
+      "数据库"
+
+    ],
+        "keywords" : [ 
+      
+      "MySQL"
+
+    ]
+    }
+  </script>
+
+
+
+</head>
+<body>
+    <header><div
+  class="page-top 
+    animated fadeInDown
+
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>
+  <nav>
+    <ul class="nav__list" id="navMenu">
+      <div class="nav__links">
+        
+        
+          
+          <li>
+            <a
+              
+              href="/"
+              
+              title=""
+              >Home</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/posts/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/portfolio/"
+              
+              title=""
+              >Portfolio</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >About</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/contact/"
+              
+              title=""
+              >Contact</a
+            >
+          </li>
+
+        
+      </div>
+      <ul>
+        
+        
+          <li>
+            <a class="theme-switch" title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </li>
+
+        
+      </ul>
+    </ul>
+  </nav>
+</div>
+</header>
+    <div class="wrapper">
+      <aside><div
+  class="sidebar
+    animated fadeInDown
+
+  "
+>
+  <div class="sidebar__content">
+    <div class="logo-title">
+      <div class="title">
+        <img src="/images/profile5.jpg" alt="profile picture" />
+        <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
+        <div class="description">
+          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+        <li>
+          <a href="https://stackoverflow.com/users/12924262/horace-yang" rel="me" aria-label="StackOverFlow" title="StackOverFlow">
+            <i class="fab fa-stack-overflow fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://github.com/harryyann" rel="me" aria-label="GitHub" title="GitHub">
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://www.zhihu.com/people/yang-hai-rui-88" rel="me" aria-label="zhihu" title="zhihu">
+            <i class="fab fa-zhihu fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=941811450@qq.com" rel="me" aria-label="e-mail" title="e-mail">
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+    </ul>
+  </div><footer class="footer footer--sidebar">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></div>
+</aside>
+      <main>
+        <div class="autopagerize_page_element">
+          <div class="content">
+  <div
+    class="post 
+      animated fadeInDown
+
+    "
+  >
+    <div class="post-content">
+      
+      <div class="post-title">
+        <h1>MySQL的复制</h1>
+        
+      </div><h1 id="复制">复制</h1>
+<p>复制是让一台服务器的数据和其他服务器保持同步。MySQL的复制是通过binlog实现的，binlog有三种类型：</p>
+<ul>
+<li><strong>statement</strong>：记录的就是SQL语句，优点是人类可读，并且占用空间较小，但是基于该类型binlog的复制可能会产生不一致，比如执行某个特定函数，在复制后的结果可能和之前不一样。</li>
+<li><strong>raw</strong>：记录的是具体的每一行的变化细节，可以保证复制的正确性，保证数据一致，但是一行一行的记录占用空间较大。实际使用中采用raw的比较多。</li>
+<li><strong>mixed</strong>：是statement和raw的结合，一般的语句修改都采用statement格式保存，当碰到一些可能引起复制不一致的函数时，改为采用raw保存。这样即能缩小日志占用空间，也可以保证复制的数据一致性。</li>
+</ul>
+<h2 id="复制的过程">复制的过程</h2>
+<ol>
+<li>主库产生binlog</li>
+<li>备库的<strong>IO线程</strong>，请求主库的binlog，并将binlog保存到自己本地的中继日志relay log中</li>
+<li>备库的<strong>sql线程</strong>读取relay log，通过重放relay log完成复制</li>
+</ol>
+<p>后续会进行详细说明，大体的过程如下图：</p>
+<p><img src="/images/replication/replication1.png" alt="图片来自《MySQL技术内幕》"></p>
+<h2 id="复制的效率问题">复制的效率问题</h2>
+<p>由于在网络正常的情况下，备库从主库拉取binlog并持久化到本地的relay log的速度是很快的，性能消耗的大头在sql线程重放relay log的过程，尤其是在MySQL5.6版本前，只有一个sql线程，这样所有在主库上并行的写入，到了备库同步时就变成了串行执行，效率自然跟不上，在5.6版本以后，MySQL增加了多sql线程的方案进行了优化，后续也会详细说明。</p>
+<h2 id="复制解决的问题">复制解决的问题</h2>
+<ol>
+<li>
+<p>高可用</p>
+<p>数据冗余在多个地方，防止单点失效。</p>
+</li>
+<li>
+<p>负载均衡</p>
+<p>写少读多的场景下，可以让写请求都走主库，读请求则分发到多个备库上，实现负载均衡，提高数据库集群读的效率。</p>
+</li>
+</ol>
+<h1 id="复制的执行过程">复制的执行过程</h1>
+<p><img src="/images/replication/replication2.png" alt="图片来自于<极客时间-MySQL实战45讲>"></p>
+<h4 id="主库">主库：</h4>
+<ol>
+<li>当有一个写请求时，先写内存的undo log，undo log主要用于事务回滚和MVCC。</li>
+<li>然后数据会写入innodb的buffer pool的缓存页中。</li>
+<li>然后就是<strong>redo log的两阶段提交</strong>，先写redo log进入prepare阶段。</li>
+<li>然后写入binlog（此时其实就具备了复制的条件） ，主库会开启一个dump线程，用于接收备库的dump请求。</li>
+<li>然后就是redo log的commit，当提交成功就会返回给客户端，提交失败也没关系，因为这一步只是修改redo log而已，事务在redo log的prepare阶段就已经成功了，失败的话后续数据库会重新提交的。宕机也没关系，MySQL有<strong>double write策略</strong>，保证数据的正确性。</li>
+</ol>
+<h4 id="备库">备库</h4>
+<ol>
+<li>备库的IO线程会向主库的dump线程进行请求读取binlog的数据，然后写入relay log中</li>
+<li>然后备库的sql线程会从relay log中读取日志，在本地重放。</li>
+</ol>
+<p>备库也可以作为其他备库的主库，再把这份数据同步到备库的备库中，只需要开启一个参数<code>log_slave_updates</code>为<code>ON</code>即可在备库上也会在重放时生成binlog。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;log_slave_updates&#34;</span>;
+<span style="color:#f92672">+-------------------+-------+</span>
+<span style="color:#f92672">|</span> Variable_name     <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
+<span style="color:#f92672">+-------------------+-------+</span>
+<span style="color:#f92672">|</span> log_slave_updates <span style="color:#f92672">|</span> <span style="color:#66d9ef">ON</span>    <span style="color:#f92672">|</span>
+<span style="color:#f92672">+-------------------+-------+</span>
+</code></pre></div><h1 id="复制的拓扑结构">复制的拓扑结构</h1>
+<p>MySQL主从复制的限制</p>
+<ol>
+<li>一个备库只能有一个主库，一个主库可以有多个备库。</li>
+<li>每个备库都要有一个全局唯一的服务器ID。</li>
+</ol>
+<h2 id="一主多从">一主多从</h2>
+<p><img src="/images/replication/replication3.png" alt=""></p>
+<p>最常见的复制方式，从库间没有交互，都是一个主库的从库，一般从库都会设置成<strong>readonly模式</strong>，有几点好处：</p>
+<ol>
+<li>有时一些运营类的查询会放到备库上查，设置为只读可以防止误操作。</li>
+<li>防止主备切换时逻辑有bug，造成切换过程中出现双写，造成主备不一致。</li>
+<li>可以方便的用readonly状态判断节点角色。</li>
+</ol>
+<p>适用场景</p>
+<ul>
+<li><strong>读写分离</strong>，主库写，所有从库读，<strong>少量写和大量读</strong>时适合。可以把不同的从库，根据使用方式，设置不同的存储引擎，提高读的效率，比如如果既要支持事务又要全文搜索就可以主库用innodb，从库用MyISAM（innodb现在也支持搜索了）。</li>
+<li>容灾，往往从库中有一台是用作灾难恢复的，不处理业务逻辑，放到远程数据中心。</li>
+<li>某个备库，还可以作为培训、开发或测试使用的服务器。</li>
+</ul>
+<h2 id="主主复制">主主复制</h2>
+<p>包含两台服务器，每个都是对方的主：</p>
+<p><img src="/images/replication/replication4.png" alt=""></p>
+<p>适用场景：当两个不同地理位置的服务器，都需要拥有写入操作时。</p>
+<p>冲突问题：同时写一行，或者同时插入一个自增的字段时，两个操作可能会产生冲突。</p>
+<p>这种拓扑模式问题很大，很容易造成数据不一致。一般不会采用这种方式，更常见的是下面这种，被动模式的主主复制</p>
+<h4 id="被动模式的主主复制">被动模式的主主复制</h4>
+<p>主主复制的其中一个主改成<strong>readOnly模式</strong>，可以避免普通主主复制的冲突问题，区别是其中一台服务器是<strong>只读的被动服务器</strong>。由于服务器的配置是对称的（即两个数据库表，存储引擎，配置等完全是一模一样的），所以故障转移和恢复很容易，不需要切换主备关系，只改下readOnly即可，其实就是个优化版本的主从复制。</p>
+<p>要注意的是，主主复制只能有两个主，不能多个主构成一个环，那种结构非常脆弱，可能循环复制。</p>
+<h4 id="一种常见的mysql主从拓扑的结构">一种常见的MySQL主从拓扑的结构</h4>
+<p><img src="/images/replication/replication6.png" alt=""></p>
+<p>A和A&rsquo;为被动模式的主主复制，其余B、C、D都是A的从库，A库进行写和少量读，B、C、D处理读请求。当A出现故障时，把A&rsquo;切换为新主。</p>
+<h4 id="分发主库">分发主库</h4>
+<p>当使用一主多从的模式下，当从库过多，每个从库一个IO线程会对主库造成较高负载，尤其是当一个很大的数据插入操作时，主库的负载会显著上升，因为多个从库同时请求这块大数据。</p>
+<p>使用一个从库作为分发主库，它也是主库的从库，然后其他从库都作为这个从库的从库，分发主库的唯一作用就是向其他所有从库提供主库的binlog。并且因为分发主库不做任何的查询，所以可以设置存储引擎为blackhole。</p>
+<pre><code>Tips:blackhole
+
+blackhole存储引擎，就像它的名字，只进不出，所有插入的数据都不会插入到B+树，只会记录binlog，一般也只用于分发主库的功能
+</code></pre><p><img src="/images/replication/replication5.png" alt=""></p>
+<p>分发主库也会有问题，如果分发主库出问题了，那么所有复制都失效了，有点脆弱，所以分发主库也可以整一个备库，当主出问题时，进行主备切换，让复制不会中断。</p>
+<h1 id="复制的优势和不足">复制的优势和不足</h1>
+<p>能显著提高读的效率，对于读多写少的业务场景非常有效。缺点是对写没什么提高，如果对写要求高的话，低价值的数据可以适用NoSQL，高价值的数据可以考虑TokuDB。</p>
+<h1 id="备库的延迟问题">备库的延迟问题</h1>
+<h2 id="检查主备数据是否一致的方式">检查主备数据是否一致的方式</h2>
+<p>有两个方法可以检查主备数据是否一致</p>
+<ol>
+<li>percona-toolkit的pt-table-checksum工具，这个工具的原理就是给主库插入一条数据，然后看看备库中是否同步过去了</li>
+<li>在备库执行<code>show slave status</code>命令，字段<code>Seconds_Behind_Master</code>就显示了从库延迟了多少秒</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">MariaDB [(none)]<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> slave status<span style="color:#960050;background-color:#1e0010">\</span>G
+<span style="color:#f92672">***************************</span> <span style="color:#ae81ff">1</span>. row <span style="color:#f92672">***************************</span>
+......
+Seconds_Behind_Master: <span style="color:#ae81ff">0</span>
+......
+</code></pre></div><h2 id="主备延迟的主要原因">主备延迟的主要原因</h2>
+<p>在网络正常时，日志从主库传给从库的耗时是很短的，所以**主要是从库从relay log中重放导致的<code>Seconds_Behind_Master</code>的延迟。</p>
+<h3 id="relay-log重放慢的原因">Relay log重放慢的原因</h3>
+<ul>
+<li>机器性能差，需要升级机器</li>
+<li>从库的读压力大，可能需要水平拓展，</li>
+<li>长事务
+<ul>
+<li>大批量的删除、写入操作，不要在一个事务里，拆分成多个事务，执行间隙再睡一会</li>
+<li>大表的DDL操作，可以适用gh-ost工具</li>
+</ul>
+</li>
+<li>从库的sql线程的重放策略有问题，比如MySQL版本较低，sql线程只有一个</li>
+</ul>
+<p>MySQL在5.6版本支持了多个sql线程尝试解决这个问题。</p>
+<h3 id="备库sql线程的并行复制">备库sql线程的并行复制</h3>
+<p>MySQL5.6以后支持了从库多个sql进行relay log的重放操作。可以通过参数<code>slave_parallel_workers</code>参数指定sql线程的数量，默认是0：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;slave_parallel_workers&#34;</span>;
+<span style="color:#f92672">+------------------------+-------+</span>
+<span style="color:#f92672">|</span> Variable_name          <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
+<span style="color:#f92672">+------------------------+-------+</span>
+<span style="color:#f92672">|</span> slave_parallel_workers <span style="color:#f92672">|</span> <span style="color:#ae81ff">0</span>     <span style="color:#f92672">|</span>
+<span style="color:#f92672">+------------------------+-------+</span>
+</code></pre></div><h4 id="多个sql线程并行复制的事务执行顺序问题">多个sql线程并行复制的事务执行顺序问题</h4>
+<p><strong>MySQL5.6的并行复制策略</strong></p>
+<p><strong>按库分发</strong>。即如果事务操作的是不同数据库，那么可以被分发给不同的线程执行。这种方案明显分发效率很低。如果主库有多个Database，并且各个Database的压力平衡，会有一定效果。这种方案对binlog，外键等没有任何要求。</p>
+<p><strong>MariaDB的并行复制策略</strong></p>
+<p>MariaDB的并行复制主要基于两点：</p>
+<ul>
+<li>一个<strong>组里提交的事务</strong>(事务可以按组提交以提升效率)，一定不会修改同一行</li>
+<li>主库上可以并行的事务，那么从库也一定可以</li>
+</ul>
+<p>基于以上两点，MariaDB通过commit_id识别出同一组提交的事务，然后把每组的事务分发到多个线程执行，执行完一组，再执行下一组。</p>
+<pre><code>Tips:
+
+同一组事务提交的时候，应该是在写binlog时，会有一个相同的commit_id，它是全局递增的，binlog种记录的每一行都会记录下commit_id
+</code></pre><p>这种方案的不足：仍然无法解决大事务对主备延迟的影响。</p>
+<p><strong>MySQL5.7的并行复制策略</strong></p>
+<p>MySQL5.7提供了<code>slave_parallel_type</code>参数来控制并行复制策略</p>
+<ul>
+<li>DATABASE，那就是MySQL5.6的按库分发的策略</li>
+<li>LOGICAL_CLOCK，就是基于MariaDB的分发策略，进行了一点优化，MariaDB是在事务commit时确定的commit_id，而InnoDB的事务是两阶段提交的，当redo log处于prepare状态时，事务就已经是可以提交的了，事务的所有的关于锁的检查都已经处理完了，所以MySQL5.7版本中除了同一组提交的事务外，同时处于prepare到commit状态的事务也是可以并行执行的。</li>
+</ul>
+<pre><code>Tips：
+
+LOGICAL_CLOCK有两个和binlog提交相关的参数可以设置
+binlog_group_commit_sync_delay：表示延迟多少微妙才调用fsync写入磁盘
+binlog_group_commit_sync_no_delay_count：表示累计多少次以后才调用fsync
+以上两个参数可以人为的拉长binlog写入磁盘的时间，制造出更多同时处于prepare阶段的事务，从而提升从库的并发度，当然这也让主库增大了一点丢失binlog的风险
+</code></pre><p><strong>MySQL5.7.22的并行复制策略</strong></p>
+<p>MySQL5.7.22增加一个参数<code>binlog_transaction_dependency_tracking</code>，有三个可选值：</p>
+<ul>
+<li>COMMIT_ORDER：就是前面5.7的LOGICAL_CLOCK策略</li>
+<li>WRITESET：表示对于事务涉及更新的每一行，计算出这一行的hash值，组合成writeset，如果两个事务没有操作相同的行，就是说他们的writeset没有交集，就可以并行</li>
+<li>WRITESET_SESSION：在writeset基础上多了一个约束，即在主库上同一个线程先后执行的事务，在从库上也要保证先后顺序</li>
+</ul>
+<h2 id="备库延迟的解决方案">备库延迟的解决方案</h2>
+<h3 id="强制走主库方案">强制走主库方案</h3>
+<p>对请求做分类，对于需要更新后立刻获取最新结果的请求，就必须要发到主库；对于可以读到旧数据的请求，就可以走主库。</p>
+<p>这种方案的缺点也很明显，如果所有的查询都不能读旧数据，那就纯纯单机数据库了。</p>
+<h3 id="更新后读库之前先sleep一下">更新后，读库之前先sleep一下</h3>
+<p>看起来不可靠，但是应用也很多。比如前端插入数据成功以后，就可以由Ajax直接把新数据显示在前端，而不是真的走查询数据库。等到用户再次刷新页面时，或者一段时间以后，再访问数据库，就相当于做了一个sleep操作。或者就直接在后端程序中判断，更新后的立刻查询，就要sleep一会再查。</p>
+<p>这种方案明显是不准的，还是可能读到旧数据，但是微博就是这么做的。我们发出去的评论，暂时看不到其实也没太大关系。</p>
+<h3 id="判断主从是否有延迟有延迟就等没延迟了再访问">判断主从是否有延迟，有延迟就等没延迟了再访问</h3>
+<p>有多种方法都可以完成这个判断</p>
+<ol>
+<li>
+<p>通过查询从库的<code>Seconds_Behind_Master</code>参数，如果不等于0，就等这个值等于0了再执行查询。</p>
+</li>
+<li>
+<p>对比位点，分别读主库的<code>read_master_log_position</code>参数和从库的<code>exec_master_log_position</code>参数，对比看看一不一样，不一样就等一样了再查询，这种比1更准确一点。</p>
+</li>
+<li>
+<p>对比GTID，主库的<code>auto_position</code>值为1，说明开启了GTID，然后检查从库的<code>retrieved_gtid_set</code>和<code>executed_gtid_set</code>是否一致，不一致就等一致了再去读，也比方法1更准确。</p>
+</li>
+<li>
+<p>方法2或方法3配合<strong>semi-sync</strong>方案，确保主库在binlog已经发给了备库之后，再提交事务。关于semi-sync，后续会说明。</p>
+</li>
+</ol>
+<h1 id="io线程的复制方案">IO线程的复制方案</h1>
+<h2 id="异步方案">异步方案</h2>
+<h2 id="半同步方案">半同步方案</h2>
+<p>即semi-sync，在MySQL5.7中通过一下命令可以开启：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"><span style="color:#66d9ef">set</span> global rpl_semi_sync_master_wait_point <span style="color:#f92672">=</span> AFTER_SYNC;
+</code></pre></div><h2 id="全同步方案">全同步方案</h2>
+<p>MySQL5.7.17以后配合MGR集群，并且仅支持InnoDB引擎，只能在GTID模式下，binlog只能为raw格式。</p>
+</div>
+    <div class="post-footer">
+      <div class="info">
+        
+          <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
+
+
+
+
+        
+
+        
+          <span class="separator"><a class="tag" href="/tags/mysql/">MySQL</a></span>
+
+
+
+
+        
+      </div>
+    </div>
+
+    
+  </div>
+
+
+          </div>
+        </div>
+      </main>
+    </div><footer class="footer footer--base">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></body>
+</html>
