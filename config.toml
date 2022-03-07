@@ -102,15 +102,15 @@ url = "http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=941811450@qq.com"
   identifier = "posts"
   url = "/posts/"
 
-  [[menu.main]]
-  name = "Records"
-  weight = 300
-  identifier = "records"
-  url = "/records/"
+#  [[menu.main]]
+#  name = "Records"
+#  weight = 300
+#  identifier = "records"
+#  url = "/records/"
 
   [[menu.main]]
   name = "Portfolio"
-  weight = 350
+  weight = 300
   identifier = "portfolio"
   url = "/portfolio/"
 

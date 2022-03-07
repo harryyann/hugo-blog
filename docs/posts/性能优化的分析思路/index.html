@@ -217,18 +217,6 @@
           <li>
             <a
               
-              href="/records/"
-              
-              title=""
-              >Records</a
-            >
-          </li>
-
-        
-          
-          <li>
-            <a
-              
               href="/portfolio/"
               
               title=""
@@ -432,7 +420,7 @@ Average:          sda     10.50      0.00    130.00     12.38      0.07      7.0
 <p>如果CPU不高，IO也不高，性能还是差，那就可以看看<strong>网络带宽</strong>。可能是带宽过小了，导致网络传输效率低，这个可以有很多命令可以用，<code>iftop</code>、<code>iptraf</code>、<code>tcpdump</code>或者也可以使用wireshark。</p>
 <p>如果网络带宽也没问题，那就大概率是应用程序的性能问题是当前系统的瓶颈，接下来我们讨论一下。</p>
 <h1 id="应用程序性能瓶颈和优化">应用程序性能瓶颈和优化</h1>
-<p>通过一些profile工具对应用程序进行benchmark，比如golang官方的<strong>pprof</strong>，找到各个函数或方法的运行时间以及调用的次数，对于CPU的使用率等，如果关注CPU缓存行的调优，可以使用<a href="https://www.intel.com/content/www/us/en/developer/tools/oneapi/vtune-profiler.html">Vtune</a>。</p>
+<p>通过一些profile工具对应用程序进行benchmark，比如golang官方的<strong>pprof</strong>，找到各个函数或方法的运行时间以及调用的次数，对于CPU的使用率等，如果关注<strong>CPU缓存行</strong>的调优，可以使用<a href="https://www.intel.com/content/www/us/en/developer/tools/oneapi/vtune-profiler.html">Vtune</a>。</p>
 <p>需要重点观察哪些调用次数较多的函数，因为对这些函数进行小小的提升，对整个应用程序的提升最大，比如一个函数被调用了1000次，那么优化它1ms，那就有整整1s的优化。</p>
 <p>一个应用程序的性能分布往往也遵循二八定律。20%的代码消耗了整体80%的性能，那么找到这20%的代码，对它进行重点优化。</p>
 <h2 id="代码优化的常见方式">代码优化的常见方式</h2>
@@ -470,7 +458,7 @@ Average:          sda     10.50      0.00    130.00     12.38      0.07      7.0
 <p>多核CPU的使用，尽量利用到多核CPU，同时注意CPU 0。</p>
 <p>文件系统调优，linux的文件系统也是有cache的，<strong>os buffer</strong>，尽量利用到系统的优化，这一点MySQL有很多值得参考的地方。</p>
 <h2 id="数据库调优">数据库调优</h2>
-<p>数据库调优有很多值得写的地方。大体上可以分成<strong>索引的合理使用</strong>、<strong>查询方式的优化</strong>、<strong>表结构的优化</strong>、**引擎的配置*等。</p>
+<p>数据库调优有很多值得写的地方。大体上可以分成<strong>索引的合理使用</strong>、<strong>查询方式的优化</strong>、<strong>表结构的优化</strong>、<strong>引擎的合理配置</strong>等。</p>
 <h2 id="其他方面的一些优化策略">其他方面的一些优化策略</h2>
 <ol>
 <li>空间换时间</li>

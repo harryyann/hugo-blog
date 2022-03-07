@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>微服务 on Website of Harry Yang</title>
+    <link>https://yanghairui.life/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/</link>
+    <description>Recent content in 微服务 on Website of Harry Yang</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 06 Jan 2022 17:37:07 +0800</lastBuildDate><atom:link href="https://yanghairui.life/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>微服务概览</title>
+      <link>https://yanghairui.life/post/%E4%BB%8E0%E5%BC%80%E5%A7%8B%E5%AD%A6%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Thu, 06 Jan 2022 17:37:07 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/post/%E4%BB%8E0%E5%BC%80%E5%A7%8B%E5%AD%A6%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AC%94%E8%AE%B0/</guid>
+      
+        <description>Reference 微服务的演进过程 单体应用 单体应用时代有两个主流流派
+ LAMP：Linux系统 + Apache/Nginx服务器 + MySQL数据库 + 一种脚本语言，比如PHP，Python，Ruby或者NodeJS。  </description>
+      
+    </item>
+    
+    <item>
+      <title>微服务概览</title>
+      <link>https://yanghairui.life/posts/%E4%BB%8E0%E5%BC%80%E5%A7%8B%E5%AD%A6%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Thu, 06 Jan 2022 17:37:07 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/posts/%E4%BB%8E0%E5%BC%80%E5%A7%8B%E5%AD%A6%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AC%94%E8%AE%B0/</guid>
+      
+        <description>微服务的演进过程 单体应用 单体应用时代有两个主流流派：
+ LAMP架构：Linux系统 + Apache/Nginx服务器 + MySQL数据库 + 一种脚本语言，比如PHP，Python，Ruby，Perl等。特点是轻量级，价格低，跨平台，并且十分易于开发。 MVC架构：Model-View-Controller，例如Spring + IBatis/Hibernate + Tomcat。它有较低的耦合性，可重用性高，且部署快速的特点。  单体应用架构的优点：</description>
+      
+    </item>
+    
+  </channel>
+</rss>
