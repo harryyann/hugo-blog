@@ -91,7 +91,9 @@ Per aspera ad astra.
   
   <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Mysql的锁"/>
-<meta name="twitter:description" content=""/>
+<meta name="twitter:description" content="数据库的锁 锁的作用就是确保每一个用户都能以一致的方式读取和写入数据。MySQL中的锁分为两种：闩锁latch和lock锁。
+  latch：轻量级的锁，用于锁定mysql应用程序中的一些对象，要求锁定的时间必须非常短，mysql中分为mutex（互斥锁）和rwlock（读写锁），是应用程序级别的，就是我们在程序中使用的mutex和rwmutex。通过命令show engine innodb mutex可以查看，一般mysql的开发人员会关注。
+通过命令show engine innodb mutex可以观察当前数据库中的latch信息。"/>
 
 
 
@@ -112,7 +114,7 @@ Per aspera ad astra.
         "alternativeHeadline": "",
         "description": "
       
-        
+        数据库的锁 锁的作用就是确保每一个用户都能以一致的方式读取和写入数据。MySQL中的锁分为两种：闩锁latch和lock锁。\n  latch：轻量级的锁，用于锁定mysql应用程序中的一些对象，要求锁定的时间必须非常短，mysql中分为mutex（互斥锁）和rwlock（读写锁），是应用程序级别的，就是我们在程序中使用的mutex和rwmutex。通过命令show engine innodb mutex可以查看，一般mysql的开发人员会关注。\n通过命令show engine innodb mutex可以观察当前数据库中的latch信息。
 
 
       
@@ -162,7 +164,7 @@ Per aspera ad astra.
 
     ,
         "url" : "https:\/\/yanghairui.life\/posts\/mysql%E7%9A%84%E9%94%81\/",
-        "wordCount" : "0",
+        "wordCount" : "163",
         "genre" : [ 
       
       "数据库"
@@ -356,7 +358,103 @@ Per aspera ad astra.
       <div class="post-title">
         <h1>Mysql的锁</h1>
         
-      </div></div>
+      </div><h1 id="数据库的锁">数据库的锁</h1>
+<p>锁的作用就是确保每一个用户都能以一致的方式读取和写入数据。MySQL中的锁分为两种：闩锁latch和lock锁。</p>
+<ul>
+<li>
+<p>latch：轻量级的锁，用于锁定mysql应用程序中的一些对象，要求锁定的时间必须非常短，mysql中分为mutex（互斥锁）和rwlock（读写锁），是应用程序级别的，就是我们在程序中使用的mutex和rwmutex。通过命令show engine innodb mutex可以查看，一般mysql的开发人员会关注。</p>
+<p>通过命令<code>show engine innodb mutex</code>可以观察当前数据库中的latch信息。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">engine</span> innodb mutex;
+<span style="color:#f92672">+--------+-----------------------------+-------------+</span>
+<span style="color:#f92672">|</span> Type   <span style="color:#f92672">|</span> Name                        <span style="color:#f92672">|</span> Status      <span style="color:#f92672">|</span>
+<span style="color:#f92672">+--------+-----------------------------+-------------+</span>
+<span style="color:#f92672">|</span> InnoDB <span style="color:#f92672">|</span> rwlock: dict0dict.cc:<span style="color:#ae81ff">920</span>    <span style="color:#f92672">|</span> waits<span style="color:#f92672">=</span><span style="color:#ae81ff">106</span>   <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> InnoDB <span style="color:#f92672">|</span> rwlock: log0log.cc:<span style="color:#ae81ff">582</span>      <span style="color:#f92672">|</span> waits<span style="color:#f92672">=</span><span style="color:#ae81ff">24</span>    <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> InnoDB <span style="color:#f92672">|</span> rwlock: btr0sea.cc:<span style="color:#ae81ff">240</span>      <span style="color:#f92672">|</span> waits<span style="color:#f92672">=</span><span style="color:#ae81ff">1694</span>  <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> InnoDB <span style="color:#f92672">|</span> rwlock: btr0sea.cc:<span style="color:#ae81ff">240</span>      <span style="color:#f92672">|</span> waits<span style="color:#f92672">=</span><span style="color:#ae81ff">1179</span>  <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> InnoDB <span style="color:#f92672">|</span> rwlock: btr0sea.cc:<span style="color:#ae81ff">240</span>      <span style="color:#f92672">|</span> waits<span style="color:#f92672">=</span><span style="color:#ae81ff">22050</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> InnoDB <span style="color:#f92672">|</span> sum rwlock: buf0buf.cc:<span style="color:#ae81ff">1563</span> <span style="color:#f92672">|</span> waits<span style="color:#f92672">=</span><span style="color:#ae81ff">3929</span>  <span style="color:#f92672">|</span>
+<span style="color:#f92672">+--------+-----------------------------+-------------+</span>
+<span style="color:#ae81ff">6</span> rows <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">003</span> sec)
+</code></pre></div></li>
+<li>
+<p>lock：用来锁定数据库中的对象，表、页、行，并且仅在事务提交或回滚之后才能释放（不同事务隔离级别的释放时机不同）。这也是我们本篇文章主要讨论的锁。</p>
+</li>
+</ul>
+<h1 id="mysql中的lock">MySQL中的Lock</h1>
+<p>MySQL支持全局锁、表锁、行锁(InnoDB存储引擎支持)。</p>
+<h2 id="全局锁">全局锁</h2>
+<p>用来锁住整个数据库，命令是<code>Flush tables with read lock</code>，可以让整个库处于只读状态。</p>
+<h2 id="表锁">表锁</h2>
+<p>表锁分两种，一种是表锁，另一种是元数据锁(metadata lock，MDL)。</p>
+<h4 id="表锁-1">表锁</h4>
+<p>就是锁住有一张表，命令是<code>lock tables ... read/write</code>，可以用<code>unlock</code>命令主动释放锁，或者当连接断开时也会自动释放。一般不用这个锁，影响面太大，并且读锁和写锁的机制还需要注意：</p>
+<ul>
+<li>读锁：<strong>给表加了读锁后，自己也不能对其进行修改</strong>，所有连接都只能读取该表。</li>
+<li>写锁：<strong>给表加了写锁后，自己可以读写该表，其他连接的读写都被阻塞</strong>。</li>
+</ul>
+<h4 id="mdl">MDL</h4>
+<p>MySQL5.5引入，用于隔离DML操作和DDL操作之间的干扰。不需要显示使用，会在访问一个表时自动加上，MDL是保证读写时，表的元数据（字段，类型等）不会变化。</p>
+<p>当对一个表做增删改查DML操作时，自动加MDL读锁，读锁之间不互斥，即所有DML操作都可以并行。</p>
+<p>当对表结构做DDL操作时，加MDL写锁，写锁和其他锁都互斥，即在修改表结构时，其它线程的DDL操作，和DML操作，都会被阻塞。</p>
+<p><strong>注意：修改表结构时自动添加的MDL写锁，会阻塞后续的所有DML操作！</strong></p>
+<p><img src="/images/lock/mdl.png" alt=""></p>
+<p>如上图，session C开始执行DDL，session D都会被阻塞住。</p>
+<p>原因：申请MDL锁的操作会形成一个队列，队列中<strong>写锁的优先级高于读锁，所以一旦出现写锁等待时，后续的读锁也要等待读锁先获取到锁</strong>，之后自己才能获取，所以写锁等待时，后续的读锁都会阻塞。</p>
+<h2 id="读锁和写锁">读锁和写锁</h2>
+<p>这里讨论的读锁和写锁针对的是普通的表锁和行锁。</p>
+<ul>
+<li>共享锁：S Lock，读锁。</li>
+<li>排他锁：X Lock，写锁。</li>
+</ul>
+<p>对于普通表锁和行锁来说，它们的读锁和写锁的兼容性如下：</p>
+<p><img src="/images/lock/SX.png" alt=""></p>
+<p><strong>写锁和任何锁都不兼容，读锁和读锁都是兼容的</strong>。</p>
+<h2 id="意向锁">意向锁</h2>
+<p>意向锁是表级别的锁，而且<strong>针对的也是表级别的读锁和写锁</strong>。当想要给一个表中的某一行加读锁或者写锁时，就需要先给表加个意向锁，它的作用是为了快速的判断一个表中有没有被加行锁，否则就需要一行行看才能知道这个表有没有被加行锁。如果表被加了行锁，那么对表加表锁时就需要收到限制。</p>
+<p>它同样也有两种：</p>
+<ul>
+<li>意向共享锁，IS Lock，意向读锁，当事务想要获得一张表中某些行的共享锁时，就会给表加个意向读锁。</li>
+<li>意向排他锁，IX Lock，意向写锁，当事务想要获得一张表中某些行的排他锁时，就会给表加个意向写锁。</li>
+</ul>
+<p>意向锁和表级别的读锁写锁之间的兼容性如下：</p>
+<p><img src="/images/lock/ISIX.png" alt=""></p>
+<p>可以看到：<strong>意向锁之间都是兼容的；表的写锁和其他所有锁都是不兼容的；意向写锁和表级别的读锁和写锁都是不兼容的</strong>。</p>
+<p>一个事务想要加行锁的过程：</p>
+<ol>
+<li><strong>事务要获取一个表中某些行的S锁/X锁时，需要先获得表的IS/IX锁</strong></li>
+<li>当要获取IS锁时，发现表被加了X锁，表X锁和其他所有锁都不兼容，所以需要阻塞</li>
+<li>当要获取IX锁时，发现表被加了S锁，IX锁和S锁不兼容，所以也要阻塞</li>
+<li>当要获取IS/IX锁时，发现表被加了其他事务的意向锁，不会阻塞，因为意向锁之间都是不阻塞的，可以继续看想要加锁的这行有没有被锁住</li>
+</ol>
+<p>一个事务对表加表级别的读锁和写锁时的过程：</p>
+<ol>
+<li>如果事务要对表加X锁，发现表上被加了某个意向锁，X锁和所有意向锁都不兼容，则会阻塞</li>
+<li>如果事务要加表的S锁，发现表被加了IS锁，则不会阻塞，因为IS锁和S锁是兼容的</li>
+<li>如果事务要加表的S锁，发现表被加了IX锁，则还是会阻塞，因为IX锁和S锁也是不兼容的</li>
+</ol>
+<h1 id="innodb的行锁">InnoDB的行锁</h1>
+<h2 id="行锁的两阶段协议">行锁的两阶段协议</h2>
+<ol>
+<li><strong>行锁是需要的时候才加上</strong>的，可以主动加，或者当修改某行时也会自动加</li>
+<li>行锁<strong>必须等到事务提交或回滚才能释放</strong></li>
+</ol>
+<p>由于以上的两阶段协议的存在，所以我们在处理事务时，<strong>尽量在一个事务中，并发量可能最高的行锁往后放</strong>，让它锁定的时间尽量短些，提高并发效率。</p>
+<h2 id="innodb的锁定一致性读">InnoDB的锁定一致性读</h2>
+<p>顾名思义，就是通过加锁的方式，实现一致性读。</p>
+<ul>
+<li>写锁，通过语句<code>select ... for update</code>可以在读的时候给这些行加上写锁</li>
+<li>读锁，通过语句<code>select ... lock in share mode</code>可以在读的时候给这些行加上读锁</li>
+</ul>
+<h2 id="innodb行锁的算法">InnoDB行锁的算法</h2>
+<p>包括三种：Record Lock，Gap Lock和Next-Key Lock。</p>
+<ul>
+<li>Record Lock：普通的行锁，可以锁住一行</li>
+<li>Gap Lock：间隙锁，可以锁住某个索引的某一个范围，是左开右开区间</li>
+<li>Next-Key Lock：临键锁，既能锁住一个范围，也能锁住范围内的所有行，临键锁的区间是左开右闭的</li>
+</ul>
+<h2 id="死锁">死锁</h2>
+</div>
     <div class="post-footer">
       <div class="info">
         

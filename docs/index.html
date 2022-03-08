@@ -433,12 +433,14 @@ Per aspera ad astra.
         <div class="p_part">
           <p>
             
-              
+              数据库的锁 锁的作用就是确保每一个用户都能以一致的方式读取和写入数据。MySQL中的锁分为两种：闩锁latch和lock锁。
+  latch：轻量级的锁，用于锁定mysql应用程序中的一些对象，要求锁定的时间必须非常短，mysql中分为mutex（互斥锁）和rwlock（读写锁），是应用程序级别的，就是我们在程序中使用的mutex和rwmutex。通过命令show engine innodb mutex可以查看，一般mysql的开发人员会关注。
+通过命令show engine innodb mutex可以观察当前数据库中的latch信息。
 
 
             
           </p>
-          </div>
+          <a href="/posts/mysql%E7%9A%84%E9%94%81/" class="read_more">继续阅读</a></div>
       </div>
 
       
