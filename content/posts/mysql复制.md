@@ -49,7 +49,7 @@ DisableComments: false
 2. 然后数据会写入Innodb的buffer pool缓存页中。
 3. 然后就是**redo log的两阶段提交**，先写redo log进入prepare阶段。
 4. 然后写入binlog（此时其实就具备了复制的条件） ，主库会开启一个dump线程，用于接收备库的dump binlog请求。
-5. 然后就是redo log的commit，当提交成功就会返回给客户端，提交失败也没关系，因为这一步只是修改redo log而已，事务在redo log的prepare阶段就已经成功了，失败的话后续数据库会重新提交的。宕机也没关系，MySQL有**double write策略**，保证数据从redo log恢复时的正确性。
+5. 然后就是redo log的commit，当提交成功就会返回给客户端，提交失败也没关系，后续数据库会重新提交的。
 
 #### 备库
 

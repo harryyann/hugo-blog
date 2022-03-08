@@ -8,7 +8,7 @@
     
       杨海瑞
         |
-        MySQL
+        MySQL的两阶段提交
 
 
       
@@ -22,10 +22,7 @@
   <meta
     name="description"
     content="
-      
-Per aspera ad astra.
-循此苦旅，终抵群星。
-
+      详解MySQL redo log的两阶段提交
 
 
     "
@@ -62,12 +59,9 @@ Per aspera ad astra.
   <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
 
-  <link rel="canonical" href="https://yanghairui.life/tags/mysql/" />
+  <link rel="canonical" href="https://yanghairui.life/posts/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/" />
 
   
-  <link rel="alternate" type="application/rss+xml" href="/tags/mysql/index.xml" title="Website of Harry Yang" />
-
-
   
   
   
@@ -93,11 +87,8 @@ Per aspera ad astra.
 
   
   <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="MySQL"/>
-<meta name="twitter:description" content="
-Per aspera ad astra.
-循此苦旅，终抵群星。
-"/>
+<meta name="twitter:title" content="MySQL的两阶段提交"/>
+<meta name="twitter:description" content="详解MySQL redo log的两阶段提交"/>
 
 
 
@@ -106,6 +97,79 @@ Per aspera ad astra.
 
   
   
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "posts",
+        "name": "MySQL的两阶段提交",
+        "headline": "MySQL的两阶段提交",
+        "alternativeHeadline": "",
+        "description": "
+      详解MySQL redo log的两阶段提交
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/posts\/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-05-08T07:09:30.00Z",
+        "datePublished": "2021-05-08T07:09:30.00Z",
+        "dateModified": "2021-05-08T07:09:30.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/posts\/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4\/",
+        "wordCount" : "0",
+        "genre" : [ 
+      
+      "数据库"
+
+    ],
+        "keywords" : [ 
+      
+      "MySQL"
+
+    ]
+    }
+  </script>
+
+
 
 </head>
 <body>
@@ -275,91 +339,38 @@ Per aspera ad astra.
         <div class="autopagerize_page_element">
           <div class="content">
   <div
-    class="archive 
+    class="post 
       animated fadeInDown
 
     "
   >
-    <ul class="list-with-title">
+    <div class="post-content">
       
-        <div class="listing-title">2021</div>
+      <div class="post-title">
+        <h1>MySQL的两阶段提交</h1>
         
-          <ul class="listing">
-            <div class="listing-item">
-              <div class="listing-post">
-                <a href="/posts/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/" title="MySQL的两阶段提交">MySQL的两阶段提交</a>
-                <div class="post-time">
-                  <span class="date"
-                    >
-                      May 8
-
-
-                    </span
-                  >
-                </div>
-              </div>
-            </div>
-          </ul>
-
+      </div></div>
+    <div class="post-footer">
+      <div class="info">
         
-          <ul class="listing">
-            <div class="listing-item">
-              <div class="listing-post">
-                <a href="/posts/mysql%E5%A4%8D%E5%88%B6/" title="MySQL的复制">MySQL的复制</a>
-                <div class="post-time">
-                  <span class="date"
-                    >
-                      May 6
+          <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
 
 
-                    </span
-                  >
-                </div>
-              </div>
-            </div>
-          </ul>
 
-        
-          <ul class="listing">
-            <div class="listing-item">
-              <div class="listing-post">
-                <a href="/posts/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/" title="MySQL事务详解">MySQL事务详解</a>
-                <div class="post-time">
-                  <span class="date"
-                    >
-                      May 4
-
-
-                    </span
-                  >
-                </div>
-              </div>
-            </div>
-          </ul>
-
-        
-          <ul class="listing">
-            <div class="listing-item">
-              <div class="listing-post">
-                <a href="/posts/mysql%E7%9A%84%E6%9E%B6%E6%9E%84%E5%92%8C%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B/" title="MySQL的架构和语句执行过程">MySQL的架构和语句执行过程</a>
-                <div class="post-time">
-                  <span class="date"
-                    >
-                      Apr 8
-
-
-                    </span
-                  >
-                </div>
-              </div>
-            </div>
-          </ul>
 
         
 
+        
+          <span class="separator"><a class="tag" href="/tags/mysql/">MySQL</a></span>
 
-      
-    </ul>
+
+
+
+        
+      </div>
+    </div>
+
+    
   </div>
 
 

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="zh-cn"
+  data-theme=""
+><head>
+  <title>
+    
+      杨海瑞
+        |
+        MySQL的架构和语句执行过程
+
+
+      
+
+
+    
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.81.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta
+    name="description"
+    content="
+      
+Per aspera ad astra.
+循此苦旅，终抵群星。
+
+
+
+    "
+  />
+  
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://yanghairui.life/posts/mysql%E7%9A%84%E6%9E%B6%E6%9E%84%E5%92%8C%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.2a2cd9614b7d007dfbb75e8da19e3a0fa872ceab53c6d000c00b7a0c89b85bfc.js"
+    integrity="sha256-KizZYUt9AH37t16NoZ46D6hyzqtTxtAAwAt6DIm4W/w="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js"
+      integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus="
+      crossorigin="anonymous"
+    ></script>
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="MySQL的架构和语句执行过程"/>
+<meta name="twitter:description" content="MySQL的整体架构图 &#34;
+如上图所示，整体上看MySQL分成上下两层，上面那层是Server层，下面是存储引擎层。
+Server层包含了连接器、查询缓存、解析器、优化器、执行器(有的资料中说有)等组件，，主要负责的是跨存储引擎的功能，如存储过程、触发器、视图等，内置函数也是在Server层提供的。
+存储引擎层则是MyISAM、InnoDB、Memory等各种存储引擎，以插件式集成，负责数据的读写。
+连接器 用于和客户端建立连接，并维持和管理连接。并在连接建立时查询用户的权限表获取到该用户的所有权限，建立连接的过程大概如下：
+ 首先进行TCP握手，建立TCP连接 然后进行身份认证，这一步会查询MySQL的权限表，通过后会从权限表中拿到用户的所有权限，并保存在这个连接中，后续的所有权限判断，都是基于这次查询得到的权限数据，不会再去查权限表了 通过用户的身份认证之后，连接就建立起来了  通过命令show processlist可以观察当前数据库的所有连接："/>
+
+
+
+  
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "posts",
+        "name": "MySQL的架构和语句执行过程",
+        "headline": "MySQL的架构和语句执行过程",
+        "alternativeHeadline": "",
+        "description": "
+      
+        MySQL的整体架构图 \u0022\n如上图所示，整体上看MySQL分成上下两层，上面那层是Server层，下面是存储引擎层。\nServer层包含了连接器、查询缓存、解析器、优化器、执行器(有的资料中说有)等组件，，主要负责的是跨存储引擎的功能，如存储过程、触发器、视图等，内置函数也是在Server层提供的。\n存储引擎层则是MyISAM、InnoDB、Memory等各种存储引擎，以插件式集成，负责数据的读写。\n连接器 用于和客户端建立连接，并维持和管理连接。并在连接建立时查询用户的权限表获取到该用户的所有权限，建立连接的过程大概如下：\n 首先进行TCP握手，建立TCP连接 然后进行身份认证，这一步会查询MySQL的权限表，通过后会从权限表中拿到用户的所有权限，并保存在这个连接中，后续的所有权限判断，都是基于这次查询得到的权限数据，不会再去查权限表了 通过用户的身份认证之后，连接就建立起来了  通过命令show processlist可以观察当前数据库的所有连接：
+
+
+      
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/posts\/mysql%E7%9A%84%E6%9E%B6%E6%9E%84%E5%92%8C%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-04-08T12:09:30.00Z",
+        "datePublished": "2021-04-08T12:09:30.00Z",
+        "dateModified": "2021-04-08T12:09:30.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/posts\/mysql%E7%9A%84%E6%9E%B6%E6%9E%84%E5%92%8C%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B\/",
+        "wordCount" : "271",
+        "genre" : [ 
+      
+      "数据库"
+
+    ],
+        "keywords" : [ 
+      
+      "MySQL"
+
+    ]
+    }
+  </script>
+
+
+
+</head>
+<body>
+    <header><div
+  class="page-top 
+    animated fadeInDown
+
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>
+  <nav>
+    <ul class="nav__list" id="navMenu">
+      <div class="nav__links">
+        
+        
+          
+          <li>
+            <a
+              
+              href="/"
+              
+              title=""
+              >Home</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/posts/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/portfolio/"
+              
+              title=""
+              >Portfolio</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >About</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/contact/"
+              
+              title=""
+              >Contact</a
+            >
+          </li>
+
+        
+      </div>
+      <ul>
+        
+        
+          <li>
+            <a class="theme-switch" title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </li>
+
+        
+      </ul>
+    </ul>
+  </nav>
+</div>
+</header>
+    <div class="wrapper">
+      <aside><div
+  class="sidebar
+    animated fadeInDown
+
+  "
+>
+  <div class="sidebar__content">
+    <div class="logo-title">
+      <div class="title">
+        <img src="/images/profile5.jpg" alt="profile picture" />
+        <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
+        <div class="description">
+          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+        <li>
+          <a href="https://stackoverflow.com/users/12924262/horace-yang" rel="me" aria-label="StackOverFlow" title="StackOverFlow">
+            <i class="fab fa-stack-overflow fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://github.com/harryyann" rel="me" aria-label="GitHub" title="GitHub">
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://www.zhihu.com/people/yang-hai-rui-88" rel="me" aria-label="zhihu" title="zhihu">
+            <i class="fab fa-zhihu fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=941811450@qq.com" rel="me" aria-label="e-mail" title="e-mail">
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+    </ul>
+  </div><footer class="footer footer--sidebar">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></div>
+</aside>
+      <main>
+        <div class="autopagerize_page_element">
+          <div class="content">
+  <div
+    class="post 
+      animated fadeInDown
+
+    "
+  >
+    <div class="post-content">
+      
+      <div class="post-title">
+        <h1>MySQL的架构和语句执行过程</h1>
+        
+      </div><h1 id="mysql的整体架构图">MySQL的整体架构图</h1>
+<p><img src="/images/mysql_structure/structure.png" alt="来自<高性能MySQL>"></p>
+<p>如上图所示，整体上看MySQL分成上下两层，上面那层是Server层，下面是存储引擎层。</p>
+<p>Server层包含了<strong>连接器、查询缓存、解析器、优化器、执行器</strong>(有的资料中说有)等组件，，主要负责的是跨存储引擎的功能，如存储过程、触发器、视图等，内置函数也是在Server层提供的。</p>
+<p>存储引擎层则是MyISAM、InnoDB、Memory等各种存储引擎，以插件式集成，负责数据的读写。</p>
+<h1 id="连接器">连接器</h1>
+<p>用于和客户端建立连接，并维持和管理连接。并在连接建立时查询用户的权限表获取到该用户的所有权限，建立连接的过程大概如下：</p>
+<ol>
+<li>首先进行TCP握手，建立TCP连接</li>
+<li>然后进行身份认证，这一步会查询MySQL的权限表，通过后会<strong>从权限表中拿到用户的所有权限，并保存在这个连接</strong>中，后续的所有权限判断，都是基于这次查询得到的权限数据，不会再去查权限表了</li>
+<li>通过用户的身份认证之后，连接就建立起来了</li>
+</ol>
+<p>通过命令<code>show processlist</code>可以观察当前数据库的所有连接：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> processlist;
+<span style="color:#f92672">+----+-------------+-----------------------------------------+-----------+-------------+------+-----------------------------------------------------------------------+------------------+----------+</span>
+<span style="color:#f92672">|</span> Id <span style="color:#f92672">|</span> <span style="color:#66d9ef">User</span>        <span style="color:#f92672">|</span> Host                                    <span style="color:#f92672">|</span> db        <span style="color:#f92672">|</span> Command     <span style="color:#f92672">|</span> <span style="color:#66d9ef">Time</span> <span style="color:#f92672">|</span> State                                                                 <span style="color:#f92672">|</span> Info             <span style="color:#f92672">|</span> Progress <span style="color:#f92672">|</span>
+<span style="color:#f92672">+----+-------------+-----------------------------------------+-----------+-------------+------+-----------------------------------------------------------------------+------------------+----------+</span>
+<span style="color:#f92672">|</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span> system <span style="color:#66d9ef">user</span> <span style="color:#f92672">|</span>                                         <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> Daemon      <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> InnoDB <span style="color:#66d9ef">purge</span> coordinator                                              <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>             <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span> system <span style="color:#66d9ef">user</span> <span style="color:#f92672">|</span>                                         <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> Daemon      <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> InnoDB <span style="color:#66d9ef">purge</span> worker                                                   <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>             <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>  <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span> system <span style="color:#66d9ef">user</span> <span style="color:#f92672">|</span>                                         <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> Daemon      <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> InnoDB <span style="color:#66d9ef">purge</span> worker                                                   <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>             <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>  <span style="color:#ae81ff">4</span> <span style="color:#f92672">|</span> system <span style="color:#66d9ef">user</span> <span style="color:#f92672">|</span>                                         <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> Daemon      <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> InnoDB <span style="color:#66d9ef">purge</span> worker                                                   <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>             <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>  <span style="color:#ae81ff">5</span> <span style="color:#f92672">|</span> system <span style="color:#66d9ef">user</span> <span style="color:#f92672">|</span>                                         <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> Daemon      <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> InnoDB shutdown handler                                               <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>             <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> <span style="color:#ae81ff">82</span> <span style="color:#f92672">|</span> root        <span style="color:#f92672">|</span> localhost                               <span style="color:#f92672">|</span> employees <span style="color:#f92672">|</span> Query       <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> Init                                                                  <span style="color:#f92672">|</span> <span style="color:#66d9ef">show</span> processlist <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> <span style="color:#ae81ff">83</span> <span style="color:#f92672">|</span> replica     <span style="color:#f92672">|</span> test:<span style="color:#ae81ff">48936</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> Binlog Dump <span style="color:#f92672">|</span> <span style="color:#ae81ff">2265</span> <span style="color:#f92672">|</span> Master has sent <span style="color:#66d9ef">all</span> binlog <span style="color:#66d9ef">to</span> slave; waiting <span style="color:#66d9ef">for</span> binlog <span style="color:#66d9ef">to</span> be updated <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>             <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">+----+-------------+-----------------------------------------+-----------+-------------+------+-----------------------------------------------------------------------+------------------+----------+</span>
+<span style="color:#ae81ff">7</span> rows <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> sec)
+</code></pre></div><p>可以看到当前有几个daemon的daemonset线程，还有个本地的Query查询，还有一个复制的线程在工作。</p>
+<p>当客户端太久没有操作，连接器会自动断开，超时时间由参数<code>wait_timeout</code>控制，默认是8小时，28800秒。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;wait_timeout&#34;</span>;
+<span style="color:#f92672">+---------------+-------+</span>
+<span style="color:#f92672">|</span> Variable_name <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
+<span style="color:#f92672">+---------------+-------+</span>
+<span style="color:#f92672">|</span> wait_timeout  <span style="color:#f92672">|</span> <span style="color:#ae81ff">28800</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">+---------------+-------+</span>
+<span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">001</span> sec
+</code></pre></div><p>使用MySQL建立连接时要注意的问题：</p>
+<p><strong>大量的短连接可以改成长连接</strong></p>
+<p>如果每次都进行很少的操作就断开连接，下次查询时再重新建立连接的话，多了很多不必要的资源浪费，尽量使用长连接，并在多个查询中复用这个连接。或者使用连接池，要访问MySQL就去连接池里拿一个连接回来。</p>
+<p><strong>大量的长连接会造成问题</strong></p>
+<p>如果有大量的长连接，那么连接过程中所执行的一些操作都会保存在连接器的连接对象里，会占用很多内存资源，严重时甚至会OOM。如果长连接太多，并且观察到数据库的内存占用超过了阈值，那么要么扩大内存，或者对长连接定期的断开，再重连。对于MySQL5.7以上的版本，可以在进行了一个大的操作后，使用命令<code>mysql_reset_connection</code>来初始化连接资源，这并不会让这个连接断开，只是清理了连接对象的一些资源。</p>
+<h1 id="查询缓存">查询缓存</h1>
+<p>如果开启了查询缓存，那么在建立了连接后，会先到查询缓存中查找，看能否命中。查询缓存中存储的是key-value形式的数据，key就是查询类型的SQL语句的哈希值，value就是结果集，和操作的所有表的信息。</p>
+<p>如果命中了查询缓存，则会检查连接时获取到的用户的权限，和查询缓存中记录的访问的所有表进行对比，确认用户拥有访问这些表的权限后，就可以直接把结果集返回给用户。</p>
+<p>如果没有命中，就需要继续向后走分析器、优化器，直到从存储引擎中得到数据集返回给用户，再返回之前，这个结果集也会保存一份到查询缓存中，用户后续如果有相同的查询，则可以命中。</p>
+<h2 id="查询缓存的问题">查询缓存的问题</h2>
+<ol>
+<li>
+<p><strong>只要有一个表有更新，那么这个表涉及的查询缓存都会被清空</strong>，所以对于更新频繁的表，查询缓存命中率非常的低，除非是那种几乎不会变，但是又经常要被查询的表才有用。</p>
+<p>这种情况其实可以设置<code>query_cache_type=DEMAND</code>，这样对于所有查询语句，默认都不生成查询缓存，如果有确定需要使用查询缓存的语句，可以通过<code>SQL_CACHE</code>显式的指定就可以了，如：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> SQL_CACHE <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> T <span style="color:#66d9ef">where</span> ID<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span><span style="color:#960050;background-color:#1e0010">；</span><span style="color:#f92672">//</span> <span style="color:#960050;background-color:#1e0010">生成查询缓存</span>
+</code></pre></div></li>
+<li>
+<p>查询语句不同，即使结果集相同，也不会命中查询缓存，反而会在查询缓存中保存两份相同的结果集。</p>
+</li>
+<li>
+<p>hash计算，哈希查找，哈希碰撞都会带来额外的性能消耗，如果还没命中，还就更得不偿失了。</p>
+</li>
+</ol>
+<p>因为以上的问题，MySQL8.0把查询缓存整个模块都删了。</p>
+<h1 id="分析器">分析器</h1>
+<p>分析器作用就是解析SQL语句，将SQL语句转换为MySQL可以执行的函数。</p>
+<p>分析器分成词法分析，和语法分析两部分：</p>
+<ul>
+<li>
+<p><strong>词法分析</strong>，会识别出SQL语句的各个字符串是什么，代表什么，然后生成一颗解析树。不管你SQL写的对不对，最终都能生成一颗解析树，所以在词法分析阶段是不会报错的。</p>
+</li>
+<li>
+<p><strong>语法分析</strong>：对解析树进行判断，判断是否满足MySQL的语法，这里会访问表结构，检查表名、字段名等是否正确，如果有错误就会报错给客户端。</p>
+</li>
+</ul>
+<p>分析器执行之后会有一次权限验证，叫做<strong>precheck</strong>，因为这一步已经知道这个SQL要访问的是哪个database、哪个table了，所以可以进行一次预检查，依然是通过刚刚建立连接时保存的用户权限信息，进行检查，如果权限没问题，则会进行下一步。否则就会返回权限错误。</p>
+<h1 id="优化器">优化器</h1>
+<p>经过分析器后，MySQL已经知道要做什么了，优化器的作用是对操作进行优化。</p>
+<p>比如，如果要访问的表里有多个索引，那么使用哪个索引最优，就是优化器要考虑的。再比如，多表join时，先查哪个表，再根据外键字段查哪个表，这也是优化器需要做的。</p>
+<h1 id="执行器">执行器</h1>
+<p>有的资料上没有写这个模块，比如本文一开始的那张图，出自《高性能MySQL》。不管有没有这个模块，这部分要做的事非常简单。</p>
+<p>首先在执行器的一开始，会做最后一次的权限校验，如果权限不够则会返回错误。</p>
+<p>权限认证通过后，则会调用存储引擎对应的接口拿到数据或完成操作，根据操作类型不同，可能会再对数据做一些处理，然后返回给客户端。</p>
+<h2 id="为什么执行器还要做权限检查">为什么执行器还要做权限检查？</h2>
+<p>在分析器的最后可以确认与SQL语句本身相关的表有哪些，可以确认用户对这些表是否有相关操作权限，但是还有些其他的操作可能在SQL语句中并未体现，比如如果有个触发器，必须在执行阶段，才能知道，所以只有在执行器阶段才能做最终的权限校验。</p>
+<p>把权限的检查分解到多个步骤，也是为了提高效率，在某些权限不满足时不用到了执行器就可以直接返回。</p>
+<p><strong>整个的认证过程</strong>：</p>
+<ol>
+<li>在连接器阶段，进行认证，并获取用户权限，并不做权限校验</li>
+<li>在命中查询缓存时，根据查询缓存中保存的表信息，进行权限的检查</li>
+<li>在分析器阶段，确认了SQL语句本身要操作的表信息，进行权限的precheck检查</li>
+<li>在执行器的开始，确认了触发器等关于这次操作的所有表，做最后的权限检查。</li>
+</ol>
+</div>
+    <div class="post-footer">
+      <div class="info">
+        
+          <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
+
+
+
+
+        
+
+        
+          <span class="separator"><a class="tag" href="/tags/mysql/">MySQL</a></span>
+
+
+
+
+        
+      </div>
+    </div>
+
+    
+  </div>
+
+
+          </div>
+        </div>
+      </main>
+    </div><footer class="footer footer--base">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></body>
+</html>

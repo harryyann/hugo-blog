@@ -2,8 +2,8 @@
 title: "MySQL事务详解"
 date: 2021-05-04T22:10:47+08:00
 Description: "关于MySQL中的事务相关知识的整理"
-Tags: [Database, MySQL]
-Categories: [MySQL]
+Tags: [MySQL]
+Categories: [数据库]
 DisableComments: false
 
 ---
