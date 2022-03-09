@@ -54,7 +54,10 @@ MVCC MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的�
       
       <guid>https://yanghairui.life/posts/innodb%E7%89%B9%E6%80%A7/</guid>
       
-        <description></description>
+        <description>InnoDB存储引擎的体系架构 InnoDB存储引擎的体系架构大致如下图所示，可以看到主要包含了一系列后台线程，和一个大的缓冲池。最底层则是文件系统。
+InnoDB的线程模型 InnoDB的线程主要分为Master线程、IO线程、Purge线程和Page Cleaner线程。
+Master 线程 是核心的后台线程，主要负责调度其他线程，以及脏页的刷新，undo页的回收，redo log的刷新，合并缓冲区等。（版本不同做的工作不一样）
+IO线程 innodb中大量使用了AIO（异步IO）来处理写请求，以提高性能，IO线程用于处理这些IO操作的回调。</description>
       
     </item>
     
@@ -80,6 +83,17 @@ MVCC MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的�
         <description>事务 事务就是一组原子性的SQL语句。这一组SQL语句要么全部执行成功，要么全部不执行。只要有任何一条语句因为崩溃或其他原因无法执行，那么所有的语句都不会执行。事务处理系统需要包含以下四个特性(ACID)：
  原子性(atomicity)  一个事务必须被看作 是不可分割的最小工作单元。不可能执行成功其中的一部分操作，要么全部提交成功，要么全部失败回滚。
  一致性(consistency)  数据库总是从一个一致性的状态，转换到另一个一致性的状态。</description>
+      
+    </item>
+    
+    <item>
+      <title>MySQL的索引数据结构</title>
+      <link>https://yanghairui.life/posts/mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</link>
+      <pubDate>Tue, 20 Apr 2021 17:39:38 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/posts/mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</guid>
+      
+        <description></description>
       
     </item>
     
