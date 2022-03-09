@@ -91,7 +91,9 @@ Per aspera ad astra.
   
   <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="InnoDB的非锁定一致性读"/>
-<meta name="twitter:description" content=""/>
+<meta name="twitter:description" content="非锁定一致性读 在《MySQL的锁》这篇文章中我介绍了MySQL的锁定一致性读，即通过加锁的方式来保证读取数据的正确性。而为了提高效率，InnoDB还实现了非锁定的一致性读，即读取操作不需要等待行锁的释放就可以完成数据读取，提高读的效率。这也是InnoDB默认的读取方式。
+实现方式 InnoDB通过版本控制的方式读取当前执行时间数据库中的快照数据，快照数据是指该行之前版本的数据，如上图所示，当要读取的数据被加了X锁时，可以不等到锁释放，而是直接读取数据旧版本的快照，即可实现一致性读。而在不同的事务隔离级别下，读取数据的版本也不同，这就是行多版本技术，由此带来的并发控制，就是多版本并发控制（Multi Version Concurrency Control，MVCC）。
+MVCC MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的实现方式是结合自己的undo log和在表中增加了两个隐藏的字段实现的。"/>
 
 
 
@@ -112,7 +114,7 @@ Per aspera ad astra.
         "alternativeHeadline": "",
         "description": "
       
-        
+        非锁定一致性读 在《MySQL的锁》这篇文章中我介绍了MySQL的锁定一致性读，即通过加锁的方式来保证读取数据的正确性。而为了提高效率，InnoDB还实现了非锁定的一致性读，即读取操作不需要等待行锁的释放就可以完成数据读取，提高读的效率。这也是InnoDB默认的读取方式。\n实现方式 InnoDB通过版本控制的方式读取当前执行时间数据库中的快照数据，快照数据是指该行之前版本的数据，如上图所示，当要读取的数据被加了X锁时，可以不等到锁释放，而是直接读取数据旧版本的快照，即可实现一致性读。而在不同的事务隔离级别下，读取数据的版本也不同，这就是行多版本技术，由此带来的并发控制，就是多版本并发控制（Multi Version Concurrency Control，MVCC）。\nMVCC MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的实现方式是结合自己的undo log和在表中增加了两个隐藏的字段实现的。
 
 
       
@@ -162,7 +164,7 @@ Per aspera ad astra.
 
     ,
         "url" : "https:\/\/yanghairui.life\/posts\/innodb%E7%9A%84%E9%9D%9E%E9%94%81%E5%AE%9A%E4%B8%80%E8%87%B4%E6%80%A7%E8%AF%BB\/",
-        "wordCount" : "0",
+        "wordCount" : "80",
         "genre" : [ 
       
       "数据库"
@@ -356,7 +358,68 @@ Per aspera ad astra.
       <div class="post-title">
         <h1>InnoDB的非锁定一致性读</h1>
         
-      </div></div>
+      </div><h2 id="非锁定一致性读">非锁定一致性读</h2>
+<p>在<a href="https://yanghairui.life/posts/mysql%E7%9A%84%E9%94%81/">《MySQL的锁》</a>这篇文章中我介绍了MySQL的锁定一致性读，即通过加锁的方式来保证读取数据的正确性。而为了提高效率，InnoDB还实现了非锁定的一致性读，即读取操作不需要等待行锁的释放就可以完成数据读取，提高读的效率。这也是InnoDB默认的读取方式。</p>
+<h2 id="实现方式">实现方式</h2>
+<p><img src="/images/mvcc/MVCC.png" alt=""></p>
+<p>InnoDB通过版本控制的方式读取当前执行时间数据库中的快照数据，快照数据是指该行之前版本的数据，如上图所示，当要读取的数据被加了X锁时，可以不等到锁释放，而是直接读取数据旧版本的快照，即可实现一致性读。而在不同的事务隔离级别下，读取数据的版本也不同，这就是行多版本技术，由此带来的并发控制，就是<strong>多版本并发控制（Multi Version Concurrency Control，MVCC）</strong>。</p>
+<h2 id="mvcc">MVCC</h2>
+<p>MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的实现方式是结合自己的<strong>undo log</strong>和在表中增加了<strong>两个隐藏的字段</strong>实现的。</p>
+<h3 id="undo-log">undo log</h3>
+<p>用于记录数据被修改的历史日志，当行被修改时，相反的操作会被写入，undo log是逻辑日志，它的作用就是事务回滚时的数据恢复还原，以及MVCC。</p>
+<p>根据行为的不同，undo log分成insert undo log和update undo log。</p>
+<ul>
+<li>insert undo log就是在insert操作中产生的undo log，由于insert操作的行记录只对本事务可见，所以insert undo log可以在事务提交后就删除。</li>
+<li>update undo log是在update和delete操作中产生的undo log，因为这样的操作对已有的行造成了影响，所以会在事务提交后，也不能删除，后续会在确保了版本链的数据不会被引用后由InnoDB的purge线程清理（这方面可以查看另一篇<a href="https://yanghairui.life/posts/innodb%E7%89%B9%E6%80%A7/">InnoDB特性的文章</a>）。</li>
+</ul>
+<h3 id="两个隐藏字段">两个隐藏字段</h3>
+<p><strong>TRX_ID</strong>：全局事务ID，即transaction_id，在每个事务开始时被分配，全局递增，在MVCC中可以把它理解为版本号，每当一个事务操作了一行，那么这行的版本就会更新。</p>
+<p><strong>DB_ROLL_PTR</strong>：行的回滚指针，即指向该行当前版本数据的上一个版本在undo log的指针，通过这个指针，InnoDB就可以从undo log上找到这行数据历史版本的快照。</p>
+<h4 id="快照读和当前读">快照读和当前读</h4>
+<p><strong>快照读</strong>就是执行select语句时的读取数据的方式。</p>
+<p><strong>当前读</strong>是在执行insert、update、delete、select &hellip; for update和select &hellip; lock in share mode时进行数据读取的方式。</p>
+<p><strong>只有快照读时，才能用到MVCC；如果是当前读，由于必须要加锁，就要通过InnoDB的锁机制来读取</strong></p>
+<h4 id="read-view">Read-View</h4>
+<p>MVCC中的快照读Read-View是一个数据结构，在事务执行过程中被创建，它主要包含以下4个字段：</p>
+<ul>
+<li><strong>m_ids</strong>：当前活跃的事务ID集合</li>
+<li><strong>min_trx_id</strong>：最小活跃事务编号</li>
+<li><strong>max_trx_id</strong>：预分配事务编号，当前最大事务编号+1</li>
+<li><strong>creator_trx_id</strong>：创建此Read-View的事务ID</li>
+</ul>
+<h3 id="mvcc的过程">MVCC的过程</h3>
+<p>InnoDB中只有<strong>Read Committed</strong>和<strong>Repeatable Read</strong>两个隔离等级下，可以使用MVCC实现非锁定的一致性读，方式都是一样的，只不过是根据隔离等级的要求，读取的数据版本不同。</p>
+<p>Read Committed隔离等级：可以读取所有已经提交的事务，所以可以<strong>读取行的最新事务版本</strong>。</p>
+<p>Repeatable Read隔离等级：要求可重复读，所以要<strong>读取到这行数据在该事务开始时的那个版本</strong>。</p>
+<h4 id="rc隔离级别下的mvcc过程">RC隔离级别下的MVCC过程</h4>
+<p>RC级别下在事务中每执行一次Select语句，就会生成一个Read-View对象，比如下图：</p>
+<p><img src="/images/mvcc/read_view_rc.png" alt=""></p>
+<p>每一次的select语句的快照读，都会根据read-view，以及对应隔离级别下的访问规则，获取应该得到的数据。会从当前的这行数据开始判断能不能访问，不能访问就要根据DB_ROLL_PTR从undo log中找到上一个版本再继续判断。是否可访问的判断规则如下：</p>
+<ol>
+<li>
+<p>read-view的creator_trx_id是否等于要访问行的trx_id？</p>
+<p>如果是，就证明是自己这个事务改的这一行，自己改的要认，所以这行数据可以访问。否则需要继续向下判断。</p>
+</li>
+<li>
+<p>判断行的trx_id是否小于read-view的min_trx_id？</p>
+<p>如果是，就说明这一行当前没有事务在访问，并且上一个访问它的事务已经提交了，所以这行数据可以访问。否则就要继续向下判断。</p>
+</li>
+<li>
+<p>判断行的trx_id是否大于max_trx_id？</p>
+<p>如果是，就说明这一行在read-view生成之后又被另一个新事务访问了，那么这行数据就不能被访问，需要从undo log中找到上一个版本再从规则1开始判断。否则就还可以继续向下判断。</p>
+</li>
+<li>
+<p>判断trx_id是否在min_trx_id和max_trx_id之间？</p>
+<p>由于2、3的访问都过了，所以这里一定会满足，此时就要判断trx_id是否在m_ids中，如果是就说明这一行还有其他事务在访问，不能被访问，需要从undo log找到上一个版本再从规则1开始判断；如果不在，证明这一行的事务已经被提交了，那就可以访问。</p>
+</li>
+</ol>
+<h4 id="rr隔离级别下的mvcc过程">RR隔离级别下的MVCC过程</h4>
+<p>由于RR隔离级别要求事务中只能读取到事务一开始时已经提交的事务，要满足可重复读的条件，所以RR级别下，只会在第一次执行Select语句从而发生快照读时，生成一次read-view对象，后续的每一次的快照读，都复用这个read-view，如下图：</p>
+<p><img src="/images/mvcc/read_view_rr.png" alt=""></p>
+<p>规则判断则和RC是完全一样的，只有复用read-view还是重新生成的区别。</p>
+<h4 id="关于幻读问题">关于幻读问题</h4>
+<p>MVCC不能完全解决RR隔离级别下的<strong>幻读</strong>现象！虽然read-view是复用的，但是<strong>当一个事务中两次快照读之间存在当前读，都会导致read-view重新生成</strong>，就会导致幻读的产生，要完全解决该问题，需要通过<strong>间隙锁</strong>和<strong>临键锁</strong>来解决（（锁相关的内容可以查看<a href="https://yanghairui.life/posts/mysql%E7%9A%84%E9%94%81/">MySQL的锁</a>这篇文章，幻读问题可以查看<a href="https://yanghairui.life/posts/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/">MySQL的事务</a>这篇文章）</p>
+</div>
     <div class="post-footer">
       <div class="info">
         
