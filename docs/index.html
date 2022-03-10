@@ -541,7 +541,7 @@ MVCC MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的�
     >
       
       <div class="post-title">
-        <h3><a href="/posts/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/">MySQL的两阶段提交</a></h3>
+        <h3><a href="/posts/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/">redo log的两阶段提交</a></h3>
       </div>
       <div class="post-content">
         <div class="p_part">
@@ -770,61 +770,6 @@ IO线程 innodb中大量使用了AIO（异步IO）来处理写请求，以提高
     >
       
       <div class="post-title">
-        <h3><a href="/posts/mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">MySQL的索引数据结构</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              
-
-
-            
-          </p>
-          </div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Tue, Apr 20, 2021
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/mysql/">MySQL</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
         <h3><a href="/posts/mysql%E7%9A%84%E6%9E%B6%E6%9E%84%E5%92%8C%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B/">MySQL的架构和语句执行过程</a></h3>
       </div>
       <div class="post-content">
@@ -866,6 +811,64 @@ Server层包含了连接器、查询缓存、解析器、优化器、执行器(�
 
             
               <span class="separator"><a class="tag" href="/tags/mysql/">MySQL</a></span>
+
+
+
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div
+      class="post 
+        animated fadeInDown
+
+      "
+    >
+      
+      <div class="post-title">
+        <h3><a href="/posts/%E5%AD%A6%E4%B9%A0%E7%BC%96%E5%86%99makefile/">编写Makefile</a></h3>
+      </div>
+      <div class="post-content">
+        <div class="p_part">
+          <p>
+            
+              make工具介绍 项目构建往往要经过一系列的过程，尤其是C项目，可能需要先编译这个，再编译那个，再添加个链接，完了再打个docker镜像，会有很多的文件需要创建和更改。这些动作，我们既可以通过手工的方式，一步步完成，不免显得繁琐。或者也可以写个shell脚本自动完成。但是make是专门做这件事的。
+make的环境准备 对于linux或者mac系统，只要有gcc，一般都会有make，通过命令make -v可以检查你当前的环境有没有make，而在windows上想使用make还是比较复杂的，尽管网上有很多教程，但我都没有尝试成功，推荐还是尽量在linux或者mac环境下使用make构建你的项目
+make的使用 make的使用非常简单，笔者不是make大神，使用make都是通过一条 make 命令和编写一个Makefile文件即可。
+Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需要有哪些前置操作，或者需要哪些前置文件，最终又生成了什么文件。
+
+
+            
+          </p>
+          <a href="/posts/%E5%AD%A6%E4%B9%A0%E7%BC%96%E5%86%99makefile/" class="read_more">继续阅读</a></div>
+      </div>
+
+      
+      <div class="post-footer">
+        <div class="meta">
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Thu, Mar 25, 2021
+
+
+              </span
+            >
+            
+              <span class="separator"><a class="category" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a></span>
+
+
+
+
+            
+
+            
+              <span class="separator"><a class="tag" href="/tags/makefile/">makefile</a></span>
 
 
 

@@ -315,7 +315,7 @@ MVCC MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的�
     </item>
     
     <item>
-      <title>MySQL的两阶段提交</title>
+      <title>redo log的两阶段提交</title>
       <link>https://yanghairui.life/posts/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/</link>
       <pubDate>Sat, 08 May 2021 07:09:30 +0800</pubDate>
       
@@ -368,17 +368,6 @@ IO线程 innodb中大量使用了AIO（异步IO）来处理写请求，以提高
     </item>
     
     <item>
-      <title>MySQL的索引数据结构</title>
-      <link>https://yanghairui.life/posts/mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</link>
-      <pubDate>Tue, 20 Apr 2021 17:39:38 +0800</pubDate>
-      
-      <guid>https://yanghairui.life/posts/mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</guid>
-      
-        <description></description>
-      
-    </item>
-    
-    <item>
       <title>MySQL的架构和语句执行过程</title>
       <link>https://yanghairui.life/posts/mysql%E7%9A%84%E6%9E%B6%E6%9E%84%E5%92%8C%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B/</link>
       <pubDate>Thu, 08 Apr 2021 12:09:30 +0800</pubDate>
@@ -409,7 +398,7 @@ Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需
     </item>
     
     <item>
-      <title>Contact</title>
+      <title>Contact me</title>
       <link>https://yanghairui.life/contact/</link>
       <pubDate>Tue, 23 Mar 2021 22:52:05 +0800</pubDate>
       
@@ -434,16 +423,16 @@ Informer机制 </description>
     </item>
     
     <item>
-      <title>About</title>
+      <title>About me</title>
       <link>https://yanghairui.life/about/</link>
       <pubDate>Fri, 12 Mar 2021 23:55:16 +0800</pubDate>
       
       <guid>https://yanghairui.life/about/</guid>
       
-        <description>我出生于黑龙江省海伦市，幼年在农村的姥姥家里度过；
-  7岁随父母迁往双鸭山市，在这座边境小城度过了我的小学中学时光；
-  我于2018年从郑州大学机械工程学院的机械工程专业毕业；
-  大学里我是院足球队队员，作为混子跟着球队拿过两个冠军和一个亚军；</description>
+        <description>我出生于黑龙江省海伦市，幼年在乡下的姥姥家里度过；
+  7岁跟着父母迁往双鸭山市，在这座边境小城我度过了值得回忆的小学和中学时光；
+  2018年我从郑州大学机械工程学院毕业，主修机械工程专业；
+  大学里我作为混子球员跟着院足球队拿过两个联赛冠军。读过一百多本书，看了几百部电影。学过不少东西，但也没找到自己的方向；</description>
       
     </item>
     
