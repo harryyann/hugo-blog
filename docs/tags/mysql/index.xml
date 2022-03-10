@@ -74,14 +74,14 @@ IO线程 innodb中大量使用了AIO（异步IO）来处理写请求，以提高
     </item>
     
     <item>
-      <title>MySQL事务详解</title>
+      <title>MySQL的事务</title>
       <link>https://yanghairui.life/posts/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/</link>
-      <pubDate>Tue, 04 May 2021 22:10:47 +0800</pubDate>
+      <pubDate>Thu, 06 May 2021 12:10:47 +0800</pubDate>
       
       <guid>https://yanghairui.life/posts/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/</guid>
       
-        <description>事务 事务就是一组原子性的SQL语句。这一组SQL语句要么全部执行成功，要么全部不执行。只要有任何一条语句因为崩溃或其他原因无法执行，那么所有的语句都不会执行。事务处理系统需要包含以下四个特性(ACID)：
- 原子性(atomicity)  一个事务必须被看作 是不可分割的最小工作单元。不可能执行成功其中的一部分操作，要么全部提交成功，要么全部失败回滚。
+        <description>事务的特性 事务就是一组原子性的SQL语句。这一组SQL语句要么全部执行成功，要么全部不执行。只要有任何一条语句因为崩溃或其他原因无法执行，那么所有的语句都不会执行。事务处理系统需要包含以下四个特性(ACID)：
+ 原子性(atomicity)  一个事务必须被看作是不可分割的最小工作单元。不可能执行成功其中的一部分操作，要么全部提交成功，要么全部失败回滚，不能存在部分成功部分失败的状态。
  一致性(consistency)  数据库总是从一个一致性的状态，转换到另一个一致性的状态。</description>
       
     </item>
