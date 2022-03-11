@@ -250,7 +250,7 @@ Redo log buffer的大小和已通过参数`innodb_log_buffer_size`设置，默�
 
 注意到buffer pool组成的图里面，还有一个额外内存池，这个内存池就是InnoDB对它运行过程中本身的一些数据结构对象进行存储的。
 
-### Insert buffer
+### Insert buffer/Change buffer
 
 insert buffer是为了优化二级索引（非唯一）刷盘时的插入效率，它也存在buffer pool，并且会持久化。通过`show engine innodb status`可以查看到相关信息：
 
@@ -268,37 +268,48 @@ insert 0, delete mark 0, delete 0
 
 当插入一个新行时，如果这个行要插入的页不在buffer pool，就需要先把这个页从磁盘取出来。对于主键索引，由于它一般都是递增的，所以直接从磁盘取出最后一个页，把新插入的行往B+树的最后按顺序加即可。而对于二级索引来说，新加的这行的索引字段往往不是最后面的，不能顺序插入，就需要随机IO磁盘，拿到这行数据应该插入的页，然后保存这个页到buffer pool，然后插入到buffer pool中这个页的B+树上，这里就有随机的磁盘IO了，导致效率较低。插入缓存就是为了解决这个问题，**提高二级索引的插入效率**，它既存在buffer pool中，也存在磁盘上，重启后，也可以从磁盘中加载回来还能用。
 
-#### Insert buffer的使用要求
+#### Change buffer的使用要求
 
 1. 索引不是聚簇索引，因为聚簇索引不需要优化。
 2. 索引不是唯一索引，因为要保证唯一的话，要去遍历二级索引判断是否重复，无论怎样都要遍历，优化没意义。
 
-#### Insert buffer的使用过程
+#### Change buffer的使用过程
 
-1. 当有一行数据要插入到某个表时，数据需要插入到这个表的主键索引和所有二级索引上，首先检查这行数据要插入的页在不在buffer pool的LRU链表上。
+1. 当有一行数据要插入/更新到某个表时，数据需要插入到这个表的主键索引和所有二级索引上，首先检查这行数据要写入的页在不在buffer pool的LRU链表上。
 2. 如果主键索引页和二级索引页都在LRU链表上，则可以直接操作内存直接更新。
 3. 如果主键索引不在LRU链表上，则直接顺序IO磁盘，拿到主键索引的最后一个数据页放到LRU链表，然后插入即可
 4. 如果二级索引页不在LRU链表上，则把这个插入操作先放到insert buffer中。（insert buffer在事务提交后也会持久化到共享表空间的ibdata文件，并且也会写入redo log中），并不去随机IO磁盘，然后之后根据一定频率和情况进行**merge**，merge的过程就是InnoDB再进行随机磁盘IO，把这个二级索引的数据页从磁盘加载到buffer pool的LRU链表上，然后再把insert buffer和buffer pool中的这个页进行merge操作，同时这个页变成脏页。
 
-#### Insert buffer是什么数据结构
+#### Change buffer是什么数据结构
 
-Insert buffer是一颗B+树，在mysql4.1版本前一张表有一颗，存储的是这张表的所有二级索引，后续改为了全局只有一颗B+树，负责所有的二级索引
+Change buffer是一颗B+树，在mysql4.1版本前一张表有一颗，存储的是这张表的所有二级索引，后续改为了全局只有一颗B+树，负责所有的二级索引
 
 #### Merge发生的时机
 
-1. 如果insert buffer中的记录操作的二级索引页刚好被从磁盘读入buffer pool。
-2. Insert buffer的空间用光了，不能再写了，必须先从磁盘随机IO取出二级索引页先进行merge，给insert buffer腾出空间。
+1. 如果change buffer中的记录操作的二级索引页刚好被从磁盘读入buffer pool。
+2. Change buffer的空间用光了，不能再写了，必须先从磁盘随机IO取出二级索引页先进行merge，给change buffer腾出空间。
 3. Master线程会周期性的进行merge。
 
-#### Insert buffer的问题
+#### Change buffer的问题
 
-在写频繁的情况，如果buffer pool中没有需要操作的二级索引页，就都需要写insert buffer，导致insert buffer过大，占了buffer pool的大部分。mysql5.5之前的叫做insert buffer，1.0版本改为**change buffer**，顾名思义，不仅是插入，修改和删除操作也做了优化，1.2版本开始可以通过参数`innodb_change_buffer_max_size`来控制change buffer的最大使用内存，最大值是50，默认是25，表示最多是25%的buffer pool的空间。
+在写频繁的情况，如果buffer pool中没有需要操作的二级索引页，就都需要写insert buffer，导致insert buffer过大，占了buffer pool的大部分。（mysql5.5之前的叫做insert buffer，InnoDB1.0Z版本后改为**change buffer**，顾名思义，不仅是插入，修改和删除操作也做了优化），1.2版本开始可以通过参数`innodb_change_buffer_max_size`来控制change buffer的最大使用内存，最大值是50，默认是25，表示最多是25%的buffer pool的空间。
 
 如果mysql某时刻宕机了，就可能磁盘中真实存储的二级索引页还没和insert buffer合并，这时用ibd文件恢复的话会不成功，需要进行repair table来重建表的二级索引。
 
+#### Change buffer不适用于哪些场景
+
+因为 merge 的时候是真正进行数据更新的时刻，而 change buffer 的主要目的就是将记录的变更动作缓存下来，所以在一个数据页做 merge 之前，change buffer 记录的变更越多（也就是这个页面上要更新的次数越多），收益就越大。对于写多读少的业务来说，页面在写完以后马上被访问到的概率比较小，此时 change buffer 的使用效果最好。这种业务模型常见的就是账单类、日志类的系统。假设一个业务的更新模式是写入之后马上会做查询，那么即使满足了条件，将更新先记录在 change buffer，但之后由于马上要访问这个数据页，会立即触发 merge 过程。这样随机访问 IO 的次数不会减少，反而增加了 change buffer 的维护代价。
+
 #### change buffer和redo log的区别
 
-**redo log优化的是向磁盘随机写的操作，而change buffer解决的是从磁盘随机读二级索引的问题**
+**redo log优化的是向磁盘随机写的操作(改为顺序写)，而change buffer解决的是从磁盘随机读二级索引的问题（先记录，后merge）。**
+
+总体而言redo log和change buffer的执行顺序是：、
+
+1. 当执行写入操作时，如果要操作的页在内存中，就直接更新内存即可。
+2. 如果页不在内存，则需要从磁盘加载这个页，如果要加载的页是二级索引的页，则可以使用change buffer先记录下来这次修改。如果是唯一索引，则不能使用change buffer，只能老老实实的加载数据页到内存，然后还要遍历唯一约束。
+3. 然后就可以将上述操作记录在redo log中（如果用了change buffer，那么在redo log中也会有记录）。
+4. 然后就是redo log的两阶段提交了。
 
 ### 自适应哈希索引
 
