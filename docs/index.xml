@@ -289,6 +289,17 @@
     </item>
     
     <item>
+      <title>MySQL索引使用技巧</title>
+      <link>https://yanghairui.life/posts/mysql%E7%B4%A2%E5%BC%95%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/</link>
+      <pubDate>Sun, 11 Jul 2021 17:56:02 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/posts/mysql%E7%B4%A2%E5%BC%95%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+    <item>
       <title>InnoDB的非锁定一致性读</title>
       <link>https://yanghairui.life/posts/innodb%E7%9A%84%E9%9D%9E%E9%94%81%E5%AE%9A%E4%B8%80%E8%87%B4%E6%80%A7%E8%AF%BB/</link>
       <pubDate>Mon, 07 Jun 2021 17:18:28 +0800</pubDate>
