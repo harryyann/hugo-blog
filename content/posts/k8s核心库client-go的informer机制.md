@@ -34,7 +34,7 @@ ontroller将会从Reflector的FIFOQueue中逐条获取到变更事件，然后�
 
 #### Store
 
-护着和apiserver中相同的数据，这里面的数据不是变更数据，而是list的数据，外部可以从Indexer中Get/List到数据。这样如果用户需要获取数据，就可以直接从Store中拿，而不是访问kube-apiserver。
+护着和apiserver中相同的数据，这里面的数据不是变更数据，而是list的数据，外部可以从Indexer中Get/List到数据。这样如果用户需要获取数据，就可以直接从Store中拿，而不是访问kube-apiserver。通过Store就实现了缓存级别的List/Get我们想要的API对象的方式。
 
 ## Informer的使用方式
 

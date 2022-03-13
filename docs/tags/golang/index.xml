@@ -33,6 +33,18 @@ type Server struct { Addr string Port int Protocol string Timeout time.</descrip
     </item>
     
     <item>
+      <title>K8s的RBAC权限控制机制</title>
+      <link>https://yanghairui.life/posts/k8s%E7%9A%84rbac%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/</link>
+      <pubDate>Fri, 25 Jun 2021 23:55:43 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/posts/k8s%E7%9A%84rbac%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/</guid>
+      
+        <description>RBAC(Role-Based Access Control) 基于角色的权限控制，其实只有三个最基本的概念：
+ Role：角色，每个角色都定义了一组对k8s API对象的操作权限，就是一系列权限的集合 Subject：权限被作用者，即Role提供的权限要作用到的用户，人，或机器 RoleBinding：通过RoleBinding把Role和Subject绑定到一起  总之，就是通过Role来定义权限，通过Subject来认证，通过RoleBinding将Role和Subject绑定到一起，那么Subject即可拥有Role所定义的权限了。</description>
+      
+    </item>
+    
+    <item>
       <title>k8s的Informer机制</title>
       <link>https://yanghairui.life/posts/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/</link>
       <pubDate>Fri, 12 Mar 2021 23:55:43 +0800</pubDate>
