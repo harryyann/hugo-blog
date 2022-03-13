@@ -314,66 +314,6 @@ Per aspera ad astra.
     >
       
       <div class="post-title">
-        <h3><a href="/posts/mysql%E7%9A%84%E6%9E%B6%E6%9E%84%E5%92%8C%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B/">MySQL的架构和语句执行过程</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              MySQL的整体架构图 "
-如上图所示，整体上看MySQL分成上下两层，上面那层是Server层，下面是存储引擎层。
-Server层包含了连接器、查询缓存、解析器、优化器、执行器(有的资料中说有)等组件，，主要负责的是跨存储引擎的功能，如存储过程、触发器、视图等，内置函数也是在Server层提供的。
-存储引擎层则是MyISAM、InnoDB、Memory等各种存储引擎，以插件式集成，负责数据的读写。
-连接器 用于和客户端建立连接，并维持和管理连接。并在连接建立时查询用户的权限表获取到该用户的所有权限，建立连接的过程大概如下：
- 首先进行TCP握手，建立TCP连接 然后进行身份认证，这一步会查询MySQL的权限表，通过后会从权限表中拿到用户的所有权限，并保存在这个连接中，后续的所有权限判断，都是基于这次查询得到的权限数据，不会再去查权限表了 通过用户的身份认证之后，连接就建立起来了  通过命令show processlist可以观察当前数据库的所有连接：
-
-
-            
-          </p>
-          <a href="/posts/mysql%E7%9A%84%E6%9E%B6%E6%9E%84%E5%92%8C%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B/" class="read_more">继续阅读</a></div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Thu, Apr 8, 2021
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/mysql/">MySQL</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
         <h3><a href="/posts/%E5%AD%A6%E4%B9%A0%E7%BC%96%E5%86%99makefile/">编写Makefile</a></h3>
       </div>
       <div class="post-content">

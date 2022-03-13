@@ -154,3 +154,67 @@ if s.Error != nil {
 
 ## Functional options模式
 
+首先定义一个Option函数类型，这个函数接收一个*Server对象：
+
+```go
+type Option func(*Server)
+```
+
+然后可以使用函数式编程定义一系列函数，他们会接收需要的参数，赋值给*Server对象，然后返回这个Option函数：
+
+```go
+func Protocol(p string) Option {
+    return func(s *Server) {
+         s.Protocol = p 
+    } 
+}
+
+func Timeout(timeout time.Duration) Option {
+    return func(s *Server) {
+        s.Timeout = timeout 
+    } 
+}
+
+func MaxConns(maxconns int) Option {
+     return func(s *Server) {
+         s.MaxConns = maxconns 
+     } 
+}
+```
+
+闭包，实际上就是返回了一个函数，函数中的对象被固定了一个值。然后就可以定义一个NewServer()工厂函数，接收0个或多个很多Option()函数：
+
+```go
+func NewServer(addr string, port int, options ...func(*Server)(*Server, err){
+    s := Server{
+        Addr： addr,
+        Port: port, 
+        Protocol: "tcp",  // 这里可以设置一些默认值
+        Timeout: 30 * time.Second, 
+        MaxConns: 1000,
+        TLS: nil,
+    }
+    for _, option := range options{
+        // 通过这种方式就可以给Server参数赋值了
+        option(&s)
+    }
+    return &s, nil
+}
+```
+
+然后就可以使用了，需要哪个参数就传哪个的Option方法即可：
+
+```go
+s1 := NewServer("127.0.0.1", 80)
+s2 := NewServer("127.0.0.1", 80, Protocol("udp"))
+s3 := NewServer("127.0.0.1", 80, Protocol("udp"), Timeout(300 * time.Second))
+```
+
+#### 总结
+
+相比于上述的Config模式和Builder模式，这种方式有以下好处：
+
+1. 不用纠结空Config时传nil还是空Config{}，没有nil的困惑
+2. 不用构建一个Builder的控制对象，完全函数式编程
+3. 直觉式的编程，需要什么就放什么，用起来很舒服
+4. 非常容易拓展，新的参数只需要增加一个闭包函数即可
