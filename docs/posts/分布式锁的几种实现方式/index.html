@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="zh-cn"
+  data-theme=""
+><head>
+  <title>
+    
+      杨海瑞
+        |
+        分布式锁的几种实现方式
+
+
+      
+
+
+    
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.81.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta
+    name="description"
+    content="
+      
+Per aspera ad astra.
+循此苦旅，终抵群星。
+
+
+
+    "
+  />
+  
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://yanghairui.life/posts/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.2a2cd9614b7d007dfbb75e8da19e3a0fa872ceab53c6d000c00b7a0c89b85bfc.js"
+    integrity="sha256-KizZYUt9AH37t16NoZ46D6hyzqtTxtAAwAt6DIm4W/w="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js"
+      integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus="
+      crossorigin="anonymous"
+    ></script>
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="分布式锁的几种实现方式"/>
+<meta name="twitter:description" content="分布式锁 单机锁 就是本地应用的互斥锁，或者读写锁，用来锁住某个资源，先获取锁才能操作资源，为了并发安全，多个线程操作同一个资源时不会出现意外的情况，保证同一个时刻只有一个线程可以操作这个资源。
+分布式锁 就是同样是某个资源，但是会有分布式的应用同时访问，同样需要保证任意时刻只有一个应用能访问这个资源，就需要使用分布式锁。
+简单理解，单机锁用于应用内的多个线程争抢同一个资源，分布式锁就是系统内多个进程争抢同一个资源。
+分布式锁的一般特性  互斥性：一个应用获取了锁，那么另一个应用就不能获取。这是最基本的。 可重入性：一个线程获取了这个锁之后，在持有锁的时间，依然可以再次获取到这个锁，只需要计数加1，同时释放锁时如果是已经重入的锁，只需要给计数减一即可，不用删除，该程序依然保有这个锁。 锁超时：为了防止一个线程给资源加锁之后挂掉，导致不能释放锁，其他应用迟迟不能获取这个锁，就需要给锁设置超时时间，让他自动解锁。 高效：加锁、解锁的操作要高效，这里不能成为性能瓶颈。 高可用：分布式锁要多个副本，防止单点故障后，整个分布式锁就不能用。 支持阻塞和非阻塞式的使用：当一个锁被其他线程持有时，这个线程获取锁的操作会阻塞住，直到可以获取锁，这就是阻塞。非阻塞就是获取不到锁就立刻返回，需要定时获取，或者轮询的方式直到拿到锁，直到一定时间之后，可以抛出拿不到锁的异常。 公平锁和非公平锁：公平锁就是，每个想要获取锁的线程排队，等到锁释放了，就按照先后顺序依次获得锁。非公平锁就是每次锁释放都是所以线程抢夺锁，谁先抢到是谁的，这种就可能出现某个线程长时间都拿不到锁的情况。  MySQL实现分布式锁 如果项目中本来就用了MySQL，其实就可以利用MySQL做一个分布式锁。虽然很少会使用用这种方案，但是理论上也是可行的。"/>
+
+
+
+  
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "posts",
+        "name": "分布式锁的几种实现方式",
+        "headline": "分布式锁的几种实现方式",
+        "alternativeHeadline": "",
+        "description": "
+      
+        分布式锁 单机锁 就是本地应用的互斥锁，或者读写锁，用来锁住某个资源，先获取锁才能操作资源，为了并发安全，多个线程操作同一个资源时不会出现意外的情况，保证同一个时刻只有一个线程可以操作这个资源。\n分布式锁 就是同样是某个资源，但是会有分布式的应用同时访问，同样需要保证任意时刻只有一个应用能访问这个资源，就需要使用分布式锁。\n简单理解，单机锁用于应用内的多个线程争抢同一个资源，分布式锁就是系统内多个进程争抢同一个资源。\n分布式锁的一般特性  互斥性：一个应用获取了锁，那么另一个应用就不能获取。这是最基本的。 可重入性：一个线程获取了这个锁之后，在持有锁的时间，依然可以再次获取到这个锁，只需要计数加1，同时释放锁时如果是已经重入的锁，只需要给计数减一即可，不用删除，该程序依然保有这个锁。 锁超时：为了防止一个线程给资源加锁之后挂掉，导致不能释放锁，其他应用迟迟不能获取这个锁，就需要给锁设置超时时间，让他自动解锁。 高效：加锁、解锁的操作要高效，这里不能成为性能瓶颈。 高可用：分布式锁要多个副本，防止单点故障后，整个分布式锁就不能用。 支持阻塞和非阻塞式的使用：当一个锁被其他线程持有时，这个线程获取锁的操作会阻塞住，直到可以获取锁，这就是阻塞。非阻塞就是获取不到锁就立刻返回，需要定时获取，或者轮询的方式直到拿到锁，直到一定时间之后，可以抛出拿不到锁的异常。 公平锁和非公平锁：公平锁就是，每个想要获取锁的线程排队，等到锁释放了，就按照先后顺序依次获得锁。非公平锁就是每次锁释放都是所以线程抢夺锁，谁先抢到是谁的，这种就可能出现某个线程长时间都拿不到锁的情况。  MySQL实现分布式锁 如果项目中本来就用了MySQL，其实就可以利用MySQL做一个分布式锁。虽然很少会使用用这种方案，但是理论上也是可行的。
+
+
+      
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/posts\/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-09-13T16:00:54.00Z",
+        "datePublished": "2021-09-13T16:00:54.00Z",
+        "dateModified": "2021-09-13T16:00:54.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/posts\/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F\/",
+        "wordCount" : "178",
+        "genre" : [ 
+      
+      "分布式"
+
+    ],
+        "keywords" : [ 
+      
+      "分布式锁"
+
+    ]
+    }
+  </script>
+
+
+
+</head>
+<body>
+    <header><div
+  class="page-top 
+    animated fadeInDown
+
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>
+  <nav>
+    <ul class="nav__list" id="navMenu">
+      <div class="nav__links">
+        
+        
+          
+          <li>
+            <a
+              
+              href="/"
+              
+              title=""
+              >Home</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/posts/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/portfolio/"
+              
+              title=""
+              >Portfolio</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >About</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/contact/"
+              
+              title=""
+              >Contact</a
+            >
+          </li>
+
+        
+      </div>
+      <ul>
+        
+        
+          <li>
+            <a class="theme-switch" title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </li>
+
+        
+      </ul>
+    </ul>
+  </nav>
+</div>
+</header>
+    <div class="wrapper">
+      <aside><div
+  class="sidebar
+    animated fadeInDown
+
+  "
+>
+  <div class="sidebar__content">
+    <div class="logo-title">
+      <div class="title">
+        <img src="/images/profile5.jpg" alt="profile picture" />
+        <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
+        <div class="description">
+          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+        <li>
+          <a href="https://stackoverflow.com/users/12924262/horace-yang" rel="me" aria-label="StackOverFlow" title="StackOverFlow">
+            <i class="fab fa-stack-overflow fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://github.com/harryyann" rel="me" aria-label="GitHub" title="GitHub">
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://www.zhihu.com/people/yang-hai-rui-88" rel="me" aria-label="zhihu" title="zhihu">
+            <i class="fab fa-zhihu fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=941811450@qq.com" rel="me" aria-label="e-mail" title="e-mail">
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+    </ul>
+  </div><footer class="footer footer--sidebar">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></div>
+</aside>
+      <main>
+        <div class="autopagerize_page_element">
+          <div class="content">
+  <div
+    class="post 
+      animated fadeInDown
+
+    "
+  >
+    <div class="post-content">
+      
+      <div class="post-title">
+        <h1>分布式锁的几种实现方式</h1>
+        
+      </div><h2 id="分布式锁">分布式锁</h2>
+<h4 id="单机锁">单机锁</h4>
+<p>就是本地应用的互斥锁，或者读写锁，用来锁住某个资源，先获取锁才能操作资源，为了并发安全，多个线程操作同一个资源时不会出现意外的情况，保证同一个时刻只有一个线程可以操作这个资源。</p>
+<h4 id="分布式锁-1">分布式锁</h4>
+<p>就是同样是某个资源，但是会有分布式的应用同时访问，同样需要保证任意时刻只有一个应用能访问这个资源，就需要使用分布式锁。</p>
+<p>简单理解，单机锁用于应用内的多个线程争抢同一个资源，分布式锁就是系统内多个进程争抢同一个资源。</p>
+<h4 id="分布式锁的一般特性">分布式锁的一般特性</h4>
+<ul>
+<li><strong>互斥性</strong>：一个应用获取了锁，那么另一个应用就不能获取。这是最基本的。</li>
+<li><strong>可重入性</strong>：一个线程获取了这个锁之后，在持有锁的时间，依然可以再次获取到这个锁，只需要计数加1，同时释放锁时如果是已经重入的锁，只需要给计数减一即可，不用删除，该程序依然保有这个锁。</li>
+<li><strong>锁超时</strong>：为了防止一个线程给资源加锁之后挂掉，导致不能释放锁，其他应用迟迟不能获取这个锁，就需要给锁设置超时时间，让他自动解锁。</li>
+<li><strong>高效</strong>：加锁、解锁的操作要高效，这里不能成为性能瓶颈。</li>
+<li><strong>高可用</strong>：分布式锁要多个副本，防止单点故障后，整个分布式锁就不能用。</li>
+<li>支持阻塞和非阻塞式的使用：当一个锁被其他线程持有时，这个线程获取锁的操作会阻塞住，直到可以获取锁，这就是阻塞。非阻塞就是获取不到锁就立刻返回，需要定时获取，或者轮询的方式直到拿到锁，直到一定时间之后，可以抛出拿不到锁的异常。</li>
+<li>公平锁和非公平锁：公平锁就是，每个想要获取锁的线程排队，等到锁释放了，就按照先后顺序依次获得锁。非公平锁就是每次锁释放都是所以线程抢夺锁，谁先抢到是谁的，这种就可能出现某个线程长时间都拿不到锁的情况。</li>
+</ul>
+<h2 id="mysql实现分布式锁">MySQL实现分布式锁</h2>
+<p>如果项目中本来就用了MySQL，其实就可以利用MySQL做一个分布式锁。虽然很少会使用用这种方案，但是理论上也是可行的。</p>
+<h3 id="实现方式">实现方式</h3>
+<h4 id="方法1">方法1</h4>
+<p>创建一个表，作为分布式锁的表。每个需要被锁的资源都有一个约定好的名字，加锁就是在表中插入一行，资源名字段填写特定的资源，解锁就是删去这一行。</p>
+<p>表结构设计</p>
+<ul>
+<li>resource_name：资源名</li>
+<li>thread_info：当前占有锁的线程名</li>
+<li>count：被锁的次数，为了实现可重入</li>
+<li>create_time：首次加锁的时间</li>
+<li>update_time：最近一次加锁的时间</li>
+</ul>
+<p>有个这个表，当我们想给某个资源加锁时，就先在表中创建一条记录，如果发现该资源已经有记录了，就说明已经被别的线程锁住了，就要等待锁释放。释放锁就是从表中删掉这条记录，如果count不是0，那就说明有锁的重入，只需要给count减1即可。</p>
+<h4 id="方法2">方法2</h4>
+<p>如果锁住的资源刚好是数据库表中的某一行记录，那就可以不新建表了，直接修改表结构，把方法1中的字段直接加在这个表上。resource_name就改为lock即可</p>
+<p>获取锁就是给这行记录的lock字段置为true，释放锁就是将lock置为false，或者将count值减1。</p>
+<h3 id="加锁的伪代码">加锁的伪代码</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">select <span style="color:#f92672">*</span> from lock where resource_name<span style="color:#f92672">==</span><span style="color:#e6db74">&#34;XXX&#34;</span>; <span style="color:#75715e">// 查询是否资源加了锁
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> <span style="color:#960050;background-color:#1e0010">加了锁</span>{
+    <span style="color:#960050;background-color:#1e0010">检查是不是自己加的，如果是自己加的那可以重入，</span>count <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span><span style="color:#960050;background-color:#1e0010">，并且返回</span>true<span style="color:#960050;background-color:#1e0010">，加锁成功</span>
+    <span style="color:#66d9ef">if</span> thread_info <span style="color:#f92672">==</span> <span style="color:#960050;background-color:#1e0010">自己</span>{
+        update count<span style="color:#f92672">++</span> where resource_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;XXXX</span>
+        <span style="color:#66d9ef">return</span> true
+    }<span style="color:#66d9ef">else</span>{
+        <span style="color:#75715e">// 不是自己加的锁，那就不能得到锁了
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">return</span> false
+    }
+}
+<span style="color:#75715e">// 没加锁的话，就可以加上锁了
+</span><span style="color:#75715e"></span>insert into lock (resource_name, thread_info), (<span style="color:#e6db74">&#34;XXX&#34;</span>, <span style="color:#e6db74">&#34;线程名&#34;</span>)
+<span style="color:#66d9ef">return</span> true
+</code></pre></div><p>需要注意的点就是并发时业务代码的<strong>Check-lock-Check</strong>问题（<a href="https://yanghairui.life/posts/golang%E5%8D%95%E4%BE%8B/">Golang的单例模式</a>中有描述这种并发问题），防止出现并发时被覆盖加锁的问题。</p>
+<p>还有要做超时处理，当一直返回false时需要返回错误。可以写一个定时任务循环遍历锁，判断create_time和update_time距离现在的时间（thread_info要一样），太长时间没更新这个锁就要删除。或者也可以用懒加载的方式，每个获取锁的程序在检查是否可以获取锁时，顺便检查create_time和update_time，超时了直接删掉，并且自己直接加锁。</p>
+<h3 id="mysql分布式锁的优缺点">MySQL分布式锁的优缺点</h3>
+<p><strong>优点：</strong></p>
+<ul>
+<li>项目中用到了MySQL就可以使用，不用增加中间件</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>加锁解锁的代码需要自己写；</li>
+<li>磁盘型数据库，性能较差；</li>
+<li>功能太简单，公平锁，阻塞非阻塞都不能用；</li>
+<li>不支持高可用，加锁解锁都只能操作主库，从从库读锁也因为主从延迟的问题导致不可信。</li>
+</ul>
+<h3 id="总结">总结</h3>
+<p>MySQL的分布式锁缺点太大，导致几乎不能用，这里仅作为帮助理解分布式锁的方案。</p>
+<h2 id="zookeeper实现分布式锁">Zookeeper实现分布式锁</h2>
+<p>zookeeper是一个以Paxos共识算法为基础的分布式应用协调服务。就是个分布式强一致的数据库。Zookeeper以Znode为存储单元的分布式数据存储结构：</p>
+<p><img src="/images/distribute_lock/znode.png" alt=""></p>
+<ul>
+<li>data：znode存储的数据信息</li>
+<li>ACL：记录znode的访问权限</li>
+<li>stat：包含znode的各种元数据</li>
+<li>child：子Znode节点</li>
+</ul>
+<p>可以看出zookeeper就是一个树形的结构，类似文件系统的目录。</p>
+<h3 id="实现方式-1">实现方式</h3>
+<p><img src="/images/distribute_lock/zk_lock.png" alt=""></p>
+<p>首先新建一个lock节点，lock节点的每个子节点都是被锁资源的名称。</p>
+<p>资源节点下可以建立多个<strong>临时有序节点</strong>，临时有序节点是zookeeper的数据结构，按建立顺序天然有序。每个客户端想要获取锁都是给资源节点建立子的临时有序节点，通过判断自己创建出的临时有序节点是不是1号，得知自己有没有获取到锁。</p>
+<p>如果临时有序节点不是1，那么zookeeper中会向他的上一个临时有序节点建立一个watcher，当1号有序节点被删除，每个节点会自动向上提升，并且由于注册了watcher，当节点成为1时，客户端也会收到通知，所以zookeeper天生是公平锁。</p>
+<h3 id="优缺点">优缺点</h3>
+<p><strong>优点</strong></p>
+<ul>
+<li>对于锁超时有现成的处理方法：建立的是临时有序节点，到时间会自动删除的</li>
+<li>由于临时有序节点的存在所以是天然的公平锁</li>
+<li>Zookeeper是分布式协调服务，所以是天然高可用</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li>如果项目中没用到Zookeeper，增加一个Zookeeper仅用于分布式锁的话开销有点大</li>
+<li>性能上不比MySQL强多少，强一致性的性能都好不了</li>
+</ul>
+<h2 id="etcd实现分布式锁">Etcd实现分布式锁</h2>
+<p>Etcd是一个分布式键值对数据库，使用raft共识算法保证强一致性，可以看做是paxos的简化版。</p>
+<p>Etcd的特性：</p>
+<ul>
+<li>lease租约机制，每个键值对都有一个租约，相当于过期时间，到期自动删除</li>
+<li>revision版本号机制：每个key都是自己的版本号，并且被修改过的话，key版本号会增加，并且旧的key也不会删除，而是保存，直到执行了数据压缩</li>
+<li>prefix前缀机制：多个key都可以有相同的前缀，并且Etcd还能根据前缀查询</li>
+<li>watch机制：监听机制，可以watch某个固定的key，也可以watch某个前缀的所有key，当key变化时会收到通知</li>
+</ul>
+<h3 id="实现原理">实现原理</h3>
+<p><img src="/images/distribute_lock/etcd_lock.png" alt=""></p>
+<p>每个想拿锁的线程可以以资源名作为前缀创建一个key，可以获得一个版本号，如果版本号是最小的，那就代表持有锁了。</p>
+<p>如果版本号不是最小的，就说明锁被其他线程持有了，那么这个线程就会watch这个资源前缀的前一个版本号，当资源最小的版本被删除时，他会收到通知，同时再判断自己的版本号是不是最小的。</p>
+<p>客户端可以创建一个定时任务，进行定时续约，防止锁自己的租约超时被删掉。</p>
+<p>并且<strong>Etcd的v3接口原生就实现了分布式锁</strong>，可以直接使用。</p>
+<h3 id="优缺点-1">优缺点</h3>
+<p><strong>优点</strong></p>
+<ul>
+<li>v3接口提供了现成的分布式锁实现，不用我们自己实现了</li>
+<li>版本号的存在导致天然是公平锁</li>
+<li>Etcd也是分布式强一致数据库，所以天生高可用</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li>和ZK一样，项目没用到强加开销大，不过Etcd稍微比ZK简单点</li>
+<li>同样是强一致数据库，所以性能也不大行</li>
+</ul>
+<h2 id="chubby实现分布式锁">Chubby实现分布式锁</h2>
+<p>Chubby是闭源的，是google版本的Zookeeper。它是一个专门的分布式锁服务，而Zookeeper定位是一个分布式协调服务。</p>
+<p>Chubby在分布式锁的使用上比Zookeeper优秀的地方是：当超时时间快到了时，不会立刻释放锁，而是访问一下客户端，防止客户端不是因为挂了才不释放锁，而是真的处理业务时间过长，这种情况下可以等一会，等客户端来解锁，防止客户端解锁时发现锁已经是别人的了。</p>
+<p>由于闭源用的人不多，总体上和Zookeeper差不多，所以就不细讲了。重点还是看Redis。</p>
+<h2 id="redis实现分布式锁">Redis实现分布式锁</h2>
+<p>这是使用最多的分布式锁实现方案。</p>
+<h3 id="简单实现">简单实现</h3>
+<p>只需要在redis中设置一个key就可以了：</p>
+<pre><code class="language-redis" data-lang="redis">set resource_name value ex 5 nx // nx标识如果key不存在就创建，已存在的话就创建失败
+</code></pre><p>就创建一个资源名的键即可，指定超时时间，nx表示不能重复创建，其他线程创建同名key时会报错。</p>
+<p>需要注意的是Redis2.8之前由于不能设置键时指定ex，需要用lua脚本保证set key和expire两个命令的原子性。</p>
+<p>数据结构选字符串就可以，或者如果想存更多信息的话也可以用hash表。</p>
+<p>简单实现的问题：</p>
+<ul>
+<li>
+<p>不及时续约导致的问题：</p>
+<ol>
+<li>
+<p><strong>超时lock被删</strong>：如果线程A获取了锁，然后超过了key的过期时间，导致key被删除，而线程A还没处理完，那么此时线程B就可以重新获得锁，然后操作资源，此时就有并发安全性。</p>
+</li>
+<li>
+<p><strong>误删其他线程占用的lock</strong>：当A线程处理完了，他还要释放锁，这是锁是B占有的，就会导致A把B的锁给误释放了，那么其他线程又可以在b没释放锁时拿到锁。</p>
+</li>
+</ol>
+</li>
+</ul>
+<p>解决方式：</p>
+<ul>
+<li>
+<p>超时lock被删：</p>
+<ol>
+<li>
+<p>创建锁之后要起一个线程，如果没处理完，这个线程要去给key续约，可以通过执行任务的线程给续约线程发信号的方式通知续约线程，续约线程定时进行续约，收到信号就可以退出不用续约了。</p>
+</li>
+<li>
+<p>尽量把比较耗时的操作不要放到加锁的方法内，锁内的方法要尽量控制时长。</p>
+</li>
+<li>
+<p>摸不清楚耗时时间可以尽量设置大点，正常情况下耗时任务执行完了就会解锁，设置大点主要时为了防止异常情况下执行过长。</p>
+</li>
+</ol>
+</li>
+<li>
+<p>解决误删问题：</p>
+<ol>
+<li>
+<p>每个线程删锁时，要判断是不是自己加的，可以在value中加上自己的线程名字，如果不是自己加的锁，就不要删。</p>
+</li>
+<li>
+<p>这里由于代码往往都不是原子的，可以使用lua脚本，先查询再删除的逻辑，保证原子性，防止小概率情况下的误删。</p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="高级版实现">高级版实现</h3>
+<ol>
+<li>阻塞加锁</li>
+<li>阻塞超时加锁</li>
+<li>非阻塞异步的加锁，得到锁时唤醒回调</li>
+<li>重入等高级特性可以通过lua脚本实现</li>
+</ol>
+<h3 id="redis分布式锁的优缺点">Redis分布式锁的优缺点</h3>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>Redis这个中间件在大多数项目中较常见，一般不需要增加其他中间件</li>
+<li>Redis的分布式锁很容易取得可靠性和性能的平衡</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>可靠性不像Etcd、Zookeeper那么高，因为redis宕机会丢数据，如果是AOF持久化那最多就丢1s的数据</li>
+</ul>
+<h3 id="redlock实现的分布式锁">RedLock实现的分布式锁</h3>
+<p><strong>Redis集群实现分布式锁的问题：</strong></p>
+<ol>
+<li>Redis主从不是强一致性的，所以可能会有数据不一致的问题，读写分离的情况下，从库如果数据和主库不同，那么就会导致加锁解锁判断出现问题。</li>
+<li>Redis的常用的持久化，RDB，或者是1s同步的AOF都会丢数据，如果加锁后Redis宕机了，就会导致多个线程同时获取锁，出现并发安全问题。</li>
+</ol>
+<p>RedLock就是为了解决以上问题，实现方式是：</p>
+<ol>
+<li>建立多套（奇数）Redis集群，或者单机，总之是多套分布式锁系统</li>
+<li>依次对所有Redis集群加锁</li>
+<li>只要保证大多数redis集群都加锁成功了，就算是成功</li>
+<li>如果不是大多数redis集群都加锁成功了，就要想其他成功的redis集群回滚，请求释放锁（在这一步方式少部分成功的redis集群宕机导致数据丢失）</li>
+</ol>
+<p>RedLock其实是用概率的方式大大减少redis宕机导致锁失效的概率，多套redis同时在加锁之后宕机的概率几乎为0。</p>
+<p>但是缺点也很明显：多套Redis(集群或者单点)，大多数系统都接受不了。</p>
+</div>
+    <div class="post-footer">
+      <div class="info">
+        
+          <span class="separator"><a class="category" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></span>
+
+
+
+
+        
+
+        
+          <span class="separator"><a class="tag" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">分布式锁</a></span>
+
+
+
+
+        
+      </div>
+    </div>
+
+    
+  </div>
+
+
+          </div>
+        </div>
+      </main>
+    </div><footer class="footer footer--base">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></body>
+</html>
