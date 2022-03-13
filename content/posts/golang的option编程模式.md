@@ -3,7 +3,7 @@ title: "Golang编程模式：functional options"
 date: 2021-07-12T19:28:17+08:00
 Tags: [golang,编程模式]
 Categories: [golang]
-draft: true
+draft: false
 ---
 
 ## 配置选项问题
