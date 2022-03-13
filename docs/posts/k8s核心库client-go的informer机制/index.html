@@ -91,8 +91,11 @@ Per aspera ad astra.
   
   <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="k8s的Informer机制"/>
-<meta name="twitter:description" content="Client-go client-go与其他语言版本的k8s不同的地方在于，它不仅仅是一个k8s的客户端，而且还是一个k8s的核心库，k8s中各个组件与api-server之间的通信都是通过client-go的iformer机制实现的快速无延迟的数据同步。
-Informer机制 "/>
+<meta name="twitter:description" content="Client-go client-go与其他语言版本的k8s不同的地方在于，它不仅仅是一个k8s的客户端，而且还是k8s的核心库，k8s中各个组件与api-server之间的通信都是通过client-go的iformer机制实现的快速低延迟的数据同步。kubernetes中的各个组件和api-server之间都是通过http通信，那么需要非常高的可靠性，时效性。核心就是使用了client-go的informer机制。
+Informer机制 下图是client-go中Informer机制的架构图：
+最外层是一个Informer，可以看到所有功能都被封装到了Informer中，通过Informer与kube-apiserver通信，实现对API资源的list/watch，Informer也可以连接用户定义的eventHandler对捕获到的某些事件进行处理，还可以将watch到的更新，输出到外部，比如存到本地数据库等等。
+Informer的三个组成部分 Reflector 如上图，Reflector包含一个通过clientset实现的ListerWatcher对象和一个Store对象，Reflector会通过ListerWatcher方法对api-server进行watch，通过比对resourceVersion来捕获API资源的变化，然后送入store。store是一个FIFO Queue(先入先出队列)。
+FIFO Queue的实现者为DeltaFIFO，store是一个内存级的缓存，存储捕获到的变更，对Store提供了pop()方法，就实现了一个Queue。"/>
 
 
 
@@ -113,7 +116,7 @@ Informer机制 "/>
         "alternativeHeadline": "",
         "description": "
       
-        Client-go client-go与其他语言版本的k8s不同的地方在于，它不仅仅是一个k8s的客户端，而且还是一个k8s的核心库，k8s中各个组件与api-server之间的通信都是通过client-go的iformer机制实现的快速无延迟的数据同步。\nInformer机制 
+        Client-go client-go与其他语言版本的k8s不同的地方在于，它不仅仅是一个k8s的客户端，而且还是k8s的核心库，k8s中各个组件与api-server之间的通信都是通过client-go的iformer机制实现的快速低延迟的数据同步。kubernetes中的各个组件和api-server之间都是通过http通信，那么需要非常高的可靠性，时效性。核心就是使用了client-go的informer机制。\nInformer机制 下图是client-go中Informer机制的架构图：\n最外层是一个Informer，可以看到所有功能都被封装到了Informer中，通过Informer与kube-apiserver通信，实现对API资源的list\/watch，Informer也可以连接用户定义的eventHandler对捕获到的某些事件进行处理，还可以将watch到的更新，输出到外部，比如存到本地数据库等等。\nInformer的三个组成部分 Reflector 如上图，Reflector包含一个通过clientset实现的ListerWatcher对象和一个Store对象，Reflector会通过ListerWatcher方法对api-server进行watch，通过比对resourceVersion来捕获API资源的变化，然后送入store。store是一个FIFO Queue(先入先出队列)。\nFIFO Queue的实现者为DeltaFIFO，store是一个内存级的缓存，存储捕获到的变更，对Store提供了pop()方法，就实现了一个Queue。
 
 
       
@@ -163,7 +166,7 @@ Informer机制 "/>
 
     ,
         "url" : "https:\/\/yanghairui.life\/posts\/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6\/",
-        "wordCount" : "3",
+        "wordCount" : "110",
         "genre" : [ 
       
       "k8s"
@@ -364,10 +367,64 @@ Informer机制 "/>
       <div class="post-title">
         <h1>k8s的Informer机制</h1>
         
-      </div><h3 id="client-go">Client-go</h3>
-<p>client-go与其他语言版本的k8s不同的地方在于，它不仅仅是一个k8s的客户端，而且还是一个k8s的核心库，k8s中各个组件与api-server之间的通信都是通过client-go的iformer机制实现的快速无延迟的数据同步。</p>
-<h3 id="informer机制">Informer机制</h3>
+      </div><h2 id="client-go">Client-go</h2>
+<p>client-go与其他语言版本的k8s不同的地方在于，它不仅仅是一个k8s的客户端，而且还是k8s的核心库，k8s中各个组件与api-server之间的通信都是通过client-go的iformer机制实现的快速低延迟的数据同步。kubernetes中的各个组件和api-server之间都是通过http通信，那么需要非常高的可靠性，时效性。核心就是使用了client-go的informer机制。</p>
+<h2 id="informer机制">Informer机制</h2>
+<p>下图是client-go中Informer机制的架构图：</p>
 <p><img src="/images/informer.png" alt="Image"></p>
+<p>最外层是一个Informer，可以看到所有功能都被封装到了Informer中，通过Informer与kube-apiserver通信，实现对API资源的list/watch，Informer也可以连接用户定义的eventHandler对捕获到的某些事件进行处理，还可以将watch到的更新，输出到外部，比如存到本地数据库等等。</p>
+<h3 id="informer的三个组成部分">Informer的三个组成部分</h3>
+<h4 id="reflector">Reflector</h4>
+<p>如上图，Reflector包含一个通过clientset实现的ListerWatcher对象和一个Store对象，Reflector会通过ListerWatcher方法对api-server进行watch，通过比对resourceVersion来捕获API资源的变化，然后送入store。store是一个FIFO Queue(先入先出队列)。</p>
+<p>FIFO Queue的实现者为DeltaFIFO，store是一个内存级的缓存，存储捕获到的变更，对Store提供了pop()方法，就实现了一个Queue。</p>
+<h4 id="controller">Controller</h4>
+<p>ontroller将会从Reflector的FIFOQueue中逐条获取到变更事件，然后他可以根据事件的类型（增加，更新还是删除），触发onAdd、onUpdate、onDelete方法，对应的方法最终会触发用户自己定义的eventHandler；Controller也会将变更更新到Informer的Store中（注意，这个Store和Reflector中的store的区别），保持Store数据和kube-apiserver的一致。</p>
+<h4 id="store">Store</h4>
+<p>护着和apiserver中相同的数据，这里面的数据不是变更数据，而是list的数据，外部可以从Indexer中Get/List到数据。这样如果用户需要获取数据，就可以直接从Store中拿，而不是访问kube-apiserver。</p>
+<h2 id="informer的使用方式">Informer的使用方式</h2>
+<p>我们以监控pod的informer为例：</p>
+<h4 id="获取clientset">获取clientset</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">config</span> ,<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">clientcmd</span>.<span style="color:#a6e22e">BuildConfigFromFlags</span>(<span style="color:#e6db74">&#34;&#34;</span>,<span style="color:#e6db74">&#34;config&#34;</span>)
+<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+    panic(<span style="color:#a6e22e">err</span>)
+}
+<span style="color:#75715e">// 通过kubeconfig 拿到clientset
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">clientset</span> ,<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">kubernetes</span>.<span style="color:#a6e22e">NewForConfig</span>(<span style="color:#a6e22e">config</span>)
+<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+    panic(<span style="color:#a6e22e">err</span>)
+}
+</code></pre></div><h4 id="通过clientset获取informer">通过clientset获取informer</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">stopch</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{})
+<span style="color:#66d9ef">defer</span> close(<span style="color:#a6e22e">stopch</span>)
+ <span style="color:#75715e">//通过clientset获取informer的集合（参数rsync也就是同步间隔时间 如果是0那么就禁用同步功能，这里设置1m）
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">sharedInformers</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">informers</span>.<span style="color:#a6e22e">NewSharedInformerFactory</span>(<span style="color:#a6e22e">clientset</span>,<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Minute</span>)
+</code></pre></div><h4 id="获取指定资源的informer">获取指定资源的Informer</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">//通过sharedinfomers获取到pod的informer
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">podInfomer</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sharedinformers</span>.<span style="color:#a6e22e">Core</span>().<span style="color:#a6e22e">V1</span>().<span style="color:#a6e22e">Pods</span>().<span style="color:#a6e22e">Informer</span>()
+</code></pre></div><h4 id="为podinformer添加eventhandler">为podInformer添加eventHandler</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">//为pod informer添加 controller的handlerfunc  触发回调函数之后 会通过addch 传给nextCh 管道然后调用controller的对应的handler来做处理
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">podinfomer</span>.<span style="color:#a6e22e">AddEventHandler</span>(<span style="color:#a6e22e">cache</span>.<span style="color:#a6e22e">ResourceEventHandlerFuncs</span>{
+	<span style="color:#75715e">//pod资源对象创建的时候出发的回调方法,新增pod时回调
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">AddFunc</span>: <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">obj</span> <span style="color:#66d9ef">interface</span>{}) {
+        <span style="color:#a6e22e">obja</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">obj</span>.(<span style="color:#a6e22e">v1</span>.<span style="color:#a6e22e">Object</span>)
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">obja</span>)
+    },
+    <span style="color:#75715e">//更新回调
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">UpdateFunc</span>: <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">oldObj</span>, <span style="color:#a6e22e">newObj</span> <span style="color:#66d9ef">interface</span>{}) {
+        <span style="color:#f92672">...</span>
+    },
+    <span style="color:#75715e">//删除回调
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">DeleteFunc</span>: <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">obj</span> <span style="color:#66d9ef">interface</span>{}) {
+        <span style="color:#f92672">...</span>
+    },
+})
+</code></pre></div><h4 id="最后启动informer">最后启动Informer</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 定义一个stop channel用于停止Informer
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">stopch</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{})
+<span style="color:#66d9ef">defer</span> close(<span style="color:#a6e22e">stopch</span>)
+<span style="color:#a6e22e">podInfomer</span>.<span style="color:#a6e22e">Run</span>(<span style="color:#a6e22e">stopch</span>)
+</code></pre></div><p>这样当informer启动后，将会监控集群内的pod事件，当出现add、update、delete事件时就可以通过我们编写的eventHandler进行处理了。</p>
+<p>最后，不仅仅k8s原生的API对象可以使用Informer，我们自己创建的CRD(Custom Resource Defined)也可以使用Informer，通过CRD我们就可以创建我们自己的API对象，然后通过Informer机制来监听集群中CRD对象的变化，进而实现一些控制，这就是自定义控制器，和k8s的<strong>operator</strong>模式。</p>
 </div>
     <div class="post-footer">
       <div class="info">

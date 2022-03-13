@@ -91,7 +91,7 @@ Per aspera ad astra.
   
   <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Golang实现单例模式"/>
-<meta name="twitter:description" content="单例模式 单例模式是保证一个类，确保在一个系统中永远只有一个实例。在go中，可以保证一个结构体，永远只有一个实例化的对象。
+<meta name="twitter:description" content="单例模式 单例模式是保证一个类，确保在一个系统中永远只有一个实例。在go中，就是保证一个结构体，永远只有一个实例化的对象。
 当一个应用程序中某个对象需要是全局唯一的，就要使用单例模式。单例模式常用在以下场景中：
  配置类 日志类 必须要以共享模式访问的资源类 需要频繁的创建和删除对象，而对象又可以复用的场景  单例模式不适用的场景："/>
 
@@ -114,7 +114,7 @@ Per aspera ad astra.
         "alternativeHeadline": "",
         "description": "
       
-        单例模式 单例模式是保证一个类，确保在一个系统中永远只有一个实例。在go中，可以保证一个结构体，永远只有一个实例化的对象。\n当一个应用程序中某个对象需要是全局唯一的，就要使用单例模式。单例模式常用在以下场景中：\n 配置类 日志类 必须要以共享模式访问的资源类 需要频繁的创建和删除对象，而对象又可以复用的场景  单例模式不适用的场景：
+        单例模式 单例模式是保证一个类，确保在一个系统中永远只有一个实例。在go中，就是保证一个结构体，永远只有一个实例化的对象。\n当一个应用程序中某个对象需要是全局唯一的，就要使用单例模式。单例模式常用在以下场景中：\n 配置类 日志类 必须要以共享模式访问的资源类 需要频繁的创建和删除对象，而对象又可以复用的场景  单例模式不适用的场景：
 
 
       
@@ -366,7 +366,7 @@ Per aspera ad astra.
         <h1>Golang实现单例模式</h1>
         
       </div><h2 id="单例模式">单例模式</h2>
-<p>单例模式是保证一个类，确保在一个系统中永远只有一个实例。在go中，可以保证一个结构体，永远只有一个实例化的对象。</p>
+<p>单例模式是保证一个类，确保在一个系统中永远只有一个实例。在go中，就是保证一个结构体，永远只有一个实例化的对象。</p>
 <p>当一个应用程序中某个对象需要是全局唯一的，就要使用单例模式。单例模式常用在以下场景中：</p>
 <ul>
 <li>配置类</li>
@@ -435,7 +435,7 @@ Per aspera ad astra.
 </span><span style="color:#75715e"></span>		}
 	}
 }
-</code></pre></div><p>这种模式的想法是，先检查，再加锁，并在锁住的操作中再次检查。原因是如果两个goroutine同时通过了第一次check()，那么如果在lock()后不加第二次check()，那么在其中一个goroutine在执行完lock中的内容并释放锁之后，第二个goroutine还会拿到lock()并覆写第一个goroutine的初始化。</p>
+</code></pre></div><p>这种模式的想法是，先检查，再加锁，并在锁住的操作中再次检查。原因是如果两个goroutine同时通过了第一次check()，那么如果在lock()后不加第二次check()，那么在其中一个goroutine在执行完lock中的内容并释放锁之后，第二个goroutine还会拿到lock()并覆写第一个goroutine的初始化操作。</p>
 <p>那么我们的代码就可以改成：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">single</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Person</span>
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">mutex</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Mute</span>

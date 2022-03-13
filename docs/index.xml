@@ -295,7 +295,7 @@
       
       <guid>https://yanghairui.life/posts/golang%E5%8D%95%E4%BE%8B/</guid>
       
-        <description>单例模式 单例模式是保证一个类，确保在一个系统中永远只有一个实例。在go中，可以保证一个结构体，永远只有一个实例化的对象。
+        <description>单例模式 单例模式是保证一个类，确保在一个系统中永远只有一个实例。在go中，就是保证一个结构体，永远只有一个实例化的对象。
 当一个应用程序中某个对象需要是全局唯一的，就要使用单例模式。单例模式常用在以下场景中：
  配置类 日志类 必须要以共享模式访问的资源类 需要频繁的创建和删除对象，而对象又可以复用的场景  单例模式不适用的场景：</description>
       
@@ -455,8 +455,11 @@ wechat: redamancy40520</description>
       
       <guid>https://yanghairui.life/posts/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/</guid>
       
-        <description>Client-go client-go与其他语言版本的k8s不同的地方在于，它不仅仅是一个k8s的客户端，而且还是一个k8s的核心库，k8s中各个组件与api-server之间的通信都是通过client-go的iformer机制实现的快速无延迟的数据同步。
-Informer机制 </description>
+        <description>Client-go client-go与其他语言版本的k8s不同的地方在于，它不仅仅是一个k8s的客户端，而且还是k8s的核心库，k8s中各个组件与api-server之间的通信都是通过client-go的iformer机制实现的快速低延迟的数据同步。kubernetes中的各个组件和api-server之间都是通过http通信，那么需要非常高的可靠性，时效性。核心就是使用了client-go的informer机制。
+Informer机制 下图是client-go中Informer机制的架构图：
+最外层是一个Informer，可以看到所有功能都被封装到了Informer中，通过Informer与kube-apiserver通信，实现对API资源的list/watch，Informer也可以连接用户定义的eventHandler对捕获到的某些事件进行处理，还可以将watch到的更新，输出到外部，比如存到本地数据库等等。
+Informer的三个组成部分 Reflector 如上图，Reflector包含一个通过clientset实现的ListerWatcher对象和一个Store对象，Reflector会通过ListerWatcher方法对api-server进行watch，通过比对resourceVersion来捕获API资源的变化，然后送入store。store是一个FIFO Queue(先入先出队列)。
+FIFO Queue的实现者为DeltaFIFO，store是一个内存级的缓存，存储捕获到的变更，对Store提供了pop()方法，就实现了一个Queue。</description>
       
     </item>
     
