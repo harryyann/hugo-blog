@@ -541,6 +541,62 @@ Per aspera ad astra.
     >
       
       <div class="post-title">
+        <h3><a href="/post/deferselect%E5%92%8Crange%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">Golang中的defer、select和range的底层原理</a></h3>
+      </div>
+      <div class="post-content">
+        <div class="p_part">
+          <p>
+            
+              Defer defer语句用于延迟函数的调用，每次defer都会把一个函数压入栈中，当前函数返回前，再把延迟的函数取出来并执行，所以多个defer语句是后写的先执行的。
+几个题目 问题1：以下输出什么？ func deferFuncParameter() { var aInt = 1 defer fmt.
+
+
+            
+          </p>
+          <a href="/post/deferselect%E5%92%8Crange%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="read_more">继续阅读</a></div>
+      </div>
+
+      
+      <div class="post-footer">
+        <div class="meta">
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Sat, Aug 14, 2021
+
+
+              </span
+            >
+            
+              <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
+
+
+
+
+            
+
+            
+              <span class="separator"><a class="tag" href="/tags/golang/">golang</a></span>
+
+
+
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div
+      class="post 
+        animated fadeInDown
+
+      "
+    >
+      
+      <div class="post-title">
         <h3><a href="/post/golang%E7%9A%84map%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/">Golang的map底层实现</a></h3>
       </div>
       <div class="post-content">
@@ -816,63 +872,6 @@ MVCC MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的�
     </div>
 
   
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
-        <h3><a href="/post/mysql%E7%9A%84%E9%94%81/">MySQL的锁</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              数据库的锁 锁的作用就是确保每一个用户都能以一致的方式读取和写入数据。MySQL中的锁分为两种：闩锁latch和lock锁。
-  latch：轻量级的锁，用于锁定mysql应用程序中的一些对象，要求锁定的时间必须非常短，mysql中分为mutex（互斥锁）和rwlock（读写锁），是应用程序级别的，就是我们在程序中使用的mutex和rwmutex。通过命令show engine innodb mutex可以查看，一般mysql的开发人员会关注。
-通过命令show engine innodb mutex可以观察当前数据库中的latch信息。
-
-
-            
-          </p>
-          <a href="/post/mysql%E7%9A%84%E9%94%81/" class="read_more">继续阅读</a></div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Sun, Jun 6, 2021
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/mysql/">MySQL</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
   <div class="pagination">
     
   <ul class="pagination">
@@ -892,6 +891,15 @@ MVCC MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的�
       
         <li class="page-item">
           <a class="page-link" href="/page/2/">2</a>
+        </li>
+
+      
+
+
+    
+      
+        <li class="page-item">
+          <a class="page-link" href="/page/3/">3</a>
         </li>
 
       

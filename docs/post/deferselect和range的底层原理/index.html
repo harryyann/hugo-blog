@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="zh-cn"
+  data-theme=""
+><head>
+  <title>
+    
+      杨海瑞
+        |
+        Golang中的defer、select和range的底层原理
+
+
+      
+
+
+    
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.81.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta
+    name="description"
+    content="
+      
+Per aspera ad astra.
+循此苦旅，终抵群星。
+
+
+
+    "
+  />
+  
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://yanghairui.life/post/deferselect%E5%92%8Crange%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.2a2cd9614b7d007dfbb75e8da19e3a0fa872ceab53c6d000c00b7a0c89b85bfc.js"
+    integrity="sha256-KizZYUt9AH37t16NoZ46D6hyzqtTxtAAwAt6DIm4W/w="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js"
+      integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus="
+      crossorigin="anonymous"
+    ></script>
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Golang中的defer、select和range的底层原理"/>
+<meta name="twitter:description" content="Defer defer语句用于延迟函数的调用，每次defer都会把一个函数压入栈中，当前函数返回前，再把延迟的函数取出来并执行，所以多个defer语句是后写的先执行的。
+几个题目 问题1：以下输出什么？ func deferFuncParameter() { var aInt = 1 defer fmt."/>
+
+
+
+  
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "post",
+        "name": "Golang中的defer、select和range的底层原理",
+        "headline": "Golang中的defer、select和range的底层原理",
+        "alternativeHeadline": "",
+        "description": "
+      
+        Defer defer语句用于延迟函数的调用，每次defer都会把一个函数压入栈中，当前函数返回前，再把延迟的函数取出来并执行，所以多个defer语句是后写的先执行的。\n几个题目 问题1：以下输出什么？ func deferFuncParameter() { var aInt = 1 defer fmt.
+
+
+      
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/post\/deferselect%E5%92%8Crange%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-08-14T19:34:46.00Z",
+        "datePublished": "2021-08-14T19:34:46.00Z",
+        "dateModified": "2021-08-14T19:34:46.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/post\/deferselect%E5%92%8Crange%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86\/",
+        "wordCount" : "391",
+        "genre" : [ 
+      
+      "golang"
+
+    ],
+        "keywords" : [ 
+      
+      "golang"
+
+    ]
+    }
+  </script>
+
+
+
+</head>
+<body>
+    <header><div
+  class="page-top 
+    animated fadeInDown
+
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>
+  <nav>
+    <ul class="nav__list" id="navMenu">
+      <div class="nav__links">
+        
+        
+          
+          <li>
+            <a
+              
+              href="/"
+              
+              title=""
+              >Home</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/post/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/portfolio/"
+              
+              title=""
+              >Portfolio</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >About</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/contact/"
+              
+              title=""
+              >Contact</a
+            >
+          </li>
+
+        
+      </div>
+      <ul>
+        
+        
+          <li>
+            <a class="theme-switch" title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </li>
+
+        
+      </ul>
+    </ul>
+  </nav>
+</div>
+</header>
+    <div class="wrapper">
+      <aside><div
+  class="sidebar
+    animated fadeInDown
+
+  "
+>
+  <div class="sidebar__content">
+    <div class="logo-title">
+      <div class="title">
+        <img src="/images/profile5.jpg" alt="profile picture" />
+        <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
+        <div class="description">
+          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+        <li>
+          <a href="https://stackoverflow.com/users/12924262/horace-yang" rel="me" aria-label="StackOverFlow" title="StackOverFlow">
+            <i class="fab fa-stack-overflow fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://github.com/harryyann" rel="me" aria-label="GitHub" title="GitHub">
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://www.zhihu.com/people/yang-hai-rui-88" rel="me" aria-label="zhihu" title="zhihu">
+            <i class="fab fa-zhihu fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=941811450@qq.com" rel="me" aria-label="e-mail" title="e-mail">
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+    </ul>
+  </div><footer class="footer footer--sidebar">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></div>
+</aside>
+      <main>
+        <div class="autopagerize_page_element">
+          <div class="content">
+  <div
+    class="post 
+      animated fadeInDown
+
+    "
+  >
+    <div class="post-content">
+      
+      <div class="post-title">
+        <h1>Golang中的defer、select和range的底层原理</h1>
+        
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Sat, Aug 14, 2021
+
+
+              </span
+            >
+            <em class="fas fa-stopwatch"></em>
+            <span class="reading-time">阅读时间 2 分钟</span>
+          </div>
+
+        
+      </div><h1 id="defer">Defer</h1>
+<p>defer语句用于延迟函数的调用，每次defer都会把一个函数压入栈中，当前函数返回前，再把延迟的函数取出来并执行，所以多个defer语句是<strong>后写的先执行</strong>的。</p>
+<h2 id="几个题目">几个题目</h2>
+<h3 id="问题1以下输出什么">问题1：以下输出什么？</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">deferFuncParameter</span>() {
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">aInt</span> = <span style="color:#ae81ff">1</span>
+
+    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">aInt</span>)
+
+    <span style="color:#a6e22e">aInt</span> = <span style="color:#ae81ff">2</span>
+    <span style="color:#66d9ef">return</span>
+}
+</code></pre></div><p>答：输出1，因为defer调用的时候，传进去的参数就确定是1，并且压入栈中，defer语句在调用时后续执行的参数就确定了，所以后续调用的时候参数还是1。</p>
+<h3 id="问题2以下输出什么">问题2：以下输出什么？</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">printArray</span>(<span style="color:#a6e22e">array</span> <span style="color:#f92672">*</span>[<span style="color:#ae81ff">3</span>]<span style="color:#66d9ef">int</span>) {
+    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">array</span> {
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">array</span>[<span style="color:#a6e22e">i</span>])
+    }
+}
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">deferFuncParameter</span>() {
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">aArray</span> = [<span style="color:#ae81ff">3</span>]<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>}
+
+    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">printArray</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">aArray</span>)
+
+    <span style="color:#a6e22e">aArray</span>[<span style="color:#ae81ff">0</span>] = <span style="color:#ae81ff">10</span>
+    <span style="color:#66d9ef">return</span>
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+    <span style="color:#a6e22e">deferFuncParameter</span>()
+}
+</code></pre></div><p>答：输出[10, 2, 3]三个值，因为defer传入的是指针，虽然指针确定了，但最后指针指向的数组却发生更改了。</p>
+<h3 id="问题3以下返回什么">问题3：以下返回什么？</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">deferFuncReturn</span>() (<span style="color:#a6e22e">result</span> <span style="color:#66d9ef">int</span>) {
+    <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span>
+
+    <span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
+        <span style="color:#a6e22e">result</span><span style="color:#f92672">++</span>
+    }()
+
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">i</span>
+}
+</code></pre></div><p>答：defer让具名返回值result增加1，而return语句并不是原子的，实际上分为设置返回值-&gt;ret，defer语句执行在返回前，所以过程为：<strong>设置返回值 -&gt;执行defer -&gt; ret</strong>，所以在真正返回前，result已经被赋值为1了，defer语句自增后，result=2。</p>
+<h2 id="defer的规则">Defer的规则</h2>
+<ul>
+<li>defer执行的延迟函数的参数在defer语句出现时就已经确定(题目1)。</li>
+<li>延迟函数执行按照后进先出的顺序执行，是一个栈。</li>
+<li>延迟函数可以操作主函数中的具名返回值(题目3)，因为defer发生在确定返回值和ret之间。</li>
+</ul>
+<h2 id="函数返回的过程">函数返回的过程</h2>
+<p>return不是一个原子操作，return只代理汇编指令ret，即将跳转程序执行。比如return i，实际上分两步：</p>
+<ol>
+<li>将i存入栈作为返回值</li>
+<li>然后执行跳转</li>
+</ol>
+<p>而defer的执行时机正是跳转前和返回值和压栈后，所以说defer执行时还是可以操作返回值，前提是这个返回值得有名字，要不也操作不了。</p>
+<p>总体而言，defer语句操作返回值有两种情况：</p>
+<ol>
+<li>
+<p>主函数拥有匿名返回值，返回一个局部变量时，此时defer语句可以引用到返回值，但不会改变返回值</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">foo</span>() <span style="color:#66d9ef">int</span> {
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span>
+   
+    <span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
+    <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>
+    }()
+   
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">i</span>
+}
+</code></pre></div><p>上面的函数，返回一个局部变量，返回之前defer也会操作这个变量，对于匿名的返回值来说，可以假定仍有一个变量保存返回值，所以以上代码可以拆分成以下过程：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">annoy</span> = <span style="color:#a6e22e">i</span>  <span style="color:#75715e">// 固定返回值，发生在defer之前
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">i</span> <span style="color:#f92672">++</span>       <span style="color:#75715e">// defer语句发生在固定返回值和最终返回之间，defe修改的也只是i，而不能修改annoy这个变量
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">return</span> <span style="color:#a6e22e">annoy</span>
+</code></pre></div></li>
+<li>
+<p>当主函数拥有具名返回值时，就可以被defer修改了</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">foo</span>() (<span style="color:#a6e22e">ret</span> <span style="color:#66d9ef">int</span>) {
+    <span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
+        <span style="color:#a6e22e">ret</span><span style="color:#f92672">++</span>
+    }()
+   
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
+}
+</code></pre></div><p>以上代码可以拆解为：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">ret</span> = <span style="color:#ae81ff">0</span>  <span style="color:#75715e">// 固定返回值
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">ret</span> <span style="color:#f92672">++</span>   <span style="color:#75715e">// 因为返回值有名字，所以最终返回前可以操作这个变量
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ret</span>
+</code></pre></div></li>
+</ol>
+<h2 id="defer的实现原理">Defer的实现原理</h2>
+<h3 id="defer的数据结构">defer的数据结构</h3>
+<pre><code>type _defer struct {
+    sp uintptr //函数栈指针
+    pc uintptr //程序计数器
+    fn *funcval //函数地址
+    link *_defer //指向自身结构的指针，用于链接多个defer
+}
+</code></pre><p>defer的数据结构和一般函数类似，也有栈地址，程序计数器，函数地址等。与函数不同的是它含有一个指针，可以指向另一个defer。每次声明一个defer时，就将defer插入到单链表表头，执行时则按顺序执行。</p>
+<p>源码包<code>runtime/panic.go</code>定义了两个方法分别用于创建defer和执行defer：</p>
+<ul>
+<li>deferproc()：在声明defer处调用，其将defer函数存入goroutine的链表中。</li>
+<li>deferreturn()：在return指令，准确讲是在ret指令前调用，将defer从goroutine链表中取出并执行。</li>
+</ul>
+<h1 id="select">Select</h1>
+<p>select是golang语言层面提供的IO多路复用的机制，可以同时检测多个channel是否ready。</p>
+<h2 id="几个题目-1">几个题目</h2>
+<h3 id="题目1以下程序输出什么">题目1：以下程序输出什么</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">chan1</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)
+<span style="color:#a6e22e">chan2</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)
+
+<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>(){
+    <span style="color:#a6e22e">chan1</span> <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">1</span>
+}
+
+<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>(){
+    <span style="color:#a6e22e">chan2</span> <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">1</span>
+}
+
+<span style="color:#66d9ef">select</span> {
+<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">chan1</span>:
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;chan1&#34;</span>)
+<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">chan2</span>:
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;chan2&#34;</span>)
+<span style="color:#66d9ef">default</span>:
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;default&#34;</span>)
+}
+</code></pre></div><p>答：三种都有可能。因为select中各个case的执行顺序是随机的。</p>
+<h3 id="题目2以下程序输出什么">题目2：以下程序输出什么</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">chan1</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)
+<span style="color:#a6e22e">chan2</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)
+
+<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>(){
+    close(<span style="color:#a6e22e">chan1</span>)
+}
+
+<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>(){
+    close(<span style="color:#a6e22e">chan2</span>)
+}
+
+<span style="color:#66d9ef">select</span> {
+<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">chan1</span>:
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;chan1&#34;</span>)
+<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">chan2</span>:
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;chan2&#34;</span>)
+<span style="color:#66d9ef">default</span>:
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;default&#34;</span>)
+}
+</code></pre></div><p>答：close()不会导致chan不可读，所以select依然会检测各个case，输出什么依然是随机的。</p>
+<h3 id="题目3以下程序会发生什么">题目3：以下程序会发生什么？</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>(){
+    <span style="color:#66d9ef">select</span>{
+    }
+}
+</code></pre></div><p>答：空select会阻塞，准确说是当前协程被阻塞，同时golang自带死锁检测机制，当发现协程阻塞且再也没有机会唤醒时，会panic。</p>
+<h2 id="select的数据结构">select的数据结构</h2>
+<p>golang实现select时，定义了一个数据结构表示每个case语句(包括default)，select执行过程可以类比为一个函数，函数输入case数组，输出选中的case，然后程序流转到这个case块。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">scase</span> <span style="color:#66d9ef">struct</span>{
+    <span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">hchan</span> 
+    <span style="color:#a6e22e">kind</span> <span style="color:#66d9ef">uint16</span>
+    <span style="color:#a6e22e">elem</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>
+}
+</code></pre></div><ul>
+<li>c是当前case语句的channel指针，一个case只能操作一个channel。</li>
+<li>kind表示该case的类型，分为读channel、写channel和default，又三个常量定义：
+<ul>
+<li>caseRecv：case语句中尝试读取scase.c中的数据</li>
+<li>caseSend：case语句尝试向scase.c中写数据</li>
+<li>caseDefault：default语句</li>
+</ul>
+</li>
+<li>elem表示缓冲区地址，根据scase.kind不同，有不同的用途：
+<ul>
+<li>scase.kind == caseRecv，elem表示要读出channel的数据存放地址。</li>
+<li>scase.kind == caseSend，elem表示要写入channel的数据存放地址。</li>
+</ul>
+</li>
+</ul>
+<h2 id="select的实现逻辑">select的实现逻辑</h2>
+<p>源码包<code>runtime/select.go</code>中定义了select选择case的函数：</p>
+<pre><code>func selectgo(cas0 *scase, order0 *uint16, ncases int) (int, bool)
+</code></pre><p>参数说明：</p>
+<ul>
+<li>cas0为scase数组的首地址，selectgo()就是从这些scase中找出一个返回</li>
+<li>order0为一个两倍cas0数组长度的buffer，保存scase随机序列pollorder和scase中channel地址序列lockorder：
+<ul>
+<li>pollorder：每次selectgo执行都会把scase序列打乱，以实现随机检测case的目的。</li>
+<li>lockorder：所有case语句中channel序列，以达到去重防止对channel加锁时重复加锁的目的。</li>
+</ul>
+</li>
+<li>ncases表示scase数组的长度</li>
+</ul>
+<p>返回值说明：</p>
+<ul>
+<li>int：选中case的编号，这个case编号和代码一致。</li>
+<li>bool：是否成功从chennel中读取了数据，如果选中的case是从channel中读数据，则该返回值表示是否读取成功。</li>
+</ul>
+<h2 id="一个select的执行过程">一个select的执行过程</h2>
+<ol>
+<li>锁定scase语句中所有的channel</li>
+<li>按照随机顺序检测scase中的channel是否ready
+<ol>
+<li>如果case可读，则读取channel中数据，解锁所有的channel，然后返回(case index, true)</li>
+<li>如果case可写，则将数据写入channel，解锁所有的channel，然后返回(case index, false)</li>
+<li>所有case都未ready，则解锁所有的channel，然后返回（default index, false）</li>
+</ol>
+</li>
+<li>所有case都未ready，且没有default语句
+<ol>
+<li>将当前协程加入到所有channel的等待队列</li>
+<li>当将协程转入阻塞，等待被唤醒</li>
+</ol>
+</li>
+<li>唤醒后返回channel对应的case index
+<ol>
+<li>唤醒后返回channel对应的case index</li>
+<li>如果是写操作，解锁所有的channel，然后返回(case index, false)</li>
+</ol>
+</li>
+</ol>
+<h2 id="总结">总结</h2>
+<ul>
+<li>select语句中除了default外，每个case操作一个channel，要么读要么写。</li>
+<li>select语句除了default，各case执行顺序是随机的。</li>
+<li>select语句中如果没有default语句，则会阻塞等待任意一个case。</li>
+<li>对于select语句中读操作，要判断是否成功读取，因为关闭的channel也可以读取，此时ok=false，可能会读到错误的信息。</li>
+</ul>
+<h1 id="range">Range</h1>
+<p>range是一种迭代遍历手段，可操作的类型有数组，切片，Map，channel等。</p>
+<h2 id="几个题目-2">几个题目</h2>
+<h3 id="题目1切片遍历请问以下程序性能上有没有优化的空间">题目1：切片遍历，请问以下程序性能上有没有优化的空间？</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">RangeSlice</span>(<span style="color:#a6e22e">slice</span> []<span style="color:#66d9ef">int</span>) {
+    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">index</span>, <span style="color:#a6e22e">value</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">slice</span> {
+     <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">_</span> = <span style="color:#a6e22e">index</span>, <span style="color:#a6e22e">value</span>
+    }
+}
+</code></pre></div><p>答：遍历过程中，每次的遍历都会给index和value赋值，而实际上给value赋值的步骤是多余的，因为可以直接通过slice[index]直接访问到value。所以可以用_忽略value的值，用slice[index]来访问元素。</p>
+<h3 id="题目2map遍历打印key和value有没有优化的空间">题目2：map遍历打印key和value，有没有优化的空间？</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">RangeMap</span>(<span style="color:#a6e22e">myMap</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">int</span>]<span style="color:#66d9ef">string</span>){
+    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">key</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">myMap</span>{
+        <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">_</span> = <span style="color:#a6e22e">key</span>, <span style="color:#a6e22e">myMap</span>[<span style="color:#a6e22e">key</span>]
+    }
+}
+</code></pre></div><p>答：遍历时只获取到了key，忽略了value，虽然少了一次赋值，但实际上多了一步通过key查找value的步骤，而查找的性能消耗可能高于赋值的性能消耗(map的查找和slice的查找不同的，后者直接就能找到，前者则需要运算)，所以这里能否优化需要取决于map存储数据结构特征。</p>
+<h3 id="题目3动态遍历以下程序能否正常结束">题目3：动态遍历，以下程序能否正常结束？</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>(){
+    <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>}
+    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">v</span>{
+        <span style="color:#a6e22e">v</span> = append(<span style="color:#a6e22e">v</span>, <span style="color:#a6e22e">i</span>)
+    }
+}
+</code></pre></div><p>答：可以在遍历三次后结束。因为循环次数在循环开始时就确定了，<strong>后续切片变长后并不会改变循环次数</strong>。</p>
+<h2 id="range实现原理">range实现原理</h2>
+<p>range是个C风格的循环结构，range支持数组，数组指针，切片，map和channel类型，对于不同类型的实现有细节差异。</p>
+<h3 id="遍历切片的过程">遍历切片的过程</h3>
+<ol>
+<li>先获取到切片的长度作为循环次数（正因如此，循环中如果切片长度发生改变，新添加的元素是没办法遍历到的。但是修改的后面元素却是可以遍历到的）。</li>
+<li>循环中，每次循环会先获取元素的索引和值作为一个匿名的变量。</li>
+<li>如果range语句中对两个值都有接收的话，则会对index和value进行一次<strong>赋值</strong>。</li>
+</ol>
+<h3 id="遍历map过程">遍历map过程</h3>
+<ol>
+<li>遍历map时没有指定循环次数。循环体与slice类似。</li>
+<li>由于map底层使用hash表，如果遍历时插入数据，则插入数据的位置是随机的。</li>
+<li>如果遍历时新插入的数据在当前遍历位置的后面，则可以被后续遍历到，如果在前面则遍历不到。无法保证新键值对会被遍历到还是不会被遍历到。</li>
+</ol>
+<h3 id="遍历channel过程">遍历channel过程</h3>
+<ol>
+<li>channel在被遍历时是不知道里面有多少个元素的。</li>
+<li>循环时会按顺序从channel中取数据出来。</li>
+<li>如果channel中没有元素，则会阻塞等待。</li>
+<li>如果channel被关闭，则会解除阻塞并退出循环。</li>
+</ol>
+<h2 id="range使用的一些技巧">Range使用的一些技巧</h2>
+<ul>
+<li>使用range遍历切片时，可以适当的放弃接收index和value，减少数据的拷贝可以提高一定性能。</li>
+<li>遍历channel的表现很不同，需要特别注意。</li>
+<li>尽量不要在遍历时修改原数据，因为可能会产生不好确定的效果。需要这样的场景，最好重新开辟一块内存暂存需要修改的数据。</li>
+</ul>
+</div>
+    <div class="post-footer">
+      <div class="info">
+        
+          <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
+
+
+
+
+        
+
+        
+          <span class="separator"><a class="tag" href="/tags/golang/">golang</a></span>
+
+
+
+
+        
+      </div>
+    </div>
+
+    
+  </div>
+
+
+          </div>
+        </div>
+      </main>
+    </div><footer class="footer footer--base">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></body>
+</html>
