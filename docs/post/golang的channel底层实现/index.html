@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="zh-cn"
+  data-theme=""
+><head>
+  <title>
+    
+      杨海瑞
+        |
+        Golang的channel底层实现
+
+
+      
+
+
+    
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.81.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta
+    name="description"
+    content="
+      
+Per aspera ad astra.
+循此苦旅，终抵群星。
+
+
+
+    "
+  />
+  
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://yanghairui.life/post/golang%E7%9A%84channel%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.2a2cd9614b7d007dfbb75e8da19e3a0fa872ceab53c6d000c00b7a0c89b85bfc.js"
+    integrity="sha256-KizZYUt9AH37t16NoZ46D6hyzqtTxtAAwAt6DIm4W/w="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js"
+      integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus="
+      crossorigin="anonymous"
+    ></script>
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Golang的channel底层实现"/>
+<meta name="twitter:description" content="Channel的底层数据结构 channel是golang在语言层面提供的goroutine通信机制，也是我们经常使用的数据结构，它的数据结构如下：
+// 在src/runtime/chan.go中定义  type hchan struct{ // 环形队列相关  qcount uint // 当前队列中剩余元素的个数  dataqsiz uint // 环形队列的长度，即可以存放的元素个数  buf unsafe."/>
+
+
+
+  
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "post",
+        "name": "Golang的channel底层实现",
+        "headline": "Golang的channel底层实现",
+        "alternativeHeadline": "",
+        "description": "
+      
+        Channel的底层数据结构 channel是golang在语言层面提供的goroutine通信机制，也是我们经常使用的数据结构，它的数据结构如下：\n\/\/ 在src\/runtime\/chan.go中定义  type hchan struct{ \/\/ 环形队列相关  qcount uint \/\/ 当前队列中剩余元素的个数  dataqsiz uint \/\/ 环形队列的长度，即可以存放的元素个数  buf unsafe.
+
+
+      
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/post\/golang%E7%9A%84channel%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-09-18T20:01:29.00Z",
+        "datePublished": "2021-09-18T20:01:29.00Z",
+        "dateModified": "2021-09-18T20:01:29.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/post\/golang%E7%9A%84channel%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0\/",
+        "wordCount" : "185",
+        "genre" : [ 
+      
+      "golang"
+
+    ],
+        "keywords" : [ 
+      
+      "golang"
+
+    ]
+    }
+  </script>
+
+
+
+</head>
+<body>
+    <header><div
+  class="page-top 
+    animated fadeInDown
+
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>
+  <nav>
+    <ul class="nav__list" id="navMenu">
+      <div class="nav__links">
+        
+        
+          
+          <li>
+            <a
+              
+              href="/"
+              
+              title=""
+              >Home</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/post/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/portfolio/"
+              
+              title=""
+              >Portfolio</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >About</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/contact/"
+              
+              title=""
+              >Contact</a
+            >
+          </li>
+
+        
+      </div>
+      <ul>
+        
+        
+          <li>
+            <a class="theme-switch" title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </li>
+
+        
+      </ul>
+    </ul>
+  </nav>
+</div>
+</header>
+    <div class="wrapper">
+      <aside><div
+  class="sidebar
+    animated fadeInDown
+
+  "
+>
+  <div class="sidebar__content">
+    <div class="logo-title">
+      <div class="title">
+        <img src="/images/profile5.jpg" alt="profile picture" />
+        <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
+        <div class="description">
+          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+        <li>
+          <a href="https://stackoverflow.com/users/12924262/horace-yang" rel="me" aria-label="StackOverFlow" title="StackOverFlow">
+            <i class="fab fa-stack-overflow fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://github.com/harryyann" rel="me" aria-label="GitHub" title="GitHub">
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://www.zhihu.com/people/yang-hai-rui-88" rel="me" aria-label="zhihu" title="zhihu">
+            <i class="fab fa-zhihu fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=941811450@qq.com" rel="me" aria-label="e-mail" title="e-mail">
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+    </ul>
+  </div><footer class="footer footer--sidebar">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></div>
+</aside>
+      <main>
+        <div class="autopagerize_page_element">
+          <div class="content">
+  <div
+    class="post 
+      animated fadeInDown
+
+    "
+  >
+    <div class="post-content">
+      
+      <div class="post-title">
+        <h1>Golang的channel底层实现</h1>
+        
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Sat, Sep 18, 2021
+
+
+              </span
+            >
+            <em class="fas fa-stopwatch"></em>
+            <span class="reading-time">阅读时间 1 分钟</span>
+          </div>
+
+        
+      </div><h1 id="channel的底层数据结构">Channel的底层数据结构</h1>
+<p>channel是golang在语言层面提供的goroutine通信机制，也是我们经常使用的数据结构，它的数据结构如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 在src/runtime/chan.go中定义
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">hchan</span> <span style="color:#66d9ef">struct</span>{
+    <span style="color:#75715e">// 环形队列相关
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">qcount</span> <span style="color:#66d9ef">uint</span>         <span style="color:#75715e">// 当前队列中剩余元素的个数
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">dataqsiz</span> <span style="color:#66d9ef">uint</span>       <span style="color:#75715e">// 环形队列的长度，即可以存放的元素个数
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">buf</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>  <span style="color:#75715e">// 环形队列的指针
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">sendx</span> <span style="color:#66d9ef">uint</span>          <span style="color:#75715e">// 队列下标，指示元素写入时存放到队列中的位置
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">recvx</span> <span style="color:#66d9ef">uint</span>          <span style="color:#75715e">// 队列下标，指示元素从队列的该位置处读出
+</span><span style="color:#75715e"></span>    
+    <span style="color:#75715e">// 元素信息
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">elemtype</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">_type</span>     <span style="color:#75715e">// 元素类型
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">elemsize</span> <span style="color:#66d9ef">uint16</span>     <span style="color:#75715e">// 每个元素的大小
+</span><span style="color:#75715e"></span>    
+    <span style="color:#a6e22e">closed</span> <span style="color:#66d9ef">uint32</span>       <span style="color:#75715e">// 标识关闭状态
+</span><span style="color:#75715e"></span>    
+    <span style="color:#75715e">// 等待队列相关
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">recvq</span> <span style="color:#a6e22e">waitq</span>         <span style="color:#75715e">// 等待读消息的goroutine队列
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">sendq</span> <span style="color:#a6e22e">waitq</span>         <span style="color:#75715e">// 等待写消息的goroutine队列
+</span><span style="color:#75715e"></span>    
+    <span style="color:#a6e22e">lock</span> <span style="color:#a6e22e">mutex</span>          <span style="color:#75715e">// 互斥锁，chan不允许并发读写
+</span><span style="color:#75715e"></span>}
+</code></pre></div><p>如上，chan的字段可以分成5类</p>
+<ul>
+<li>环形队列相关</li>
+<li>存储消息的信息</li>
+<li>等待队列相关</li>
+<li>关闭状态的标识</li>
+<li>互斥锁</li>
+</ul>
+<h2 id="环形队列">环形队列</h2>
+<p>chan内部使用了一个环形队列作为其缓冲区(buf字段)，队列的长度就是创建chan时指定的长度(dataqsiz字段)：</p>
+<p><img src="/images/chan/buffer.png" alt=""></p>
+<ul>
+<li>
+<p>dataqsize指示了队列长度为6，即可缓存6个元素。超过6个就得阻塞，等有空位了才能插入。</p>
+</li>
+<li>
+<p>buf指向这个环形队列的内存地址。</p>
+</li>
+<li>
+<p>qcount表示队列中还有几个空位。</p>
+</li>
+<li>
+<p>sendx指示后续写入的数据存储的位置，长度为6的话取值就是0-5。</p>
+</li>
+<li>
+<p>recvx表示chan接收端从该位置处读取数据，取值也是0-5。</p>
+</li>
+</ul>
+<h2 id="等待队列">等待队列</h2>
+<p>当从channel中读数据，而chan中没数据，或往chan中写数据，而chan中没有空位时(即qcount=0)，当前这个goroutine会被阻塞。被阻塞的goroutine将会挂在channel的等待队列中。</p>
+<p>等待队列有两个：recvq就是读阻塞的等待队列，sendq就是写阻塞的等待队列。</p>
+<ul>
+<li>
+<p>因读阻塞的goroutine将会被向chan中写入数据的goroutine唤醒</p>
+<p>读阻塞是因为channel中没数据，当有goroutine向chan中写入数据时，读操作自然就解阻塞了。</p>
+</li>
+<li>
+<p>因写阻塞的goroutine将会被从chan中读数据的goroutine唤醒</p>
+<p>写阻塞是因为channel满了，写不了，当有goroutine从chan中读出一个数据时，自然就有空位去写了。</p>
+</li>
+</ul>
+<p><img src="/images/chan/wait.png" alt=""></p>
+<p>如上图，每个G都是一个goroutine，这几个goroutine都挂在recvq这个读等待队列中，即chan中没数据，所有的goroutine想从chan中读时都阻塞在这了。</p>
+<p>一般情况下，recvq和sendq中至少一个为空的，即要么都在阻塞读，要么都在阻塞写。</p>
+<h2 id="消息的相关信息">消息的相关信息</h2>
+<p>chan结构体中有两个字段用于标识chan中存储的消息信息：elemtype和elemsize</p>
+<ul>
+<li>elemtype代表消息的数据类型，用于数据传递过程中的赋值</li>
+<li>elemsize代表消息的大小，用于在buf中定位元素的位置</li>
+</ul>
+<h2 id="锁">锁</h2>
+<p>lock字段是一个mutex，明显channel是并发安全的。channel同一时刻仅允许被一个goroutine读写，每次读写都要先获取到锁。用完了再释放。</p>
+<h1 id="channel的读写过程">channel的读写过程</h1>
+<h2 id="写数据的过程">写数据的过程</h2>
+<p>写数据可以分成三种情况：有goroutine在读阻塞、没有goroutine在读阻塞、缓冲区满了。</p>
+<h4 id="有goroutine读阻塞">有goroutine读阻塞</h4>
+<p>当读等待队列recvq不为空，说明有goroutine在阻塞，此时说明缓冲区没有数据或者这个channel没有缓冲区，这种情况下写入时会从recvq中取出一个G，然后把数据写入到缓冲区，最后把这个G唤醒，结束发送过程。</p>
+<p>即该情形下，不仅要写入缓冲区，还要唤醒阻塞的goroutine。</p>
+<h4 id="没有goroutine读阻塞">没有goroutine读阻塞</h4>
+<p>这种情况比较简单，没有读阻塞就说明缓冲区有空余位置，直接将数据写入缓冲区，就可以结束发送过程。</p>
+<h4 id="缓冲区满了">缓冲区满了</h4>
+<p>如果缓冲区没有空余位置，则此时写入时就是写阻塞，需要将当前G加入到sendq中，同时该goroutine进入睡眠状态，等待被唤醒，被唤醒后才能接着写。</p>
+<p><img src="/images/chan/write.png" alt=""></p>
+<h2 id="读数据的过程">读数据的过程</h2>
+<p>读数据分为四种情况：有写阻塞且chan没有缓冲区、有写阻塞且chan有缓冲区、没有写阻塞且缓冲区中有数据、没有写阻塞且缓冲区中无数据。</p>
+<h4 id="有写阻塞且chan没有缓冲区">有写阻塞且chan没有缓冲区</h4>
+<p>chan没有缓冲区的情况，每个写入都会是写阻塞，每个读取都是读阻塞，此时不管是要写数据还是读数据，都需要另一个goroutine同时在读或写。换句话说，没有缓冲区的chan的读写，实际上就是一个goroutine把数据直接交给了另一个goroutine。</p>
+<p>所以这种情况下读数据，一定要有另一个goroutine在写阻塞中才能读到，此时本goroutine会直接从sendq中取出第一个写阻塞的G，从G中取出数据，然后把G唤醒，即可。</p>
+<h4 id="有写阻塞且chan有缓冲区">有写阻塞且chan有缓冲区</h4>
+<p>chan有缓冲区，且写阻塞，此时一定是chan的缓冲区满了，此时需要先从缓冲区的头部取出一个数据，然后把sendq中第一个写阻塞的G的数据写入到缓冲区的尾部，最后唤醒这个G即可。</p>
+<h4 id="没有写阻塞且缓冲区中有数据">没有写阻塞且缓冲区中有数据</h4>
+<p>这种是最简单的情况，也是最常见的情况，这种情况直接从缓冲区头部取出一条数据，即可。</p>
+<h4 id="没有写阻塞且缓冲区中无数据">没有写阻塞且缓冲区中无数据</h4>
+<p>这种情况下可能是刚开始创建chan时，还没有goroutine向chan中写入数据，此时从chan中读取数据就会被阻塞，这个goroutine会把自己的G写入到recvq中，同时自己进入睡眠状态，等待被写操作的G唤醒。</p>
+<p><img src="/images/chan/read.png" alt=""></p>
+<h1 id="channel的关闭的问题">Channel的关闭的问题</h1>
+<p>关闭channel时会对等待队列中的G做如下操作：</p>
+<ul>
+<li>把读阻塞recvq中的G全部唤醒，并向这些G中发送chan数据类型的0值。</li>
+<li>把sendq中的G全部唤醒，但是这些写入的G都会panic。</li>
+</ul>
+<h2 id="channel引发panic的场景">channel引发panic的场景</h2>
+<ul>
+<li>关闭一个值为nil的channel</li>
+<li>关闭已经关闭的channel</li>
+<li>向已经关闭的channel写数据</li>
+</ul>
+<h2 id="从一个已关闭的channel读数据的情形">从一个已关闭的channel读数据的情形</h2>
+<ul>
+<li>如果这个chan中还有值，那么会把这些值读完</li>
+<li>如果这个chan的值已被读完，那么依然可以读取到这个chan中存储数据类型的基本值，如int会读出0，string会读出&quot;&quot;，bool会读出false</li>
+</ul>
+<p>从chan中读数据可以用两个变量接收，第二个变量为bool值，表示接收到的值是不是有效的，为true是有效：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">channel</span>
+<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ok</span>{
+    <span style="color:#a6e22e">有效</span>
+}
+</code></pre></div><h1 id="channel的常见用法">Channel的常见用法</h1>
+<h2 id="单向chan">单向chan</h2>
+<p>指只用于发送，或者只用于接收的chan，实际上没有单向的chan，这里说的只是使用限制，即限制一个chan在一个函数内为只读或者只写，通过函数传参时指定：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">readChan</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>){} <span style="color:#75715e">// 通过形参指定函数中只能读c的数据
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">writeChan</span>(<span style="color:#a6e22e">c</span> <span style="color:#66d9ef">chan</span><span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">int</span>){} <span style="color:#75715e">// 通过形参限定函数内部只能写入c 
+</span></code></pre></div><h2 id="配合select多路复用">配合select多路复用</h2>
+<p>select多路复用可以监控多个channel，当其中某个chan有数据时，就从中读取数据：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">for</span>{
+    <span style="color:#66d9ef">select</span> {
+    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">chan1</span>:
+        <span style="color:#75715e">// do something
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">chan2</span>:
+        <span style="color:#75715e">// do something
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">default</span>:
+        <span style="color:#75715e">// if chan1 and chan2 has block, go this way
+</span><span style="color:#75715e"></span>    }
+}
+</code></pre></div><h2 id="配合range">配合range</h2>
+<p>通过range可以持续的从一个chan中取出数据，像是在遍历一个数组一样，当channel中没有数据时则会阻塞在某一次读取中</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">e</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">chan1</span>{
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">e</span>)
+}
+</code></pre></div></div>
+    <div class="post-footer">
+      <div class="info">
+        
+          <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
+
+
+
+
+        
+
+        
+          <span class="separator"><a class="tag" href="/tags/golang/">golang</a></span>
+
+
+
+
+        
+      </div>
+    </div>
+
+    
+  </div>
+
+
+          </div>
+        </div>
+      </main>
+    </div><footer class="footer footer--base">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></body>
+</html>

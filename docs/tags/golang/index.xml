@@ -6,7 +6,19 @@
     <description>Recent content in golang on Website of Harry Yang</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 14 Jul 2021 20:01:29 +0800</lastBuildDate><atom:link href="https://yanghairui.life/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 18 Sep 2021 20:01:29 +0800</lastBuildDate><atom:link href="https://yanghairui.life/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Golang的channel底层实现</title>
+      <link>https://yanghairui.life/post/golang%E7%9A%84channel%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Sat, 18 Sep 2021 20:01:29 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/post/golang%E7%9A%84channel%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/</guid>
+      
+        <description>Channel的底层数据结构 channel是golang在语言层面提供的goroutine通信机制，也是我们经常使用的数据结构，它的数据结构如下：
+// 在src/runtime/chan.go中定义  type hchan struct{ // 环形队列相关  qcount uint // 当前队列中剩余元素的个数  dataqsiz uint // 环形队列的长度，即可以存放的元素个数  buf unsafe.</description>
+      
+    </item>
+    
     <item>
       <title>Golang的map底层实现</title>
       <link>https://yanghairui.life/post/golang%E7%9A%84map%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/</link>
@@ -17,19 +29,6 @@
         <description>Map的底层数据结构 Golang的map数据类型底层使用的是哈希表实现，一个哈希表可以有多个哈希表节点，即bucket，一个bucket保存着map中的一个或者一组键值对。
 hmap的数据结构： map的实现实际上就是runtime包里的hmap：
 // 定义在src/runtime/map.go中  type hmap struct{ count int // 当前保存的元素个数  .</description>
-      
-    </item>
-    
-    <item>
-      <title>Golang的slice底层实现</title>
-      <link>https://yanghairui.life/post/golang%E7%9A%84slice%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/</link>
-      <pubDate>Tue, 13 Jul 2021 20:01:29 +0800</pubDate>
-      
-      <guid>https://yanghairui.life/post/golang%E7%9A%84slice%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/</guid>
-      
-        <description>Slice的底层数据结构 Golang的slice切片依托于数组实现，和数组的差别就是slice可以方便的扩容，实际使用中除了在少数情况我们明确知道数组长度时，大多数时候都是用的是slice，因为不用担心容量不够的问题。但是如果不了解它内部的实现机制，就有可能会遭遇一些莫名的现象。
-slice底层结构：
-// 源码位于src/runtime/slice.gotype slice struct{array unsafe.Pointerlen intcap int}array是一个unsafe.</description>
       
     </item>
     
@@ -67,6 +66,19 @@ type Server struct { Addr string Port int Protocol string Timeout time.</descrip
       
         <description>RBAC(Role-Based Access Control) 基于角色的权限控制，其实只有三个最基本的概念：
  Role：角色，每个角色都定义了一组对k8s API对象的操作权限，就是一系列权限的集合 Subject：权限被作用者，即Role提供的权限要作用到的用户，人，或机器 RoleBinding：通过RoleBinding把Role和Subject绑定到一起  总之，就是通过Role来定义权限，通过Subject来认证，通过RoleBinding将Role和Subject绑定到一起，那么Subject即可拥有Role所定义的权限了。</description>
+      
+    </item>
+    
+    <item>
+      <title>Golang的slice底层实现</title>
+      <link>https://yanghairui.life/post/golang%E7%9A%84slice%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Wed, 05 May 2021 20:01:29 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/post/golang%E7%9A%84slice%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/</guid>
+      
+        <description>Slice的底层数据结构 Golang的slice切片依托于数组实现，和数组的差别就是slice可以方便的扩容，实际使用中除了在少数情况我们明确知道数组长度时，大多数时候都是用的是slice，因为不用担心容量不够的问题。但是如果不了解它内部的实现机制，就有可能会遭遇一些莫名的现象。
+slice底层结构：
+// 源码位于src/runtime/slice.gotype slice struct{array unsafe.Pointerlen intcap int}array是一个unsafe.</description>
       
     </item>
     
