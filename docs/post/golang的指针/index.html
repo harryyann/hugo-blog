@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="zh-cn"
+  data-theme=""
+><head>
+  <title>
+    
+      杨海瑞
+        |
+        Golang的指针和内存对齐
+
+
+      
+
+
+    
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.81.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta
+    name="description"
+    content="
+      
+Per aspera ad astra.
+循此苦旅，终抵群星。
+
+
+
+    "
+  />
+  
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://yanghairui.life/post/golang%E7%9A%84%E6%8C%87%E9%92%88/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.2a2cd9614b7d007dfbb75e8da19e3a0fa872ceab53c6d000c00b7a0c89b85bfc.js"
+    integrity="sha256-KizZYUt9AH37t16NoZ46D6hyzqtTxtAAwAt6DIm4W/w="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js"
+      integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus="
+      crossorigin="anonymous"
+    ></script>
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Golang的指针和内存对齐"/>
+<meta name="twitter:description" content="指针 golang中的指针种类 golang的指针类型分为三种，*类型，unsafe.Pointer，uintptr。
+ *类型：普通指针类型，用于传递对象地址，不能进行指针运算。 unsafe.Pointer：通用指针类型，用于转换不同类型的指针，不能进行指针运算，不能读取内存存储的值，必须要转换到某一类型的普通指针。 uintptr：用于指针运算，GC不把uintptr当指针，uintptr无法持有对象，uintptr类型的目标会被回收。  通过以上就可以看出：
+ unsafe."/>
+
+
+
+  
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "post",
+        "name": "Golang的指针和内存对齐",
+        "headline": "Golang的指针和内存对齐",
+        "alternativeHeadline": "",
+        "description": "
+      
+        指针 golang中的指针种类 golang的指针类型分为三种，*类型，unsafe.Pointer，uintptr。\n *类型：普通指针类型，用于传递对象地址，不能进行指针运算。 unsafe.Pointer：通用指针类型，用于转换不同类型的指针，不能进行指针运算，不能读取内存存储的值，必须要转换到某一类型的普通指针。 uintptr：用于指针运算，GC不把uintptr当指针，uintptr无法持有对象，uintptr类型的目标会被回收。  通过以上就可以看出：\n unsafe.
+
+
+      
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/post\/golang%E7%9A%84%E6%8C%87%E9%92%88\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-08-20T19:34:46.00Z",
+        "datePublished": "2021-08-20T19:34:46.00Z",
+        "dateModified": "2021-08-20T19:34:46.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/post\/golang%E7%9A%84%E6%8C%87%E9%92%88\/",
+        "wordCount" : "277",
+        "genre" : [ 
+      
+      "golang"
+
+    ],
+        "keywords" : [ 
+      
+      "golang"
+
+    ]
+    }
+  </script>
+
+
+
+</head>
+<body>
+    <header><div
+  class="page-top 
+    animated fadeInDown
+
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>
+  <nav>
+    <ul class="nav__list" id="navMenu">
+      <div class="nav__links">
+        
+        
+          
+          <li>
+            <a
+              
+              href="/"
+              
+              title=""
+              >Home</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/post/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/portfolio/"
+              
+              title=""
+              >Portfolio</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >About</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/contact/"
+              
+              title=""
+              >Contact</a
+            >
+          </li>
+
+        
+      </div>
+      <ul>
+        
+        
+          <li>
+            <a class="theme-switch" title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </li>
+
+        
+      </ul>
+    </ul>
+  </nav>
+</div>
+</header>
+    <div class="wrapper">
+      <aside><div
+  class="sidebar
+    animated fadeInDown
+
+  "
+>
+  <div class="sidebar__content">
+    <div class="logo-title">
+      <div class="title">
+        <img src="/images/profile5.jpg" alt="profile picture" />
+        <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
+        <div class="description">
+          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+        <li>
+          <a href="https://stackoverflow.com/users/12924262/horace-yang" rel="me" aria-label="StackOverFlow" title="StackOverFlow">
+            <i class="fab fa-stack-overflow fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://github.com/harryyann" rel="me" aria-label="GitHub" title="GitHub">
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://www.zhihu.com/people/yang-hai-rui-88" rel="me" aria-label="zhihu" title="zhihu">
+            <i class="fab fa-zhihu fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=941811450@qq.com" rel="me" aria-label="e-mail" title="e-mail">
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+    </ul>
+  </div><footer class="footer footer--sidebar">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></div>
+</aside>
+      <main>
+        <div class="autopagerize_page_element">
+          <div class="content">
+  <div
+    class="post 
+      animated fadeInDown
+
+    "
+  >
+    <div class="post-content">
+      
+      <div class="post-title">
+        <h1>Golang的指针和内存对齐</h1>
+        
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Fri, Aug 20, 2021
+
+
+              </span
+            >
+            <em class="fas fa-stopwatch"></em>
+            <span class="reading-time">阅读时间 2 分钟</span>
+          </div>
+
+        
+      </div><h1 id="指针">指针</h1>
+<h2 id="golang中的指针种类">golang中的指针种类</h2>
+<p>golang的指针类型分为三种，*<strong>类型</strong>，<strong>unsafe.Pointer</strong>，<strong>uintptr</strong>。</p>
+<ul>
+<li>*类型：普通指针类型，用于传递对象地址，不能进行指针运算。</li>
+<li>unsafe.Pointer：通用指针类型，用于<strong>转换不同类型的指针</strong>，不能进行指针运算，不能读取内存存储的值，必须要转换到某一类型的普通指针。</li>
+<li>uintptr：用于指针运算，GC不把uintptr当指针，uintptr无法持有对象，uintptr类型的目标会被回收。</li>
+</ul>
+<p>通过以上就可以看出：</p>
+<ul>
+<li>unsafe.Pointer是桥梁，可以让任意类型的普通指针进行互相转换，也可以将任意类型的指针转换成uintptr来进行指针运算。</li>
+<li>unsafe.Pointer可以让你的变量在不同的指针类型转来转去，也就是表示为任意可寻址的指针类型，而uintptr常用于和unsafe.Pointer打配合，用于指针运算。</li>
+</ul>
+<h2 id="unsafepointer">unsafe.Pointer</h2>
+<p>四个重要特性：</p>
+<ul>
+<li>任何类型的指针都可以转化为Pointer</li>
+<li>Pointer可以转化为任意类型的指针</li>
+<li>uintptr可以转化为Pointer</li>
+<li>Pointer可以转化为uintptr</li>
+</ul>
+<p>注意：</p>
+<ol>
+<li>不可以直接通过*p来获取unsafe.Pointer指针指向的真实变量的值，因为不知道p的具体类型。</li>
+<li>Pointer指针只能和nil比较判断是否为空指针</li>
+</ol>
+<h2 id="uintptr">uintptr</h2>
+<p>uintptr其实就是一个整数类型，只是用于表示指针罢了。</p>
+<p>有一点要注意，uintptr变量即使仍然有效，依然会被GC回收，这也是将其不推荐使用unitptr类型的原因。</p>
+<h2 id="unsafe包">unsafe包</h2>
+<p>unsafe包只有两个struct、三个函数。</p>
+<p>struct：</p>
+<ul>
+<li>
+<p>ArbitraryType：是int的别名，含义是代表一个任意的类型</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">ArbitraryType</span> <span style="color:#66d9ef">int</span>
+</code></pre></div></li>
+<li>
+<p>Pointer：是int指针类型的别名，表示任意指针的父类型</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Pointer</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>
+</code></pre></div></li>
+</ul>
+<p>函数：</p>
+<ul>
+<li>unsafe.Sizeof()：接收任意类型值，返回其占用的字节数，和C不同的是，传入的可以是任意对象表达式，结构体，变量都可以。</li>
+<li>unsafe.Offsetof()：返回结构体中元素所在内存的偏移量，可以接收任意类型的变量，但是需要变量是struct类型，且只能把struct的属性当作参数。</li>
+<li>unsafe.Alignof返回变量的对齐字节数量，即最小对齐块的字节数。</li>
+</ul>
+<h3 id="常用使用方式">常用使用方式</h3>
+<h4 id="unsafepointer进行普通指针类型转换">unsafe.Pointer进行普通指针类型转换</h4>
+<pre><code>v := int(13)
+p := unsafe.Pointer(&amp;v) // 接收一个指针，返回一个Pointer对象
+uv := (*uint)(p)  //将p强制转换为uint类型的指针
+fmt.Println(reflect.TypeOf(uv))  // *uint
+fmt.Println(*uv)  // 13
+</code></pre><h4 id="unsafepointer用于操作结构体的私有变量">unsafe.Pointer用于操作结构体的私有变量</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">a</span>
+
+<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">V</span> <span style="color:#66d9ef">struct</span> {
+    <span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int32</span>
+    <span style="color:#a6e22e">j</span> <span style="color:#66d9ef">int64</span>
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">this</span> <span style="color:#a6e22e">V</span>) <span style="color:#a6e22e">PutI</span>() {
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;i=%d\n&#34;</span>, <span style="color:#a6e22e">this</span>.<span style="color:#a6e22e">i</span>)
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">this</span> <span style="color:#a6e22e">V</span>) <span style="color:#a6e22e">PutJ</span>() {
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;j=%d\n&#34;</span>, <span style="color:#a6e22e">this</span>.<span style="color:#a6e22e">j</span>)
+}
+</code></pre></div><p>包a的V这个struct只有两个方法，用于打印出两个私有成员变量的值，不能给他们赋值：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">packagepackage</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>(){
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">V</span>{}
+    <span style="color:#75715e">// 拿到v结构体的起始指针，要用第一个元素的指针类型进行转化，这个指针指向的就是v结构体的第一个元素
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int32</span> = (<span style="color:#f92672">*</span><span style="color:#66d9ef">int32</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">v</span>))
+    <span style="color:#f92672">*</span><span style="color:#a6e22e">i</span> = int32(<span style="color:#ae81ff">98</span>) <span style="color:#75715e">// 给i赋值
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">PutI</span>()  <span style="color:#75715e">// 打印可以看到i已经变为98了
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 然后获取j的内存地址，需要根据内存对齐算一下，要注意内存对齐后，i占用的字节数也是和j一样的int64的长度了
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int64</span> = (<span style="color:#f92672">*</span><span style="color:#66d9ef">int64</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">v</span>)) <span style="color:#f92672">+</span> uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(int64(<span style="color:#ae81ff">0</span>)))))
+    <span style="color:#f92672">*</span><span style="color:#a6e22e">j</span> = int64(<span style="color:#ae81ff">763</span>)
+    <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">PutJ</span>() <span style="color:#75715e">// 打印可以看到j已经变为763了
+</span><span style="color:#75715e"></span>}
+</code></pre></div><p>核心思想就是：结构体的成员在内存中的分配是连续的内存，采用内存对齐的原则，这样就可以根据成员类型推算出各个成员所在的内存地址了。</p>
+<p>一定要注意的是：不要把uintptr类型的数据作为一个临时变量，要把涉及到了uintptr的表达式都写在一行里，因为uintptr类型变量会被GC回收！</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 错误写法!!!
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">tmp</span> <span style="color:#f92672">:=</span> uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">v</span>) <span style="color:#f92672">+</span> uintptr(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(int64(<span style="color:#ae81ff">0</span>)))
+<span style="color:#a6e22e">j</span> <span style="color:#f92672">:=</span> (<span style="color:#f92672">*</span><span style="color:#66d9ef">int64</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#a6e22e">tmp</span>)
+</code></pre></div><h1 id="内存对齐">内存对齐</h1>
+<h2 id="内存对齐的原因">内存对齐的原因</h2>
+<ul>
+<li>并不是所有硬件平台都能访问任意地址上的任意数据。</li>
+<li>性能，访问未对齐的内存，处理器需要做两次内存访问，而对齐的内存只需要访问一次。</li>
+</ul>
+<h2 id="内存对齐的方式">内存对齐的方式</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(int64(<span style="color:#ae81ff">0</span>))) <span style="color:#75715e">// &#34;8&#34;
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">SizeOfA</span> <span style="color:#66d9ef">struct</span> {
+    <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">int</span>
+}
+<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">SizeOfA</span>{<span style="color:#ae81ff">0</span>}) <span style="color:#75715e">// 8
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">SizeOfC</span> <span style="color:#66d9ef">struct</span> {
+    <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">byte</span>  <span style="color:#75715e">// 1字节
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">C</span> <span style="color:#66d9ef">int32</span> <span style="color:#75715e">// 4字节
+</span><span style="color:#75715e"></span>}
+<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">SizeOfC</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>})    <span style="color:#75715e">// 8
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Alignof</span>(<span style="color:#a6e22e">SizeOfC</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>})   <span style="color:#75715e">// 4
+</span></code></pre></div><p>以上的结构体SizeOfC，实际只需要占用5个字节，但是实际上占了8字节。因为这个结构体的对齐字节倍数Alignof(SizeOfC)=4，即结构体占用的实际大小必须是4的倍数。</p>
+<p>Align返回的对齐数是结构体中单位基本类型所占的内存字节数，不超过8，如果元素是数组则取数据元素所占内存值而不是整个数组的内存值：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">SizeOfD</span> <span style="color:#66d9ef">struct</span> {
+    <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">byte</span>
+    <span style="color:#a6e22e">B</span> [<span style="color:#ae81ff">3</span>]<span style="color:#66d9ef">int32</span>
+}
+<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">SizeOfD</span>{})   <span style="color:#75715e">// 16
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Alignof</span>(<span style="color:#a6e22e">SizeOfD</span>{})  <span style="color:#75715e">// 4，因为结构体最大元素为int32，占四个字节
+</span></code></pre></div><p>因为结构体元素在内存中的布局是按顺序放的，先放了A，然后发现后面的7个字节放不下B，则会再后分配8个字节给B，那么A自己就独占了8个字节。以上结构体在内存中的布局：</p>
+<p><img src="/images/pointer/struct1.png" alt=""></p>
+<p>再举个例子：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">SizeOfE</span> <span style="color:#66d9ef">struct</span> {
+    <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">byte</span>  <span style="color:#75715e">// 1
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">B</span> <span style="color:#66d9ef">int64</span> <span style="color:#75715e">// 8
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">C</span> <span style="color:#66d9ef">byte</span>  <span style="color:#75715e">// 1
+</span><span style="color:#75715e"></span>}
+<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">SizeOfE</span>{})    <span style="color:#75715e">// 24
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Alignof</span>(<span style="color:#a6e22e">SizeOfE</span>{})   <span style="color:#75715e">// 8
+</span></code></pre></div><p>以上结构体在内存中的布局：</p>
+<p><img src="/images/pointer/struct2.png" alt=""></p>
+<p>而如果把C写在B之前，那么按顺序放C的时候发现C和A占用的内存刚好一样，就可以把C直接放在A后面了，然后发现下一个元素B占8个字节，那么为了内存对齐，。这样这个结构体占内存就比上面小了：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">SizeOfF</span> <span style="color:#66d9ef">struct</span> {
+    <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">byte</span>  <span style="color:#75715e">// 1
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">C</span> <span style="color:#66d9ef">byte</span>  <span style="color:#75715e">// 1
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">B</span> <span style="color:#66d9ef">int64</span> <span style="color:#75715e">// 8   
+</span><span style="color:#75715e"></span>}
+<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">SizeOfF</span>{})    <span style="color:#75715e">// 16
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Alignof</span>(<span style="color:#a6e22e">SizeOfF</span>{})   <span style="color:#75715e">// 8
+</span></code></pre></div><p>以上结构体在内存中的布局：</p>
+<p><img src="/images/pointer/struct3.png" alt=""></p>
+<p>后面的元素在放时会首先根据前一个元素所占的内存大小来决定这个元素要怎么和前一个元素拥有相同的内存数量，反正最大不超过8字节：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">SizeOfH</span> <span style="color:#66d9ef">struct</span> {
+    <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">byte</span>
+    <span style="color:#a6e22e">C</span> <span style="color:#66d9ef">int16</span>
+    <span style="color:#a6e22e">B</span> <span style="color:#66d9ef">int64</span>
+    <span style="color:#a6e22e">D</span> <span style="color:#66d9ef">int32</span>
+}
+<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Offsetof</span>(<span style="color:#a6e22e">SizeOfH</span>{}.<span style="color:#a6e22e">A</span>) <span style="color:#75715e">// 0
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Offsetof</span>(<span style="color:#a6e22e">SizeOfH</span>{}.<span style="color:#a6e22e">C</span>) <span style="color:#75715e">// 2
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Offsetof</span>(<span style="color:#a6e22e">SizeOfH</span>{}.<span style="color:#a6e22e">B</span>) <span style="color:#75715e">// 8
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Offsetof</span>(<span style="color:#a6e22e">SizeOfH</span>{}.<span style="color:#a6e22e">D</span>) <span style="color:#75715e">// 16
+</span></code></pre></div><p>以上结构体在内存中的布局：</p>
+<p><img src="/images/pointer/struct4.png" alt=""></p>
+<h2 id="golang中常用类型的内存大小">golang中常用类型的内存大小</h2>
+<ul>
+<li>bool：1字节</li>
+<li>int、uint、uintptr、*T、map、func、chan：1机器字节（根据机器是32位还是64位，分别占4个和8个字节）</li>
+<li>string：2机器字节</li>
+<li>interface：2机器字节</li>
+<li>[]T：3机器字节</li>
+<li>intN、uintN、floatN、complexN：N/8个字节</li>
+</ul>
+</div>
+    <div class="post-footer">
+      <div class="info">
+        
+          <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
+
+
+
+
+        
+
+        
+          <span class="separator"><a class="tag" href="/tags/golang/">golang</a></span>
+
+
+
+
+        
+      </div>
+    </div>
+
+    
+  </div>
+
+
+          </div>
+        </div>
+      </main>
+    </div><footer class="footer footer--base">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></body>
+</html>
