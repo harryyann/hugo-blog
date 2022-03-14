@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="zh-cn"
+  data-theme=""
+><head>
+  <title>
+    
+      杨海瑞
+        |
+        K8s的RBAC权限控制机制
+
+
+      
+
+
+    
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.81.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta
+    name="description"
+    content="
+      
+Per aspera ad astra.
+循此苦旅，终抵群星。
+
+
+
+    "
+  />
+  
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://yanghairui.life/post/k8s%E7%9A%84rbac%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.2a2cd9614b7d007dfbb75e8da19e3a0fa872ceab53c6d000c00b7a0c89b85bfc.js"
+    integrity="sha256-KizZYUt9AH37t16NoZ46D6hyzqtTxtAAwAt6DIm4W/w="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js"
+      integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus="
+      crossorigin="anonymous"
+    ></script>
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="K8s的RBAC权限控制机制"/>
+<meta name="twitter:description" content="RBAC(Role-Based Access Control) 基于角色的权限控制，其实只有三个最基本的概念：
+ Role：角色，每个角色都定义了一组对k8s API对象的操作权限，就是一系列权限的集合 Subject：权限被作用者，即Role提供的权限要作用到的用户，人，或机器 RoleBinding：通过RoleBinding把Role和Subject绑定到一起  总之，就是通过Role来定义权限，通过Subject来认证，通过RoleBinding将Role和Subject绑定到一起，那么Subject即可拥有Role所定义的权限了。"/>
+
+
+
+  
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "post",
+        "name": "K8s的RBAC权限控制机制",
+        "headline": "K8s的RBAC权限控制机制",
+        "alternativeHeadline": "",
+        "description": "
+      
+        RBAC(Role-Based Access Control) 基于角色的权限控制，其实只有三个最基本的概念：\n Role：角色，每个角色都定义了一组对k8s API对象的操作权限，就是一系列权限的集合 Subject：权限被作用者，即Role提供的权限要作用到的用户，人，或机器 RoleBinding：通过RoleBinding把Role和Subject绑定到一起  总之，就是通过Role来定义权限，通过Subject来认证，通过RoleBinding将Role和Subject绑定到一起，那么Subject即可拥有Role所定义的权限了。
+
+
+      
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/post\/k8s%E7%9A%84rbac%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-06-25T23:55:43.00Z",
+        "datePublished": "2021-06-25T23:55:43.00Z",
+        "dateModified": "2021-06-25T23:55:43.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/post\/k8s%E7%9A%84rbac%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6\/",
+        "wordCount" : "290",
+        "genre" : [ 
+      
+      "k8s"
+
+    ],
+        "keywords" : [ 
+      
+      "k8s"
+
+    
+      
+        ,
+
+      
+      "golang"
+
+    ]
+    }
+  </script>
+
+
+
+</head>
+<body>
+    <header><div
+  class="page-top 
+    animated fadeInDown
+
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>
+  <nav>
+    <ul class="nav__list" id="navMenu">
+      <div class="nav__links">
+        
+        
+          
+          <li>
+            <a
+              
+              href="/"
+              
+              title=""
+              >Home</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/post/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/portfolio/"
+              
+              title=""
+              >Portfolio</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >About</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/contact/"
+              
+              title=""
+              >Contact</a
+            >
+          </li>
+
+        
+      </div>
+      <ul>
+        
+        
+          <li>
+            <a class="theme-switch" title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </li>
+
+        
+      </ul>
+    </ul>
+  </nav>
+</div>
+</header>
+    <div class="wrapper">
+      <aside><div
+  class="sidebar
+    animated fadeInDown
+
+  "
+>
+  <div class="sidebar__content">
+    <div class="logo-title">
+      <div class="title">
+        <img src="/images/profile5.jpg" alt="profile picture" />
+        <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
+        <div class="description">
+          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+        <li>
+          <a href="https://stackoverflow.com/users/12924262/horace-yang" rel="me" aria-label="StackOverFlow" title="StackOverFlow">
+            <i class="fab fa-stack-overflow fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://github.com/harryyann" rel="me" aria-label="GitHub" title="GitHub">
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://www.zhihu.com/people/yang-hai-rui-88" rel="me" aria-label="zhihu" title="zhihu">
+            <i class="fab fa-zhihu fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=941811450@qq.com" rel="me" aria-label="e-mail" title="e-mail">
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+    </ul>
+  </div><footer class="footer footer--sidebar">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></div>
+</aside>
+      <main>
+        <div class="autopagerize_page_element">
+          <div class="content">
+  <div
+    class="post 
+      animated fadeInDown
+
+    "
+  >
+    <div class="post-content">
+      
+      <div class="post-title">
+        <h1>K8s的RBAC权限控制机制</h1>
+        
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Fri, Jun 25, 2021
+
+
+              </span
+            >
+            <em class="fas fa-stopwatch"></em>
+            <span class="reading-time">阅读时间 2 分钟</span>
+          </div>
+
+        
+      </div><h2 id="rbacrole-based-access-control">RBAC(Role-Based Access Control)</h2>
+<p>基于角色的权限控制，其实只有三个最基本的概念：</p>
+<ul>
+<li>Role：角色，每个角色都定义了一组对k8s API对象的操作权限，就是一系列权限的集合</li>
+<li>Subject：权限被作用者，即Role提供的权限要作用到的用户，人，或机器</li>
+<li>RoleBinding：通过RoleBinding把Role和Subject绑定到一起</li>
+</ul>
+<p>总之，就是通过Role来定义权限，通过Subject来认证，通过RoleBinding将Role和Subject绑定到一起，那么Subject即可拥有Role所定义的权限了。</p>
+<h2 id="role和rolebinding">Role和RoleBinding</h2>
+<p>k8s的Role分为普通的role和clusterRole，前者是namespaced的，定义了对一个命名空间中的某些API对象所拥有的权限，而后者则是集群级别的，可以定义所有API对象(包括不是命名空间的API对象，如node)的操作权限。</p>
+<p>role需要使用roleBinding和subject绑定，而clusterRole则使用clusterRoleBinding和subject绑定。即role和roleBinding是namespaced对象，而clusterRole和clusterRoleBinding是集群级别的对象。</p>
+<p>Role的定义方式如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Role</span>
+<span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">rbac.authorization.k8s.io/v1 </span> <span style="color:#75715e"># 不同k8s版本可能会有所不同</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">namespace</span>: {{<span style="color:#ae81ff">命名空间}}</span>
+  <span style="color:#f92672">name</span>: {{<span style="color:#ae81ff">role的名字}}</span>
+<span style="color:#f92672">rules</span>:
+- <span style="color:#f92672">apiGroups</span>: [<span style="color:#e6db74">&#34;&#34;</span>]      <span style="color:#75715e"># api组列表，不写就是核心组，*就代表任意组</span>
+  <span style="color:#f92672">resources</span>: [<span style="color:#e6db74">&#34;pods&#34;</span>]  <span style="color:#75715e"># 想要操作的API对象的列表</span>
+  <span style="color:#f92672">verbs</span>: [<span style="color:#e6db74">&#34;get&#34;</span>, <span style="color:#e6db74">&#34;watch&#34;</span>, <span style="color:#e6db74">&#34;list&#34;</span>] <span style="color:#75715e"># 操作谓词，和HTTP请求谓词类似</span>
+</code></pre></div><p>RoleBinding的定义方式如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">RoleBinding</span>
+<span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">rbac.authorization.k8s.io/v1</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: {{<span style="color:#ae81ff">roleBinding的名字}}</span>
+  <span style="color:#f92672">namespace</span>: {{<span style="color:#ae81ff">命名空间}}</span>
+<span style="color:#f92672">subjects</span>:
+- <span style="color:#f92672">kind</span>: <span style="color:#ae81ff">User   </span> <span style="color:#75715e"># 被作用者是一个用户，大部分时候我们使用k8s的内置用户就可以了，或者ServiceAccount</span>
+  <span style="color:#f92672">name</span>: {{<span style="color:#ae81ff">用户的名字}}</span>
+  <span style="color:#f92672">apiGroup</span>: <span style="color:#ae81ff">rbac.authorization.k8s.io</span>
+<span style="color:#f92672">roleRef</span>:
+  <span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Role</span>
+  <span style="color:#f92672">name</span>: {{<span style="color:#ae81ff">想要绑定的role}}</span>
+  <span style="color:#f92672">apiGroup</span>: <span style="color:#ae81ff">rbac.authorization.k8s.io</span>
+</code></pre></div><p>clusterRole和clusterRoleBinding的定义除了名字不同，没有namespace字段，和可操作的API对象更多(包含集群级别的对象)之外，其他基本一致。</p>
+<h4 id="默认的clusterrole">默认的clusterRole</h4>
+<p>k8s提供了系统保留的clusterRole供我们使用，名字大都以system：开头，除此之外还包含了四个预定义好的clusterRole来给用户使用：</p>
+<ul>
+<li>cluter-admin：拥有整个k8s集群中的所有权限</li>
+<li>admin：拥有所有namespaced对象的所有权限</li>
+<li>view：namespaced对象的list、get、watch权限</li>
+<li>edit：namespaced对象的edit权限</li>
+</ul>
+<p>更多clusterRole都可以通过命令<code>kubectl get clusterRole</code>看到</p>
+<h2 id="serviceaccount">ServiceAccount</h2>
+<p>serviceAccount是k8s的内置用户，也是我们最常使用的。</p>
+<p>serviceAccount的定义：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">v1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">ServiceAccount</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">namespace</span>: {{<span style="color:#ae81ff">命名空间}}</span>
+  <span style="color:#f92672">name</span>: {{<span style="color:#ae81ff">serviceAccount名字}}</span>
+</code></pre></div><p>然后这个serviceAccount就可以被作为Role使用了，只需要通过roleBinding或者clusterRoleBinding将serviceAccount和Role或ClusterRole绑定就可以了：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">RoleBinding</span>
+<span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">rbac.authorization.k8s.io/v1</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">example-rolebinding</span>
+  <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">mynamespace</span>
+<span style="color:#f92672">subjects</span>:
+- <span style="color:#f92672">kind</span>: <span style="color:#ae81ff">ServiceAccount</span> <span style="color:#75715e"># 选择ServiceAccount</span>
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">example-sa</span>
+  <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">mynamespace</span>
+<span style="color:#f92672">roleRef</span>:
+  <span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Role</span>
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">example-role</span>
+  <span style="color:#f92672">apiGroup</span>: <span style="color:#ae81ff">rbac.authorization.k8s.io</span>
+</code></pre></div><p>这样example-sa这个serviceAccount就拥有了example-role的权限。</p>
+<p><strong>用户组</strong></p>
+<p>就是一组用户的意思，如果为k8s配置了外部认证服务的话，那么这个用户组的概念就会由外部认证服务提供而对于内置用户serviceAccount来说，也有自己的用户组，一个sa，实际上在k8s中的名字是：</p>
+<pre><code>system:serviceaccount:&lt;Namespace名字&gt;:&lt;ServiceAccount名字&gt;
+</code></pre><p>对应的用户组就是：</p>
+<pre><code>system:serviceaccounts:&lt;Namespace名字&gt;
+</code></pre><p>如果想要把某个role或者clusterRole绑定到一个用户组中，则在roleBinding或者clusterRoleBinding中就可以这样写subject字段：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">subjects</span>:
+- <span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Group</span>
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">system:serviceaccounts</span>
+  <span style="color:#f92672">apiGroup</span>: <span style="color:#ae81ff">rbac.authorization.k8s.io</span>
+</code></pre></div><p>上面这个绑定，就意味着这个role将作用于所有的sa。</p>
+<h2 id="在pod内访问kube-apiserver">在Pod内访问kube-apiserver</h2>
+<p>做k8s开发在pod内访问kube-apiserver是不可避免的，如果我们通过Client-go或者python的client访问kube-apiserver就需要拿到一个kubeconfig文件，这个文件中会定义kube-apiserver的LB地址，以及认证相关的token等等。</p>
+<p>我们可以在创建pod时指定serviceAccount，就可以根据这个serviceAccount的token挂载到pod内的<code>/var/run/secrets/kubernetes.io/serviceaccount</code>目录下，那我们只需要加载目录就可以使用client访问kube-apiserver了。</p>
+<p>比如我们可以进入一个pod中查看这个目录下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ kubectl exec -it sa-token-test -n mynamespace -- /bin/bash
+root@sa-token-test:/# ls /var/run/secrets/kubernetes.io/serviceaccount
+ca.crt namespace  token
+</code></pre></div><p>namespace文件中会写入这个pod所在的namespace，另外两个就是访问kube-apiserver时的认证文件了。</p>
+<p>如果一个pod在创建时没有指定serviceAccount，则k8s会在pod所在的namespace下为这个pod创建一个名为default的默认serviceAccount，然后分配给pod。</p>
+<h2 id="在pod外访问kube-apiserver">在pod外访问kube-apiserver</h2>
+<p>Pod外有很多种访问方式，你可以通过直接访问kube-apiserver的HTTP接口，也可以使用client-go的官方客户端访问，或者我们平时使用kubectl访问也是一种外部访问的方式。</p>
+<h3 id="通过http访问">通过HTTP访问</h3>
+<p>直接访问HTTP接口需要填入token，只需要添加一个Authorization的header，然后填入token即可，格式大概如下，我们以获取所有pod的接口为例：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ curl --location --request GET <span style="color:#e6db74">&#39;https://10.10.10.10:8080/api/v1/pods&#39;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>--header <span style="color:#e6db74">&#39;Authorization: Bearer {{token}}&#39;</span>
+</code></pre></div><p>注意token前面要加上<code>Bearer </code>的前缀。</p>
+<h4 id="token的获取">token的获取</h4>
+<p>每个serviceAccount都会有一个secret对象，而secret中就保存着token，我们在创建role和serviceAccount之后，通过创建roleBinding就可以让serviceAccount获得权限，然后我们就可以拿到serviceAccount的token了。比如：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># kubectl describe sa default</span>
+Name:                default
+Namespace:           default
+Labels:              &lt;none&gt;
+Annotations:         &lt;none&gt;
+Image pull secrets:  &lt;none&gt;
+Mountable secrets:   default-token-sdchv
+Tokens:              default-token-sdchv
+Events:              &lt;none&gt;
+</code></pre></div><p>可以看到default这个serviceAccount的secret和token名叫default-token-sdchv。</p>
+<p>然后我们就可以describe一下就拿到了token，或者<code>-o yaml</code>也能拿到：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># kubectl describe secret default-token-sdchv</span>
+Name:         default-token-sdchv
+Namespace:    default
+Labels:       &lt;none&gt;
+Annotations:  kubernetes.io/service-account.name: default
+              kubernetes.io/service-account.uid: 33490e00-9424-45eb-ab20-4e87e1da80b4
+
+Type:  kubernetes.io/service-account-token
+
+Data
+<span style="color:#f92672">====</span>
+ca.crt:     <span style="color:#ae81ff">1371</span> bytes
+namespace:  <span style="color:#ae81ff">7</span> bytes
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6ImoteF9FN1pjZVllNTRvcEVnOUd3NzA1UzJPS2JNUFdxMFdwSXQ3a09DZncifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRlZmF1bHQtdG9rZW4tc2RjaHYiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGVmYXVsdCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjMzNDkwZTAwLTk0MjQtNDVlYi1hYjIwLTRlODdlMWRhODBiNCIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OmRlZmF1bHQifQ.ivItYHIZgT4rm62TfYZ22M-OG3ezSx6pxlIBwTwLPOByZ4Kap3DJZMgdiRB4q2H4DVASp7TyYB58KBdRpVDLflf-UHCUj1OwNsAP6aJo9bGUa0MHKBty2Of7DevAm-5HBzoZ5q3b_sede_gI-7Hf0xaN6uIqaYhns-uMDsNQ6XftRGzcjIXw5r9UyllTfRdgRnG21JjUQtHkcv_ChHXCqNZQ9jL32mTB9KcUGmf98pXklEuRPRPDdwzSI1ZgYp2PQANagQrnJg5Y1XnWsOc_xJ4Udi8NLNH2dZHbRL12grOmwCvgYhOFe0lo4Qc7bL7cSHDEMddXVFUz_ZQj1ym3YA
+</code></pre></div><p>拿到token后，把token填进去然后访问就可以了。</p>
+<h3 id="通过client-go或者kubectl访问">通过client-go或者kubectl访问</h3>
+<p>当使用kubectl想要访问一个集群时，则需要使用kubectonfig，kubeconfig是一个包括了集群的信息，还有认证信息的文件，它的格式大概长这样：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">v1 </span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Config </span>
+<span style="color:#f92672">users</span>: 
+- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">svcs-acct-dply </span>
+  <span style="color:#f92672">user</span>: 
+  <span style="color:#f92672">token</span>: <span style="color:#ae81ff">&lt;replace this with token info&gt; </span>
+<span style="color:#f92672">clusters</span>: 
+- <span style="color:#f92672">cluster</span>: 
+    <span style="color:#f92672">certificate-authority-data</span>: <span style="color:#ae81ff">&lt;replace this with certificate-authority-data info&gt; </span>
+    <span style="color:#f92672">server</span>: <span style="color:#ae81ff">&lt;replace this with server info&gt; </span>
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">self-hosted-cluster </span>
+<span style="color:#f92672">contexts</span>: 
+- <span style="color:#f92672">context</span>: 
+    <span style="color:#f92672">cluster</span>: <span style="color:#ae81ff">self-hosted-cluster </span>
+    <span style="color:#f92672">user</span>: <span style="color:#ae81ff">svcs-acct-dply </span>
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">svcs-acct-context </span>
+<span style="color:#f92672">current-context</span>: <span style="color:#ae81ff">svcs-acct-context</span>
+</code></pre></div><p>看得出来，这就是一个Config对象的yaml文件，其中里面有三部分比较重要，分别是：</p>
+<ul>
+<li>certificate-authority-data：包含集群的认证信息</li>
+<li>server：集群apiserver的地址</li>
+<li>token：访问apiserver使用的token</li>
+</ul>
+<p>通过在master节点上执行以下命令可以获得一个admin级别的kubeconfig</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># kubectl config view --flatten --minify &gt; kubeconfig.conf</span>
+</code></pre></div><p>用上述方法获取sa的token（保证sa已经绑定好了role或clusterRole）将kubeconfig.conf改造成上面的kubeconfig的格式，填入token即可使用。</p>
+<p>有了kubeconfig我们通过kubectl访问kube-apiserver时只需要通过flag<code>--kubeconfig</code>指定kubeconfig文件即可，client-go等客户端也可以加载这个文件，然后就可以访问了，这里不多赘述。</p>
+<h2 id="reference">Reference</h2>
+<p><a href="https://hex108.gitbook.io/kubernetes-notes/sheng-chan-li-xiao-gong-ju/generate-kubeconfig">https://hex108.gitbook.io/kubernetes-notes/sheng-chan-li-xiao-gong-ju/generate-kubeconfig</a></p>
+</div>
+    <div class="post-footer">
+      <div class="info">
+        
+          <span class="separator"><a class="category" href="/categories/k8s/">k8s</a></span>
+
+
+
+
+        
+
+        
+          <span class="separator"><a class="tag" href="/tags/k8s/">k8s</a><a class="tag" href="/tags/golang/">golang</a></span>
+
+
+
+
+        
+      </div>
+    </div>
+
+    
+  </div>
+
+
+          </div>
+        </div>
+      </main>
+    </div><footer class="footer footer--base">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></body>
+</html>

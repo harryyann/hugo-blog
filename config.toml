@@ -41,7 +41,7 @@ contentRatio = 0.75
 readMore = true
 customCss = []
 customJs = [] 
-mainSections = ["posts","records"]
+mainSections = ["post","records"]
 #images = ["images/site-feature-image.png"]
 doNotLoadAnimations = false
 rssFullContent = false
@@ -100,7 +100,7 @@ url = "http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=941811450@qq.com"
   name = "Posts"
   weight = 200
   identifier = "posts"
-  url = "/posts/"
+  url = "/post/"
 
 #  [[menu.main]]
 #  name = "Records"

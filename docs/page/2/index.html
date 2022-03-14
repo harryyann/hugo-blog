@@ -156,7 +156,7 @@ Per aspera ad astra.
           <li>
             <a
               
-              href="/posts/"
+              href="/post/"
               
               title=""
               >Posts</a
@@ -314,7 +314,65 @@ Per aspera ad astra.
     >
       
       <div class="post-title">
-        <h3><a href="/posts/innodb%E7%89%B9%E6%80%A7/">Innodb存储引擎的特性</a></h3>
+        <h3><a href="/post/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/">redo log的两阶段提交</a></h3>
+      </div>
+      <div class="post-content">
+        <div class="p_part">
+          <p>
+            
+              WAL技术 WAL(Write-Ahead Logging)，就是先些日志，再写磁盘。
+当我们向MySQL更新一条记录的时候，InnoDB存储引擎就会把记录顺序的写到redo log中，然后更新InnoDB的buffer pool，并不更新磁盘中的数据页，然后这次更新操作就算是完成了，之后InnoDB存储引擎就会在它有空的时候，把redo log中记录的记录刷到磁盘上的数据页中完成最终的持久化。
+由于磁盘的顺序写入效率要远高于随机写入，并且还有组提交等优化，这种方式可以大大提高数据更新时的效率。
+关于磁盘的顺序写入，需要注意一下。不是说打开一个文件之后append就是顺序写入了。顺序写入需要知道磁盘上要写入的位置，直接操作磁盘，向某个特定的地址写入，顺序写入时，磁盘的磁头不需要移动就可以直接写入，这样才有效率的提升。Redo log Redo log是Innodb存储引擎提供的用于优化更新操作的日志。它的结构可以看成是个环形的磁盘区域。
+
+
+            
+          </p>
+          <a href="/post/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/" class="read_more">继续阅读</a></div>
+      </div>
+
+      
+      <div class="post-footer">
+        <div class="meta">
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Sat, May 8, 2021
+
+
+              </span
+            >
+            
+              <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
+
+
+
+
+            
+
+            
+              <span class="separator"><a class="tag" href="/tags/mysql/">MySQL</a></span>
+
+
+
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div
+      class="post 
+        animated fadeInDown
+
+      "
+    >
+      
+      <div class="post-title">
+        <h3><a href="/post/innodb%E7%89%B9%E6%80%A7/">Innodb存储引擎的特性</a></h3>
       </div>
       <div class="post-content">
         <div class="p_part">
@@ -328,7 +386,7 @@ IO线程 innodb中大量使用了AIO（异步IO）来处理写请求，以提高
 
             
           </p>
-          <a href="/posts/innodb%E7%89%B9%E6%80%A7/" class="read_more">继续阅读</a></div>
+          <a href="/post/innodb%E7%89%B9%E6%80%A7/" class="read_more">继续阅读</a></div>
       </div>
 
       
@@ -372,7 +430,7 @@ IO线程 innodb中大量使用了AIO（异步IO）来处理写请求，以提高
     >
       
       <div class="post-title">
-        <h3><a href="/posts/mysql%E5%A4%8D%E5%88%B6/">MySQL的复制</a></h3>
+        <h3><a href="/post/mysql%E5%A4%8D%E5%88%B6/">MySQL的复制</a></h3>
       </div>
       <div class="post-content">
         <div class="p_part">
@@ -384,7 +442,7 @@ IO线程 innodb中大量使用了AIO（异步IO）来处理写请求，以提高
 
             
           </p>
-          <a href="/posts/mysql%E5%A4%8D%E5%88%B6/" class="read_more">继续阅读</a></div>
+          <a href="/post/mysql%E5%A4%8D%E5%88%B6/" class="read_more">继续阅读</a></div>
       </div>
 
       
@@ -428,7 +486,7 @@ IO线程 innodb中大量使用了AIO（异步IO）来处理写请求，以提高
     >
       
       <div class="post-title">
-        <h3><a href="/posts/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/">MySQL的事务</a></h3>
+        <h3><a href="/post/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/">MySQL的事务</a></h3>
       </div>
       <div class="post-content">
         <div class="p_part">
@@ -441,7 +499,7 @@ IO线程 innodb中大量使用了AIO（异步IO）来处理写请求，以提高
 
             
           </p>
-          <a href="/posts/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/" class="read_more">继续阅读</a></div>
+          <a href="/post/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/" class="read_more">继续阅读</a></div>
       </div>
 
       
@@ -485,7 +543,7 @@ IO线程 innodb中大量使用了AIO（异步IO）来处理写请求，以提高
     >
       
       <div class="post-title">
-        <h3><a href="/posts/mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">MySQL的索引</a></h3>
+        <h3><a href="/post/mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">MySQL的索引</a></h3>
       </div>
       <div class="post-content">
         <div class="p_part">
@@ -498,7 +556,7 @@ IO线程 innodb中大量使用了AIO（异步IO）来处理写请求，以提高
 
             
           </p>
-          <a href="/posts/mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="read_more">继续阅读</a></div>
+          <a href="/post/mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="read_more">继续阅读</a></div>
       </div>
 
       
@@ -542,7 +600,7 @@ IO线程 innodb中大量使用了AIO（异步IO）来处理写请求，以提高
     >
       
       <div class="post-title">
-        <h3><a href="/posts/mysql%E7%9A%84%E6%9E%B6%E6%9E%84%E5%92%8C%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B/">MySQL的架构和语句执行过程</a></h3>
+        <h3><a href="/post/mysql%E7%9A%84%E6%9E%B6%E6%9E%84%E5%92%8C%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B/">MySQL的架构和语句执行过程</a></h3>
       </div>
       <div class="post-content">
         <div class="p_part">
@@ -558,7 +616,7 @@ Server层包含了连接器、查询缓存、解析器、优化器、执行器(�
 
             
           </p>
-          <a href="/posts/mysql%E7%9A%84%E6%9E%B6%E6%9E%84%E5%92%8C%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B/" class="read_more">继续阅读</a></div>
+          <a href="/post/mysql%E7%9A%84%E6%9E%B6%E6%9E%84%E5%92%8C%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B/" class="read_more">继续阅读</a></div>
       </div>
 
       
@@ -602,7 +660,7 @@ Server层包含了连接器、查询缓存、解析器、优化器、执行器(�
     >
       
       <div class="post-title">
-        <h3><a href="/posts/%E5%AD%A6%E4%B9%A0%E7%BC%96%E5%86%99makefile/">编写Makefile</a></h3>
+        <h3><a href="/post/%E5%AD%A6%E4%B9%A0%E7%BC%96%E5%86%99makefile/">编写Makefile</a></h3>
       </div>
       <div class="post-content">
         <div class="p_part">
@@ -616,7 +674,7 @@ Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需
 
             
           </p>
-          <a href="/posts/%E5%AD%A6%E4%B9%A0%E7%BC%96%E5%86%99makefile/" class="read_more">继续阅读</a></div>
+          <a href="/post/%E5%AD%A6%E4%B9%A0%E7%BC%96%E5%86%99makefile/" class="read_more">继续阅读</a></div>
       </div>
 
       
@@ -660,7 +718,7 @@ Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需
     >
       
       <div class="post-title">
-        <h3><a href="/posts/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/">k8s的Informer机制</a></h3>
+        <h3><a href="/post/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/">k8s的Informer机制</a></h3>
       </div>
       <div class="post-content">
         <div class="p_part">
@@ -675,7 +733,7 @@ FIFO Queue的实现者为DeltaFIFO，store是一个内存级的缓存，存储�
 
             
           </p>
-          <a href="/posts/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/" class="read_more">继续阅读</a></div>
+          <a href="/post/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/" class="read_more">继续阅读</a></div>
       </div>
 
       

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="zh-cn"
+  data-theme=""
+><head>
+  <title>
+    
+      杨海瑞
+        |
+        redo log的两阶段提交
+
+
+      
+
+
+    
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.81.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta
+    name="description"
+    content="
+      详解MySQL redo log的两阶段提交
+
+
+    "
+  />
+  
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://yanghairui.life/post/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.2a2cd9614b7d007dfbb75e8da19e3a0fa872ceab53c6d000c00b7a0c89b85bfc.js"
+    integrity="sha256-KizZYUt9AH37t16NoZ46D6hyzqtTxtAAwAt6DIm4W/w="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js"
+      integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus="
+      crossorigin="anonymous"
+    ></script>
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="redo log的两阶段提交"/>
+<meta name="twitter:description" content="详解MySQL redo log的两阶段提交"/>
+
+
+
+  
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "post",
+        "name": "redo log的两阶段提交",
+        "headline": "redo log的两阶段提交",
+        "alternativeHeadline": "",
+        "description": "
+      详解MySQL redo log的两阶段提交
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/post\/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-05-08T07:09:30.00Z",
+        "datePublished": "2021-05-08T07:09:30.00Z",
+        "dateModified": "2021-05-08T07:09:30.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/post\/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4\/",
+        "wordCount" : "76",
+        "genre" : [ 
+      
+      "数据库"
+
+    ],
+        "keywords" : [ 
+      
+      "MySQL"
+
+    ]
+    }
+  </script>
+
+
+
+</head>
+<body>
+    <header><div
+  class="page-top 
+    animated fadeInDown
+
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>
+  <nav>
+    <ul class="nav__list" id="navMenu">
+      <div class="nav__links">
+        
+        
+          
+          <li>
+            <a
+              
+              href="/"
+              
+              title=""
+              >Home</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/post/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/portfolio/"
+              
+              title=""
+              >Portfolio</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >About</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/contact/"
+              
+              title=""
+              >Contact</a
+            >
+          </li>
+
+        
+      </div>
+      <ul>
+        
+        
+          <li>
+            <a class="theme-switch" title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </li>
+
+        
+      </ul>
+    </ul>
+  </nav>
+</div>
+</header>
+    <div class="wrapper">
+      <aside><div
+  class="sidebar
+    animated fadeInDown
+
+  "
+>
+  <div class="sidebar__content">
+    <div class="logo-title">
+      <div class="title">
+        <img src="/images/profile5.jpg" alt="profile picture" />
+        <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
+        <div class="description">
+          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+        <li>
+          <a href="https://stackoverflow.com/users/12924262/horace-yang" rel="me" aria-label="StackOverFlow" title="StackOverFlow">
+            <i class="fab fa-stack-overflow fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://github.com/harryyann" rel="me" aria-label="GitHub" title="GitHub">
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://www.zhihu.com/people/yang-hai-rui-88" rel="me" aria-label="zhihu" title="zhihu">
+            <i class="fab fa-zhihu fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=941811450@qq.com" rel="me" aria-label="e-mail" title="e-mail">
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+    </ul>
+  </div><footer class="footer footer--sidebar">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></div>
+</aside>
+      <main>
+        <div class="autopagerize_page_element">
+          <div class="content">
+  <div
+    class="post 
+      animated fadeInDown
+
+    "
+  >
+    <div class="post-content">
+      
+      <div class="post-title">
+        <h1>redo log的两阶段提交</h1>
+        
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Sat, May 8, 2021
+
+
+              </span
+            >
+            <em class="fas fa-stopwatch"></em>
+            <span class="reading-time">阅读时间 1 分钟</span>
+          </div>
+
+        
+      </div><h1 id="wal技术">WAL技术</h1>
+<p>WAL(Write-Ahead Logging)，就是先些日志，再写磁盘。</p>
+<p>当我们向MySQL更新一条记录的时候，InnoDB存储引擎就会把记录顺序的写到redo log中，然后更新InnoDB的buffer  pool，并不更新磁盘中的数据页，然后这次更新操作就算是完成了，之后InnoDB存储引擎就会在它有空的时候，把redo log中记录的记录刷到磁盘上的数据页中完成最终的持久化。</p>
+<p>由于磁盘的顺序写入效率要远高于随机写入，并且还有组提交等优化，这种方式可以大大提高数据更新时的效率。</p>
+<pre><code>关于磁盘的顺序写入，需要注意一下。不是说打开一个文件之后append就是顺序写入了。顺序写入需要知道磁盘上要写入的
+位置，直接操作磁盘，向某个特定的地址写入，顺序写入时，磁盘的磁头不需要移动就可以直接写入，这样才有效率的提升。
+</code></pre><h1 id="redo-log">Redo log</h1>
+<p>Redo log是Innodb存储引擎提供的用于优化更新操作的日志。它的结构可以看成是个环形的磁盘区域。</p>
+<p><img src="/images/wal/redolog.png" alt=""></p>
+<p>比如上图的redo log由四个文件组成，当向redo log中顺序写时，就是依次的写这四个文件，当写满时，就再从第一个文件开始写起。write_pos就是当前磁头的位置，一边写一边后移，checkpoint是当前擦除的位置点，他们之间就是可以写的区域。</p>
+<p>Redo log大小是固定的，默认是4GB。Redo log不仅提高了数据更新时的效率，还让InnoDB拥有了<strong>crash-safe</strong>的能力，即不会因为宕机而丢数据，即如果数据在写入磁盘时宕机，可以通过redo log恢复过来。</p>
+<h1 id="redo-log和binlog的不同">Redo log和binlog的不同</h1>
+<ol>
+<li>redo log是InnoDB特有的，是存储引擎层的，用于crash-safe；binlog是Server层的，所有引擎都可以使用，主要用于数据归档。</li>
+<li>redo log是<strong>物理逻辑日志</strong>，会记录数据页的位置，数据页内部则是逻辑日志，而binlog是单纯的<strong>逻辑日志</strong>，记录的就是每行的数据。</li>
+</ol>
+<pre><code>物理日志：记录的是具体的对磁盘的操作，比如在哪个位置，做了哪个修改
+逻辑日志：可以理解为SQL语句，人类是可读的
+物理逻辑日志：redo log，记录页位置是物理的，记录数据内容是逻辑的
+</code></pre><ol start="3">
+<li>redo log有固定大小，写满了时需要进行擦除，擦除就要强制刷盘，binlog是没有大小限制的，在写到一定大小时，可以开启一个新文件接着写入。</li>
+</ol>
+<h1 id="两阶段提交">两阶段提交</h1>
+<p>由于原本的MySQL只有MyISAM引擎，它不支持crash-safe，所以binlog也没有crash-safe的能力（因为它没有checkpoint，存储引擎不知道该从哪恢复）。而InnoDB存储引擎为了支持crash-safe，又不能改binlog，就提供了Redo log作为保证crash-safe的工具。而这两个日志同时存在，并且都会记录数据的更新操作，所以就得保证两个日志文件上的记录是一致的。<strong>两阶段提交解决的就是redo log和binlog的数据一致性的问题</strong>。</p>
+<h2 id="两阶段提交的过程">两阶段提交的过程</h2>
+<ol>
+<li>InnoDB接到了Server层执行器的更新数据的请求，会先将这行数据写入<strong>undolog</strong>(用于事务回滚的日志)</li>
+<li>然后写入InnoDB的buffer pool中</li>
+<li>然后将这个操作记录到redo log上，此时redo log处于<strong>prepare</strong>状态，然后InnoDB会告知MySQL的执行器，事务已经执行完了，随时可以提交</li>
+<li>MySQL执行器在收到通知后，就会将操作和数据写入binlog，并调用InnoDB的接口进行提交</li>
+<li>InnoDB将刚刚写入redo log的语句置为<strong>commit</strong>状态，本次事务就结束了</li>
+</ol>
+<p>下图是一个例子：</p>
+<p><img src="/images/wal/double_commit.png" alt=""></p>
+<h2 id="两阶段提交的必要性">两阶段提交的必要性</h2>
+<ul>
+<li>
+<p>假如只是先写redo log然后再写binlog</p>
+<p>假如redo log写完，binlog没写完时MySQL挂了，后续恢复时，就可以通过redo log恢复这次的数据，但是binlog中却没有记录，就会导致binlog中和实际数据库中存储的数据不一致。后续如果要使用这个binlog来恢复临时库的话，就会有数据不一致。</p>
+</li>
+<li>
+<p>假如只是先写binlog然后再写redo log</p>
+<p>假如binlog写完，redolog没写时Mysql挂了，就会导致重启后无法恢复(因为redo log没有)，丢一次操作，但是binlog中却记录了这次操作，后续使用binlog恢复临时库时，就会比源库多一次操作出来，导致数据不一致。</p>
+</li>
+</ul>
+<p>我们再观察一下整个过程中的状态变化，以及<strong>任意一步出现问题时MySQL的处理</strong>：</p>
+<ol>
+<li>写入redo log，进入prepare状态</li>
+<li>写入binlog</li>
+<li>写入redo log，进入commit阶段</li>
+</ol>
+<p>如果在1和2之间MySQL宕机，则会导致redo log处于prepare阶段，而binlog未写入，此时MySQL重启时，发现redo log处于prepare阶段，就会检查binlog，观察到binlog中没有这条事务的记录，则会忽视这条redo log。redo log和bin log之间通过<strong>事务ID</strong>对应</p>
+<pre><code>事务ID即transaction_id，在每个事务开始时分配，递增且全局唯一。
+</code></pre><p>如果在2和3之间MySQL宕机，则redo log仍是处于prepare阶段，但是binlog已经写入了，此时MySQL重启时，发现redo log处于prepare阶段，就会检查binlog，观察到binlog是完整的，则会自动将这条redo log提交，并恢复数据。</p>
+<p>两阶段提交是分布式系统维持数据逻辑一致性时的常用方案。</p>
+</div>
+    <div class="post-footer">
+      <div class="info">
+        
+          <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
+
+
+
+
+        
+
+        
+          <span class="separator"><a class="tag" href="/tags/mysql/">MySQL</a></span>
+
+
+
+
+        
+      </div>
+    </div>
+
+    
+  </div>
+
+
+          </div>
+        </div>
+      </main>
+    </div><footer class="footer footer--base">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></body>
+</html>

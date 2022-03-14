@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="zh-cn"
+  data-theme=""
+><head>
+  <title>
+    
+      杨海瑞
+        |
+        Docker开启TLS远程连接
+
+
+      
+
+
+    
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.81.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta
+    name="description"
+    content="
+      
+Per aspera ad astra.
+循此苦旅，终抵群星。
+
+
+
+    "
+  />
+  
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://yanghairui.life/post/docker%E5%BC%80%E5%90%AFtls%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.2a2cd9614b7d007dfbb75e8da19e3a0fa872ceab53c6d000c00b7a0c89b85bfc.js"
+    integrity="sha256-KizZYUt9AH37t16NoZ46D6hyzqtTxtAAwAt6DIm4W/w="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js"
+      integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus="
+      crossorigin="anonymous"
+    ></script>
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Docker开启TLS远程连接"/>
+<meta name="twitter:description" content="Docker远程连接 Docker是C/S架构，通过docker的客户端连接到docker daemon，然后由docker daemon在宿主机上执行构建镜像，运行容器等指令。
+Docker支持多种方式将docker客户端连接到server。如果docker客户端和server都在同一台宿主机上，那么可以直接使用Unix域套接字文件/var/run/docker.sock连接，我们直接使用docker命令时实际上就是采用这种方式进行连接的。
+Docker也支持远程通过socket进行连接，可以选择开启或者不开启TLS，为了安全我们大多数时候还是采用开启TLS的方式进行远程连接。
+启动远程连接的过程 首先需要保证宿主机上docker daemon已安装，安装过程可查看官网
+制作证书 首先需要制作证书，包括服务端证书，和客户端证书。"/>
+
+
+
+  
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "post",
+        "name": "Docker开启TLS远程连接",
+        "headline": "Docker开启TLS远程连接",
+        "alternativeHeadline": "",
+        "description": "
+      
+        Docker远程连接 Docker是C\/S架构，通过docker的客户端连接到docker daemon，然后由docker daemon在宿主机上执行构建镜像，运行容器等指令。\nDocker支持多种方式将docker客户端连接到server。如果docker客户端和server都在同一台宿主机上，那么可以直接使用Unix域套接字文件\/var\/run\/docker.sock连接，我们直接使用docker命令时实际上就是采用这种方式进行连接的。\nDocker也支持远程通过socket进行连接，可以选择开启或者不开启TLS，为了安全我们大多数时候还是采用开启TLS的方式进行远程连接。\n启动远程连接的过程 首先需要保证宿主机上docker daemon已安装，安装过程可查看官网\n制作证书 首先需要制作证书，包括服务端证书，和客户端证书。
+
+
+      
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/post\/docker%E5%BC%80%E5%90%AFtls%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-05-14T10:29:42.00Z",
+        "datePublished": "2021-05-14T10:29:42.00Z",
+        "dateModified": "2021-05-14T10:29:42.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/post\/docker%E5%BC%80%E5%90%AFtls%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5\/",
+        "wordCount" : "217",
+        "genre" : [ 
+      
+      "Docker"
+
+    ],
+        "keywords" : [ 
+      
+      "Docker"
+
+    
+      
+        ,
+
+      
+      "容器"
+
+    ]
+    }
+  </script>
+
+
+
+</head>
+<body>
+    <header><div
+  class="page-top 
+    animated fadeInDown
+
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>
+  <nav>
+    <ul class="nav__list" id="navMenu">
+      <div class="nav__links">
+        
+        
+          
+          <li>
+            <a
+              
+              href="/"
+              
+              title=""
+              >Home</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/post/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/portfolio/"
+              
+              title=""
+              >Portfolio</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >About</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/contact/"
+              
+              title=""
+              >Contact</a
+            >
+          </li>
+
+        
+      </div>
+      <ul>
+        
+        
+          <li>
+            <a class="theme-switch" title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </li>
+
+        
+      </ul>
+    </ul>
+  </nav>
+</div>
+</header>
+    <div class="wrapper">
+      <aside><div
+  class="sidebar
+    animated fadeInDown
+
+  "
+>
+  <div class="sidebar__content">
+    <div class="logo-title">
+      <div class="title">
+        <img src="/images/profile5.jpg" alt="profile picture" />
+        <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
+        <div class="description">
+          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+        <li>
+          <a href="https://stackoverflow.com/users/12924262/horace-yang" rel="me" aria-label="StackOverFlow" title="StackOverFlow">
+            <i class="fab fa-stack-overflow fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://github.com/harryyann" rel="me" aria-label="GitHub" title="GitHub">
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://www.zhihu.com/people/yang-hai-rui-88" rel="me" aria-label="zhihu" title="zhihu">
+            <i class="fab fa-zhihu fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=941811450@qq.com" rel="me" aria-label="e-mail" title="e-mail">
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+    </ul>
+  </div><footer class="footer footer--sidebar">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></div>
+</aside>
+      <main>
+        <div class="autopagerize_page_element">
+          <div class="content">
+  <div
+    class="post 
+      animated fadeInDown
+
+    "
+  >
+    <div class="post-content">
+      
+      <div class="post-title">
+        <h1>Docker开启TLS远程连接</h1>
+        
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Fri, May 14, 2021
+
+
+              </span
+            >
+            <em class="fas fa-stopwatch"></em>
+            <span class="reading-time">阅读时间 2 分钟</span>
+          </div>
+
+        
+      </div><h2 id="docker远程连接">Docker远程连接</h2>
+<p>Docker是C/S架构，通过docker的客户端连接到docker daemon，然后由docker daemon在宿主机上执行构建镜像，运行容器等指令。</p>
+<p>Docker支持多种方式将docker客户端连接到server。如果docker客户端和server都在同一台宿主机上，那么可以直接使用Unix域套接字文件<code>/var/run/docker.sock</code>连接，我们直接使用docker命令时实际上就是采用这种方式进行连接的。</p>
+<p>Docker也支持远程通过socket进行连接，可以选择开启或者不开启TLS，为了安全我们大多数时候还是采用开启TLS的方式进行远程连接。</p>
+<h2 id="启动远程连接的过程">启动远程连接的过程</h2>
+<p>首先需要保证宿主机上docker daemon已安装，安装过程可查看<a href="https://docs.docker.com/engine/install/ubuntu/">官网</a></p>
+<h3 id="制作证书">制作证书</h3>
+<p>首先需要制作证书，包括服务端证书，和客户端证书。</p>
+<p>在docker daemon的宿主机上按步骤执行下列命令：</p>
+<ol>
+<li>
+<p>创建根证书RSA私钥
+命令输入后会提示输入密码，输入两次后会生成<strong>ca-key.pem</strong>文件。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ openssl genrsa -aes256 -out ca-key.pem <span style="color:#ae81ff">4096</span>
+</code></pre></div></li>
+<li>
+<p>用这个RSA密钥创建CA证书</p>
+<p>自己给自己签发证书，也可以交给第三方机构签发。这里我们自己签发。<code>-days</code>参数指定多少天后过期，这里设置1000天。这一步会生成<strong>ca.pem</strong>文件，就是CA证书。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ openssl req -new -x509 -days <span style="color:#ae81ff">1000</span> -key ca-key.pem -sha256 -subj <span style="color:#e6db74">&#34;/CN=*&#34;</span> -out ca.pem
+</code></pre></div></li>
+<li>
+<p>创建服务端私钥</p>
+<p>这一步生成的<strong>server-key.pem</strong>就是服务端私钥。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ openssl req -subj <span style="color:#e6db74">&#34;/CN=*&#34;</span> -sha256 -new -key server-key.pem -out server.csr
+</code></pre></div></li>
+<li>
+<p>生成服务端证书签名请求csr文件</p>
+<p>csr（certificate signing request），里面包含公钥和服务端信息。这一步会生成<strong>server.csr</strong>文件，就是服务端证书。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ openssl req -subj <span style="color:#e6db74">&#34;/CN=*&#34;</span> -sha256 -new -key server-key.pem -out server.csr
+</code></pre></div></li>
+<li>
+<p>生成签名过的服务端证书</p>
+<p>服务端证书需要签名，这一步生成的<strong>server-cert.pem</strong>文件就是签名过的服务端证书</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ openssl x509 -req -days <span style="color:#ae81ff">1000</span> -sha256 -in server.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out server-cert.pem
+</code></pre></div></li>
+<li>
+<p>生成客户端私钥</p>
+<p>接下来我们生成客户端的私钥<strong>key.pem</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ openssl genrsa -out key.pem <span style="color:#ae81ff">4096</span>
+</code></pre></div></li>
+<li>
+<p>生成客户端证书签名请求</p>
+<p>生成的<strong>client.csr</strong>文件就是客户端签名请求</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ openssl req -subj <span style="color:#e6db74">&#34;/CN=client&#34;</span> -new -key key.pem -out client.csr
+</code></pre></div></li>
+<li>
+<p>生成<strong>exfile.cnf</strong>配置文件</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ echo extendedKeyUsage<span style="color:#f92672">=</span>clientAuth &gt; extfile.cnf
+</code></pre></div></li>
+<li>
+<p>生成签名过的客户端证书</p>
+<p>期间要输入密码，生成的<strong>cert.pem</strong>就是签名过的客户端证书</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ openssl x509 -req -days <span style="color:#ae81ff">1000</span> -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out cert.pem -extfile extfile.cnf
+</code></pre></div></li>
+<li>
+<p>最后删除多余的中间文件</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ rm -rf ca.srl client.csr extfile.cnf server.csr
+</code></pre></div><p>剩下的文件都是我们需要的：</p>
+<ul>
+<li>ca.pem：CA机构证书</li>
+<li>ca-key.pem：根证书RSA私钥</li>
+<li>cert.pem：客户端证书</li>
+<li>key.pem：客户端私钥</li>
+<li>server-cert.pem：服务端证书</li>
+<li>server-key.pem：服务端私钥</li>
+</ul>
+</li>
+</ol>
+<h3 id="服务端设置">服务端设置</h3>
+<p>证书生成完成后，需要对docker daemon进行设置让它允许远程TLS访问。</p>
+<ol>
+<li>
+<p>首先打开打开<code>/lib/systemd/system/docker.service</code>文件，找到这行内容：</p>
+<pre><code>ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+</code></pre><p>把这行替换为以下格式：</p>
+<pre><code>ExecStart=/usr/bin/dockerd --tlsverify --tlscacert=/ca.pem --tlscert=/server-cert.pem --tlskey=/server-key.pem -H tcp://0.0.0.0:2376 -H unix:///var/run/docker.sock
+</code></pre><p>注意几个参数指定的文件的位置：</p>
+<ul>
+<li>&ndash;tlscacert：CA根证书</li>
+<li>&ndash;tlscert：服务端证书</li>
+<li>&ndash;tlskey：服务端私钥</li>
+</ul>
+<p><code>-H</code>参数指定了访问方式，这里设置了开启远程连接，端口为2376，并且依然支持Unix域套接字连接(即本地直接连接)</p>
+</li>
+<li>
+<p>然后如果我们的机器没有放通2376端口，需要放通一下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo iptables -I INPUT -p tcp --dport 2376-j ACCEPT
+</code></pre></div></li>
+<li>
+<p>最后重启docker daemon让配置生效</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ systemctl daemon-reload <span style="color:#f92672">&amp;&amp;</span> systemctl restart docker
+</code></pre></div><p>没报错就说明配置成功了</p>
+</li>
+</ol>
+<h3 id="客户端远程连接">客户端远程连接</h3>
+<p>完成上述的配置后，服务端的docker daemon就支持TLS远程连接了。客户端只需要在连接时指定一些参数就可以连接到远程的docker daemon上。</p>
+<ol>
+<li>
+<p>首先把在服务端创建的三个文件<strong>ca.pem</strong>，<strong>cert.pem</strong>和<strong>key.pem</strong>复制到客户端机器上。</p>
+</li>
+<li>
+<p>然后我们给服务端ip设置个域名</p>
+<p>在<code>/etc/hosts</code>文件中添加一行，前面的服务端ip，后面是它的域名。</p>
+<pre><code>192.168.121.138 docker-daemon
+</code></pre></li>
+<li>
+<p>然后就可以进行连接了。</p>
+<p>指定客户端的三个文件(这里假设都在<code>/root/work/</code>目录下)，通过-H指定服务端的地址</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ docker --tlsverify --tlscacert<span style="color:#f92672">=</span>/root/work/ca.pem --tlscert<span style="color:#f92672">=</span>/root/work/cert.pem --tlskey<span style="color:#f92672">=</span>/root/work/key.pem -H tcp://docker-daemon:2376 version
+</code></pre></div><p><img src="/images/docker_remote/version.png" alt=""></p>
+<p>可以看到客户端和服务端的版本，其他命令也都是可以的。</p>
+<p>还可以把几个证书文件拷贝到<code>~/.docker/</code>目录下，这样在连接时就可以不指定&ndash;tlscacert、&ndash;tlscert和&ndash;tlskey这几个参数了，docker client会自动加载这几个文件的。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ docker --tlsverify -H<span style="color:#f92672">=</span>tcp://docker-daemon:2376 version
+</code></pre></div></li>
+</ol>
+</div>
+    <div class="post-footer">
+      <div class="info">
+        
+          <span class="separator"><a class="category" href="/categories/docker/">Docker</a></span>
+
+
+
+
+        
+
+        
+          <span class="separator"><a class="tag" href="/tags/docker/">Docker</a><a class="tag" href="/tags/%E5%AE%B9%E5%99%A8/">容器</a></span>
+
+
+
+
+        
+      </div>
+    </div>
+
+    
+  </div>
+
+
+          </div>
+        </div>
+      </main>
+    </div><footer class="footer footer--base">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></body>
+</html>

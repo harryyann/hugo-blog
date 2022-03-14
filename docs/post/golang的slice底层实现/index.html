@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="zh-cn"
+  data-theme=""
+><head>
+  <title>
+    
+      杨海瑞
+        |
+        Golang的slice底层实现
+
+
+      
+
+
+    
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.81.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta
+    name="description"
+    content="
+      
+Per aspera ad astra.
+循此苦旅，终抵群星。
+
+
+
+    "
+  />
+  
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://yanghairui.life/post/golang%E7%9A%84slice%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.2a2cd9614b7d007dfbb75e8da19e3a0fa872ceab53c6d000c00b7a0c89b85bfc.js"
+    integrity="sha256-KizZYUt9AH37t16NoZ46D6hyzqtTxtAAwAt6DIm4W/w="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js"
+      integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus="
+      crossorigin="anonymous"
+    ></script>
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Golang的slice底层实现"/>
+<meta name="twitter:description" content="Slice的底层数据结构 Golang的slice切片依托于数组实现，和数组的差别就是slice可以方便的扩容，实际使用中除了在少数情况我们明确知道数组长度时，大多数时候都是用的是slice，因为不用担心容量不够的问题。但是如果不了解它内部的实现机制，就有可能会遭遇一些莫名的现象。
+slice底层结构：
+// 源码位于src/runtime/slice.gotype slice struct{array unsafe.Pointerlen intcap int}array是一个unsafe."/>
+
+
+
+  
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "post",
+        "name": "Golang的slice底层实现",
+        "headline": "Golang的slice底层实现",
+        "alternativeHeadline": "",
+        "description": "
+      
+        Slice的底层数据结构 Golang的slice切片依托于数组实现，和数组的差别就是slice可以方便的扩容，实际使用中除了在少数情况我们明确知道数组长度时，大多数时候都是用的是slice，因为不用担心容量不够的问题。但是如果不了解它内部的实现机制，就有可能会遭遇一些莫名的现象。\nslice底层结构：\n\/\/ 源码位于src\/runtime\/slice.go\rtype slice struct{\rarray unsafe.Pointer\rlen int\rcap int\r}\rarray是一个unsafe.
+
+
+      
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/post\/golang%E7%9A%84slice%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-07-13T20:01:29.00Z",
+        "datePublished": "2021-07-13T20:01:29.00Z",
+        "dateModified": "2021-07-13T20:01:29.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/post\/golang%E7%9A%84slice%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0\/",
+        "wordCount" : "131",
+        "genre" : [ 
+      
+      "golang"
+
+    ],
+        "keywords" : [ 
+      
+      "golang"
+
+    ]
+    }
+  </script>
+
+
+
+</head>
+<body>
+    <header><div
+  class="page-top 
+    animated fadeInDown
+
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>
+  <nav>
+    <ul class="nav__list" id="navMenu">
+      <div class="nav__links">
+        
+        
+          
+          <li>
+            <a
+              
+              href="/"
+              
+              title=""
+              >Home</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/post/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/portfolio/"
+              
+              title=""
+              >Portfolio</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >About</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/contact/"
+              
+              title=""
+              >Contact</a
+            >
+          </li>
+
+        
+      </div>
+      <ul>
+        
+        
+          <li>
+            <a class="theme-switch" title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </li>
+
+        
+      </ul>
+    </ul>
+  </nav>
+</div>
+</header>
+    <div class="wrapper">
+      <aside><div
+  class="sidebar
+    animated fadeInDown
+
+  "
+>
+  <div class="sidebar__content">
+    <div class="logo-title">
+      <div class="title">
+        <img src="/images/profile5.jpg" alt="profile picture" />
+        <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
+        <div class="description">
+          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+        <li>
+          <a href="https://stackoverflow.com/users/12924262/horace-yang" rel="me" aria-label="StackOverFlow" title="StackOverFlow">
+            <i class="fab fa-stack-overflow fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://github.com/harryyann" rel="me" aria-label="GitHub" title="GitHub">
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://www.zhihu.com/people/yang-hai-rui-88" rel="me" aria-label="zhihu" title="zhihu">
+            <i class="fab fa-zhihu fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=941811450@qq.com" rel="me" aria-label="e-mail" title="e-mail">
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+    </ul>
+  </div><footer class="footer footer--sidebar">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></div>
+</aside>
+      <main>
+        <div class="autopagerize_page_element">
+          <div class="content">
+  <div
+    class="post 
+      animated fadeInDown
+
+    "
+  >
+    <div class="post-content">
+      
+      <div class="post-title">
+        <h1>Golang的slice底层实现</h1>
+        
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Tue, Jul 13, 2021
+
+
+              </span
+            >
+            <em class="fas fa-stopwatch"></em>
+            <span class="reading-time">阅读时间 1 分钟</span>
+          </div>
+
+        
+      </div><h2 id="slice的底层数据结构">Slice的底层数据结构</h2>
+<p>Golang的slice切片依托于数组实现，和数组的差别就是slice可以方便的扩容，实际使用中除了在少数情况我们明确知道数组长度时，大多数时候都是用的是slice，因为不用担心容量不够的问题。但是如果不了解它内部的实现机制，就有可能会遭遇一些莫名的现象。</p>
+<p><strong>slice底层结构</strong>：</p>
+<pre><code>// 源码位于src/runtime/slice.go
+
+type slice struct{
+    array unsafe.Pointer
+    len int
+    cap int
+}
+</code></pre><p>array是一个unsafe.Pointer指针类型，len表示这个切片的长度，cap表示这个切片的容量。</p>
+<h2 id="slice的创建方式">Slice的创建方式</h2>
+<h3 id="使用make创建">使用make()创建</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">slice</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">10</span>) <span style="color:#75715e">// 创建一个len=5， cap=10的slice，后续添加元素直到10时都不用扩充
+</span></code></pre></div><p>**make()**函数创建的slice可以指定len和cap，这样就会创建出一块内存，分配给这个slice。</p>
+<p><img src="/images/slice/make2slice.png" alt=""></p>
+<h3 id="根据一个数组或切片创建">根据一个数组或切片创建</h3>
+<p>对一个数组或切片进行切片会产生一个新切片。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">array</span> <span style="color:#f92672">:=</span> [<span style="color:#ae81ff">10</span>]<span style="color:#66d9ef">int</span>{}
+<span style="color:#a6e22e">slice</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">array</span>[<span style="color:#ae81ff">5</span>:<span style="color:#ae81ff">7</span>]
+</code></pre></div><p>注意这个<strong>切片将会和原数组公用一部分内存</strong>：</p>
+<p><img src="/images/slice/array2slice.png" alt=""></p>
+<p>切片产生的这个slice对象的array指针指向的是原array的5号位置，到7号位置结束，即这个新的slice的len为2；同时<strong>原array中被引用的部分以及剩下的部分</strong>都将成为slice的cap，即cap=5。</p>
+<p>根据这个原理，当对一个数组和切片执行切片操作时，也可以顺带指定cap的位置：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">sliceA</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">10</span>) <span style="color:#75715e">// sliceA的len是5， cap是10
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">sliceB</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sliceA</span>[<span style="color:#ae81ff">0</span>:<span style="color:#ae81ff">5</span>:<span style="color:#ae81ff">5</span>] <span style="color:#75715e">// 切0-5这部分，同时指定cap是到了原切片5号索引的位置
+</span></code></pre></div><p>sliceB是从sliceA的头部开始切的，所以它的cap也原本是10，但我们也可以指定它的容量是到索引5的位置，所以它的cap就变成了5。再举一个例子：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">sliceB</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sliceA</span>[<span style="color:#ae81ff">5</span>:<span style="color:#ae81ff">7</span>:<span style="color:#ae81ff">8</span>] <span style="color:#75715e">// 切5-7这部分，同时指定cap是到8号索引的位置
+</span></code></pre></div><p>sliceB是从sliceA的5号索引切到7号索引，并且指定cap的位置是8，所以cap是5-10的5个，现在变成了5-8的3个。</p>
+<h2 id="slice自动扩容">Slice自动扩容</h2>
+<p>当我们只用append()函数向一个slice追加元素时，当slice的cap不足时，就会触发自动扩容。</p>
+<pre><code>newSlice := append(slice, 10) // 向slice中插入一个10，返回一个新slice
+</code></pre><p>扩容的过程实际上是重新分配一块更大的内存，然后将原slice的数据拷贝进新的slice中，并且把新append的数据追加到这个slice中。如下图：</p>
+<p><img src="/images/slice/append.png" alt=""></p>
+<p>原来的len值已经和cap值相等了，当append一个新元素时，发现cap&lt;len+1，则就触发了扩容。可以看到，扩容后的cap由5变成了10。</p>
+<h3 id="append的过程">append()的过程</h3>
+<ol>
+<li>当slice的cap值允许len+1时，就可以将这个元素直接插进入，同时len++，由于slice的位置没有变动，所以返回新slice的array指针和原slice的array指针是一样的；</li>
+<li>如果slice的cap不允许len+1，则先将slice执行扩容，开辟一块更大的新空间将原slice的值拷贝进去；</li>
+<li>然后将新元素追加到新slice中，重复1的过程。</li>
+</ol>
+<h3 id="扩容容量的规则">扩容容量的规则</h3>
+<p>当slice执行扩容时会根据原容量的大小，决定扩容后的容量大小，并不是单纯的翻倍：</p>
+<ul>
+<li>如果原slice容量小于1024，则新slice容量每次扩容将扩大为原来的两倍</li>
+<li>如果原slice容量大于等于1024，则新slice容量将扩大为原来的1.25倍</li>
+</ul>
+<h2 id="slice的拷贝">Slice的拷贝</h2>
+<p>slice需要通过函数copy()完成，拷贝时会<strong>将原切片的数据依次拷贝到新切片</strong>中。</p>
+<p>要注意，如果说新的切片len值和旧切片的len值不相等的时候，copy()也是可以完成的。具体分两种情况：</p>
+<ol>
+<li>
+<p>当新切片的len值小于旧切片len值时：</p>
+<p>将会只从旧切片中拷贝新切片len值数量的元素到新切片，如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">src</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>} <span style="color:#75715e">// src的len=4
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">dst</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">3</span>) <span style="color:#75715e">// dst的len=3
+</span><span style="color:#75715e"></span>copy(<span style="color:#a6e22e">dst</span>, <span style="color:#a6e22e">src</span>) <span style="color:#75715e">//执行拷贝
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">dst</span>) <span style="color:#75715e">// 打印将会输出[1 2 3]，即只拷贝了三个元素过来
+</span></code></pre></div></li>
+<li>
+<p>当新切片的len值大于旧切片的len值时：</p>
+<p>将会把旧切片的元素完全拷贝过来，并且空位补充元素的0值：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">src</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>} <span style="color:#75715e">// src的len=4
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">dst</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">3</span>) <span style="color:#75715e">// dst的len=5
+</span><span style="color:#75715e"></span>copy(<span style="color:#a6e22e">dst</span>, <span style="color:#a6e22e">src</span>) <span style="color:#75715e">//执行拷贝
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">dst</span>) <span style="color:#75715e">// 打印将会输出[1 2 3 4 0]，即元素全部拷贝并且还补了0
+</span></code></pre></div></li>
+</ol>
+<p>出现这种情况归根到底就是copy()函数的工作方式，<strong>将原切片的数据依次拷贝到新切片</strong>。只是单纯的拷贝数据，能拷多少拷多少，对新切片是不会有任何变动的，即copy过程不会发生扩容。</p>
+<h2 id="slice使用时要注意的点">Slice使用时要注意的点</h2>
+<ul>
+<li>创建切片时可根据需要分配尽量够用的cap，尽量避免由于追加导致的扩容操作，以提高性能；</li>
+<li>切片拷贝时要注意新切片的len和旧切片的len，否则可能会有元素拷不进去；</li>
+<li>要小心通过数组或切片创建新切片时，因为公用同一块内存地址，可能会有读写冲突；而当不停的append导致切片扩容，从而新切片被迁移到了另一个地址，那就和旧数组或切片分开了，自然就不会有读写冲突了；</li>
+<li>使用len()计算切片长度，时间复杂度为O(1)，不需要遍历数组，因为已经定义在了数组的结构体中，使用cap()计算切片容量时，时间复杂度也为O(1)，同理；</li>
+<li>通过函数参数传递切片时，不会拷贝整个切片，因为切片本身只是个结构体而已，真正的底层array是个指针，传递指针进去，函数里是可以修改是会改变外部的切片的；</li>
+<li>当对数组、切片、map等复杂对象去判断相等时，需要使用reflect包的DeepEqual()方法，比较复杂数据中的所有成员都相等。</li>
+</ul>
+</div>
+    <div class="post-footer">
+      <div class="info">
+        
+          <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
+
+
+
+
+        
+
+        
+          <span class="separator"><a class="tag" href="/tags/golang/">golang</a></span>
+
+
+
+
+        
+      </div>
+    </div>
+
+    
+  </div>
+
+
+          </div>
+        </div>
+      </main>
+    </div><footer class="footer footer--base">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></body>
+</html>

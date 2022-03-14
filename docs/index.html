@@ -156,7 +156,7 @@ Per aspera ad astra.
           <li>
             <a
               
-              href="/posts/"
+              href="/post/"
               
               title=""
               >Posts</a
@@ -314,7 +314,7 @@ Per aspera ad astra.
     >
       
       <div class="post-title">
-        <h3><a href="/posts/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E5%88%86%E6%9E%90%E6%80%9D%E8%B7%AF/">性能优化的分析思路</a></h3>
+        <h3><a href="/post/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E5%88%86%E6%9E%90%E6%80%9D%E8%B7%AF/">性能优化的分析思路</a></h3>
       </div>
       <div class="post-content">
         <div class="p_part">
@@ -327,7 +327,7 @@ Per aspera ad astra.
 
             
           </p>
-          <a href="/posts/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E5%88%86%E6%9E%90%E6%80%9D%E8%B7%AF/" class="read_more">继续阅读</a></div>
+          <a href="/post/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E5%88%86%E6%9E%90%E6%80%9D%E8%B7%AF/" class="read_more">继续阅读</a></div>
       </div>
 
       
@@ -371,7 +371,7 @@ Per aspera ad astra.
     >
       
       <div class="post-title">
-        <h3><a href="/posts/%E4%BB%8E0%E5%BC%80%E5%A7%8B%E5%AD%A6%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AC%94%E8%AE%B0/">微服务概览</a></h3>
+        <h3><a href="/post/%E4%BB%8E0%E5%BC%80%E5%A7%8B%E5%AD%A6%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AC%94%E8%AE%B0/">微服务概览</a></h3>
       </div>
       <div class="post-content">
         <div class="p_part">
@@ -383,7 +383,7 @@ Per aspera ad astra.
 
             
           </p>
-          <a href="/posts/%E4%BB%8E0%E5%BC%80%E5%A7%8B%E5%AD%A6%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AC%94%E8%AE%B0/" class="read_more">继续阅读</a></div>
+          <a href="/post/%E4%BB%8E0%E5%BC%80%E5%A7%8B%E5%AD%A6%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AC%94%E8%AE%B0/" class="read_more">继续阅读</a></div>
       </div>
 
       
@@ -427,7 +427,7 @@ Per aspera ad astra.
     >
       
       <div class="post-title">
-        <h3><a href="/posts/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">分布式锁的几种实现方式</a></h3>
+        <h3><a href="/post/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">分布式锁的几种实现方式</a></h3>
       </div>
       <div class="post-content">
         <div class="p_part">
@@ -441,7 +441,7 @@ Per aspera ad astra.
 
             
           </p>
-          <a href="/posts/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/" class="read_more">继续阅读</a></div>
+          <a href="/post/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/" class="read_more">继续阅读</a></div>
       </div>
 
       
@@ -485,7 +485,64 @@ Per aspera ad astra.
     >
       
       <div class="post-title">
-        <h3><a href="/posts/golang%E5%8D%95%E4%BE%8B/">Golang实现单例模式</a></h3>
+        <h3><a href="/post/golang%E7%9A%84slice%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/">Golang的slice底层实现</a></h3>
+      </div>
+      <div class="post-content">
+        <div class="p_part">
+          <p>
+            
+              Slice的底层数据结构 Golang的slice切片依托于数组实现，和数组的差别就是slice可以方便的扩容，实际使用中除了在少数情况我们明确知道数组长度时，大多数时候都是用的是slice，因为不用担心容量不够的问题。但是如果不了解它内部的实现机制，就有可能会遭遇一些莫名的现象。
+slice底层结构：
+// 源码位于src/runtime/slice.gotype slice struct{array unsafe.Pointerlen intcap int}array是一个unsafe.
+
+
+            
+          </p>
+          <a href="/post/golang%E7%9A%84slice%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/" class="read_more">继续阅读</a></div>
+      </div>
+
+      
+      <div class="post-footer">
+        <div class="meta">
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Tue, Jul 13, 2021
+
+
+              </span
+            >
+            
+              <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
+
+
+
+
+            
+
+            
+              <span class="separator"><a class="tag" href="/tags/golang/">golang</a></span>
+
+
+
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div
+      class="post 
+        animated fadeInDown
+
+      "
+    >
+      
+      <div class="post-title">
+        <h3><a href="/post/golang%E5%8D%95%E4%BE%8B/">Golang实现单例模式</a></h3>
       </div>
       <div class="post-content">
         <div class="p_part">
@@ -498,7 +555,7 @@ Per aspera ad astra.
 
             
           </p>
-          <a href="/posts/golang%E5%8D%95%E4%BE%8B/" class="read_more">继续阅读</a></div>
+          <a href="/post/golang%E5%8D%95%E4%BE%8B/" class="read_more">继续阅读</a></div>
       </div>
 
       
@@ -542,7 +599,7 @@ Per aspera ad astra.
     >
       
       <div class="post-title">
-        <h3><a href="/posts/golang%E7%9A%84option%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/">Golang编程模式：functional options</a></h3>
+        <h3><a href="/post/golang%E7%9A%84option%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/">Golang编程模式：functional options</a></h3>
       </div>
       <div class="post-content">
         <div class="p_part">
@@ -554,7 +611,7 @@ type Server struct { Addr string Port int Protocol string Timeout time.
 
             
           </p>
-          <a href="/posts/golang%E7%9A%84option%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/" class="read_more">继续阅读</a></div>
+          <a href="/post/golang%E7%9A%84option%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/" class="read_more">继续阅读</a></div>
       </div>
 
       
@@ -598,7 +655,7 @@ type Server struct { Addr string Port int Protocol string Timeout time.
     >
       
       <div class="post-title">
-        <h3><a href="/posts/k8s%E7%9A%84rbac%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/">K8s的RBAC权限控制机制</a></h3>
+        <h3><a href="/post/k8s%E7%9A%84rbac%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/">K8s的RBAC权限控制机制</a></h3>
       </div>
       <div class="post-content">
         <div class="p_part">
@@ -610,7 +667,7 @@ type Server struct { Addr string Port int Protocol string Timeout time.
 
             
           </p>
-          <a href="/posts/k8s%E7%9A%84rbac%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/" class="read_more">继续阅读</a></div>
+          <a href="/post/k8s%E7%9A%84rbac%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/" class="read_more">继续阅读</a></div>
       </div>
 
       
@@ -654,7 +711,7 @@ type Server struct { Addr string Port int Protocol string Timeout time.
     >
       
       <div class="post-title">
-        <h3><a href="/posts/innodb%E7%9A%84%E9%9D%9E%E9%94%81%E5%AE%9A%E4%B8%80%E8%87%B4%E6%80%A7%E8%AF%BB/">InnoDB的非锁定一致性读</a></h3>
+        <h3><a href="/post/innodb%E7%9A%84%E9%9D%9E%E9%94%81%E5%AE%9A%E4%B8%80%E8%87%B4%E6%80%A7%E8%AF%BB/">InnoDB的非锁定一致性读</a></h3>
       </div>
       <div class="post-content">
         <div class="p_part">
@@ -667,7 +724,7 @@ MVCC MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的�
 
             
           </p>
-          <a href="/posts/innodb%E7%9A%84%E9%9D%9E%E9%94%81%E5%AE%9A%E4%B8%80%E8%87%B4%E6%80%A7%E8%AF%BB/" class="read_more">继续阅读</a></div>
+          <a href="/post/innodb%E7%9A%84%E9%9D%9E%E9%94%81%E5%AE%9A%E4%B8%80%E8%87%B4%E6%80%A7%E8%AF%BB/" class="read_more">继续阅读</a></div>
       </div>
 
       
@@ -711,7 +768,7 @@ MVCC MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的�
     >
       
       <div class="post-title">
-        <h3><a href="/posts/mysql%E7%9A%84%E9%94%81/">MySQL的锁</a></h3>
+        <h3><a href="/post/mysql%E7%9A%84%E9%94%81/">MySQL的锁</a></h3>
       </div>
       <div class="post-content">
         <div class="p_part">
@@ -724,7 +781,7 @@ MVCC MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的�
 
             
           </p>
-          <a href="/posts/mysql%E7%9A%84%E9%94%81/" class="read_more">继续阅读</a></div>
+          <a href="/post/mysql%E7%9A%84%E9%94%81/" class="read_more">继续阅读</a></div>
       </div>
 
       
@@ -768,7 +825,7 @@ MVCC MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的�
     >
       
       <div class="post-title">
-        <h3><a href="/posts/docker%E5%BC%80%E5%90%AFtls%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/">Docker开启TLS远程连接</a></h3>
+        <h3><a href="/post/docker%E5%BC%80%E5%90%AFtls%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/">Docker开启TLS远程连接</a></h3>
       </div>
       <div class="post-content">
         <div class="p_part">
@@ -783,7 +840,7 @@ Docker也支持远程通过socket进行连接，可以选择开启或者不开�
 
             
           </p>
-          <a href="/posts/docker%E5%BC%80%E5%90%AFtls%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/" class="read_more">继续阅读</a></div>
+          <a href="/post/docker%E5%BC%80%E5%90%AFtls%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/" class="read_more">继续阅读</a></div>
       </div>
 
       
@@ -808,64 +865,6 @@ Docker也支持远程通过socket进行连接，可以选择开启或者不开�
 
             
               <span class="separator"><a class="tag" href="/tags/docker/">Docker</a><a class="tag" href="/tags/%E5%AE%B9%E5%99%A8/">容器</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
-        <h3><a href="/posts/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/">redo log的两阶段提交</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              WAL技术 WAL(Write-Ahead Logging)，就是先些日志，再写磁盘。
-当我们向MySQL更新一条记录的时候，InnoDB存储引擎就会把记录顺序的写到redo log中，然后更新InnoDB的buffer pool，并不更新磁盘中的数据页，然后这次更新操作就算是完成了，之后InnoDB存储引擎就会在它有空的时候，把redo log中记录的记录刷到磁盘上的数据页中完成最终的持久化。
-由于磁盘的顺序写入效率要远高于随机写入，并且还有组提交等优化，这种方式可以大大提高数据更新时的效率。
-关于磁盘的顺序写入，需要注意一下。不是说打开一个文件之后append就是顺序写入了。顺序写入需要知道磁盘上要写入的位置，直接操作磁盘，向某个特定的地址写入，顺序写入时，磁盘的磁头不需要移动就可以直接写入，这样才有效率的提升。Redo log Redo log是Innodb存储引擎提供的用于优化更新操作的日志。它的结构可以看成是个环形的磁盘区域。
-
-
-            
-          </p>
-          <a href="/posts/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/" class="read_more">继续阅读</a></div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Sat, May 8, 2021
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/mysql/">MySQL</a></span>
 
 
 

@@ -9,10 +9,10 @@
     <lastBuildDate>Fri, 14 May 2021 10:29:42 +0800</lastBuildDate><atom:link href="https://yanghairui.life/tags/docker/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Docker开启TLS远程连接</title>
-      <link>https://yanghairui.life/posts/docker%E5%BC%80%E5%90%AFtls%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/</link>
+      <link>https://yanghairui.life/post/docker%E5%BC%80%E5%90%AFtls%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/</link>
       <pubDate>Fri, 14 May 2021 10:29:42 +0800</pubDate>
       
-      <guid>https://yanghairui.life/posts/docker%E5%BC%80%E5%90%AFtls%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/</guid>
+      <guid>https://yanghairui.life/post/docker%E5%BC%80%E5%90%AFtls%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/</guid>
       
         <description>Docker远程连接 Docker是C/S架构，通过docker的客户端连接到docker daemon，然后由docker daemon在宿主机上执行构建镜像，运行容器等指令。
 Docker支持多种方式将docker客户端连接到server。如果docker客户端和server都在同一台宿主机上，那么可以直接使用Unix域套接字文件/var/run/docker.sock连接，我们直接使用docker命令时实际上就是采用这种方式进行连接的。
