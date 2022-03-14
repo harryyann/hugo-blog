@@ -768,6 +768,65 @@ MVCC MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的�
     >
       
       <div class="post-title">
+        <h3><a href="/posts/docker%E5%BC%80%E5%90%AFtls%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/">Docker开启TLS远程连接</a></h3>
+      </div>
+      <div class="post-content">
+        <div class="p_part">
+          <p>
+            
+              Docker远程连接 Docker是C/S架构，通过docker的客户端连接到docker daemon，然后由docker daemon在宿主机上执行构建镜像，运行容器等指令。
+Docker支持多种方式将docker客户端连接到server。如果docker客户端和server都在同一台宿主机上，那么可以直接使用Unix域套接字文件/var/run/docker.sock连接，我们直接使用docker命令时实际上就是采用这种方式进行连接的。
+Docker也支持远程通过socket进行连接，可以选择开启或者不开启TLS，为了安全我们大多数时候还是采用开启TLS的方式进行远程连接。
+启动远程连接的过程 首先需要保证宿主机上docker daemon已安装，安装过程可查看官网
+制作证书 首先需要制作证书，包括服务端证书，和客户端证书。
+
+
+            
+          </p>
+          <a href="/posts/docker%E5%BC%80%E5%90%AFtls%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/" class="read_more">继续阅读</a></div>
+      </div>
+
+      
+      <div class="post-footer">
+        <div class="meta">
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Fri, May 14, 2021
+
+
+              </span
+            >
+            
+              <span class="separator"><a class="category" href="/categories/docker/">Docker</a></span>
+
+
+
+
+            
+
+            
+              <span class="separator"><a class="tag" href="/tags/docker/">Docker</a><a class="tag" href="/tags/%E5%AE%B9%E5%99%A8/">容器</a></span>
+
+
+
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div
+      class="post 
+        animated fadeInDown
+
+      "
+    >
+      
+      <div class="post-title">
         <h3><a href="/posts/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/">redo log的两阶段提交</a></h3>
       </div>
       <div class="post-content">
@@ -793,64 +852,6 @@ MVCC MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的�
             <span class="date"
               >
                 Sat, May 8, 2021
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/mysql/">MySQL</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
-        <h3><a href="/posts/innodb%E7%89%B9%E6%80%A7/">Innodb存储引擎的特性</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              InnoDB存储引擎的体系架构 InnoDB存储引擎的体系架构大致如下图所示，可以看到主要包含了一系列后台线程，和一个大的缓冲池。最底层则是文件系统。
-InnoDB的线程模型 InnoDB的线程主要分为Master线程、IO线程、Purge线程和Page Cleaner线程。
-Master 线程 是核心的后台线程，主要负责调度其他线程，以及脏页的刷新，undo页的回收，redo log的刷新，合并缓冲区等。（版本不同做的工作不一样）
-IO线程 innodb中大量使用了AIO（异步IO）来处理写请求，以提高性能，IO线程用于处理这些IO操作的回调。
-
-
-            
-          </p>
-          <a href="/posts/innodb%E7%89%B9%E6%80%A7/" class="read_more">继续阅读</a></div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Fri, May 7, 2021
 
 
               </span
