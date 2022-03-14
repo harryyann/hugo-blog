@@ -372,7 +372,7 @@ slice底层结构：
           </div>
 
         
-      </div><h2 id="slice的底层数据结构">Slice的底层数据结构</h2>
+      </div><h1 id="slice的底层数据结构">Slice的底层数据结构</h1>
 <p>Golang的slice切片依托于数组实现，和数组的差别就是slice可以方便的扩容，实际使用中除了在少数情况我们明确知道数组长度时，大多数时候都是用的是slice，因为不用担心容量不够的问题。但是如果不了解它内部的实现机制，就有可能会遭遇一些莫名的现象。</p>
 <p><strong>slice底层结构</strong>：</p>
 <pre><code>// 源码位于src/runtime/slice.go
@@ -383,7 +383,7 @@ type slice struct{
     cap int
 }
 </code></pre><p>array是一个unsafe.Pointer指针类型，len表示这个切片的长度，cap表示这个切片的容量。</p>
-<h2 id="slice的创建方式">Slice的创建方式</h2>
+<h1 id="slice的创建方式">Slice的创建方式</h1>
 <h3 id="使用make创建">使用make()创建</h3>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">slice</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">10</span>) <span style="color:#75715e">// 创建一个len=5， cap=10的slice，后续添加元素直到10时都不用扩充
 </span></code></pre></div><p>**make()**函数创建的slice可以指定len和cap，这样就会创建出一块内存，分配给这个slice。</p>
@@ -401,7 +401,7 @@ type slice struct{
 </span></code></pre></div><p>sliceB是从sliceA的头部开始切的，所以它的cap也原本是10，但我们也可以指定它的容量是到索引5的位置，所以它的cap就变成了5。再举一个例子：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">sliceB</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sliceA</span>[<span style="color:#ae81ff">5</span>:<span style="color:#ae81ff">7</span>:<span style="color:#ae81ff">8</span>] <span style="color:#75715e">// 切5-7这部分，同时指定cap是到8号索引的位置
 </span></code></pre></div><p>sliceB是从sliceA的5号索引切到7号索引，并且指定cap的位置是8，所以cap是5-10的5个，现在变成了5-8的3个。</p>
-<h2 id="slice自动扩容">Slice自动扩容</h2>
+<h1 id="slice自动扩容">Slice自动扩容</h1>
 <p>当我们只用append()函数向一个slice追加元素时，当slice的cap不足时，就会触发自动扩容。</p>
 <pre><code>newSlice := append(slice, 10) // 向slice中插入一个10，返回一个新slice
 </code></pre><p>扩容的过程实际上是重新分配一块更大的内存，然后将原slice的数据拷贝进新的slice中，并且把新append的数据追加到这个slice中。如下图：</p>
@@ -419,7 +419,7 @@ type slice struct{
 <li>如果原slice容量小于1024，则新slice容量每次扩容将扩大为原来的两倍</li>
 <li>如果原slice容量大于等于1024，则新slice容量将扩大为原来的1.25倍</li>
 </ul>
-<h2 id="slice的拷贝">Slice的拷贝</h2>
+<h1 id="slice的拷贝">Slice的拷贝</h1>
 <p>slice需要通过函数copy()完成，拷贝时会<strong>将原切片的数据依次拷贝到新切片</strong>中。</p>
 <p>要注意，如果说新的切片len值和旧切片的len值不相等的时候，copy()也是可以完成的。具体分两种情况：</p>
 <ol>
@@ -441,7 +441,7 @@ type slice struct{
 </span></code></pre></div></li>
 </ol>
 <p>出现这种情况归根到底就是copy()函数的工作方式，<strong>将原切片的数据依次拷贝到新切片</strong>。只是单纯的拷贝数据，能拷多少拷多少，对新切片是不会有任何变动的，即copy过程不会发生扩容。</p>
-<h2 id="slice使用时要注意的点">Slice使用时要注意的点</h2>
+<h1 id="slice使用时要注意的点">Slice使用时要注意的点</h1>
 <ul>
 <li>创建切片时可根据需要分配尽量够用的cap，尽量避免由于追加导致的扩容操作，以提高性能；</li>
 <li>切片拷贝时要注意新切片的len和旧切片的len，否则可能会有元素拷不进去；</li>
