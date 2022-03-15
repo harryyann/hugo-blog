@@ -314,49 +314,6 @@ Per aspera ad astra.
     >
       
       <div class="post-title">
-        <h3><a href="/post/golang%E7%9A%84%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/">Golang的错误处理</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              
-
-
-            
-          </p>
-          </div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Tue, Mar 15, 2022
-
-
-              </span
-            >
-            
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
         <h3><a href="/post/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E5%88%86%E6%9E%90%E6%80%9D%E8%B7%AF/">性能优化的分析思路</a></h3>
       </div>
       <div class="post-content">
@@ -668,6 +625,64 @@ Raft算法的三个核心问题 对于一个基于raft算法的分布式集群�
             <span class="date"
               >
                 Fri, Aug 20, 2021
+
+
+              </span
+            >
+            
+              <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
+
+
+
+
+            
+
+            
+              <span class="separator"><a class="tag" href="/tags/golang/">golang</a></span>
+
+
+
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div
+      class="post 
+        animated fadeInDown
+
+      "
+    >
+      
+      <div class="post-title">
+        <h3><a href="/post/cpu%E7%9A%84%E7%BC%93%E5%AD%98%E8%A1%8C/">CPU的多级缓存和cache line</a></h3>
+      </div>
+      <div class="post-content">
+        <div class="p_part">
+          <p>
+            
+              CPU的多级缓存 随着计算机进入多核时代，CPU处理速度和内存之间的鸿沟越来越大，因此多核CPU都通过缓存行提高CPU和内存的交互效率。
+CPU根据型号不同都会有三层以上的缓存行：
+如上图，是一个CPU的典型架构，共有三级缓存
+ L1缓存：一般都是分成指令缓存，和数据缓存，分开放。 L2缓存：从L2缓存开始部分指令和数据，L1和L2缓存都是在一个真实的核中的。 L3缓存：从L3开始，往往都是一颗CPU中所有核心共享的。  这三级缓存也是离CPU越远的速度越慢：
+
+
+            
+          </p>
+          <a href="/post/cpu%E7%9A%84%E7%BC%93%E5%AD%98%E8%A1%8C/" class="read_more">继续阅读</a></div>
+      </div>
+
+      
+      <div class="post-footer">
+        <div class="meta">
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Sun, Aug 15, 2021
 
 
               </span
