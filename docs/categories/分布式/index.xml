@@ -6,7 +6,23 @@
     <description>Recent content in 分布式 on Website of Harry Yang</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 13 Sep 2021 16:00:54 +0800</lastBuildDate><atom:link href="https://yanghairui.life/categories/%E5%88%86%E5%B8%83%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 13 Dec 2021 19:46:27 +0800</lastBuildDate><atom:link href="https://yanghairui.life/categories/%E5%88%86%E5%B8%83%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Raft算法介绍</title>
+      <link>https://yanghairui.life/post/raft%E7%AE%97%E6%B3%95%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Mon, 13 Dec 2021 19:46:27 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/post/raft%E7%AE%97%E6%B3%95%E4%BB%8B%E7%BB%8D/</guid>
+      
+        <description>Raft算法介绍 在分布式系统中，为了消除单点提高系统可用性，通常会使用副本来进行容错，但这会带来另一个问题，即如何保证多个副本之间的一致性。
+强一致性 强一致性不是说所有节点在任意时刻的状态都是一致的，而是指让一个分布式系统看起来好像是个单机一样，所有操作都是原子的，不管什么故障产生，都不会让分布式系统的节点间的数据出现不一致，让应用层可以忽略底层分布式系统之间数据的同步问题，像操作一个单机一样操作这个分布式系统。
+共识算法 共识算法就是用来实现强一致性的算法，可以保证在小于一半的节点发生故障时，整个系统依然是正常可用的。
+共识算法是强一致性分布式系统的基石，比较有名的就是Zookeeper所使用的Paxos算法，Raft也是共识算法的一种，它是Paxos算法的一个简化版本，更易于理解和实现，被很多的分布式系统使用，比较有名的就是Etcd、Consul，TiKV等，MySQL集群中也使用到了raft算法。
+Raft算法的三个核心问题 对于一个基于raft算法的分布式集群来说，当我们通过客户端向集群发起一些读写操作时，首先需要确定的是需要有一个节点对操作进行处理和响应，这个节点被称为是主节点(Leader)，其他节点就叫做从节点(Follower)。Raft算法的第一个核心问题就是选主，需要确定集群中哪个节点作为主节点。
+确定了主节点后，主节点就要接收到了客户端的请求，比如接到一个写入数据的操作后，不仅需要将数据保存在本地，还要将数据分发给集群中的其他从属节点。Raft算法需要在保证集群中的大多数节点都接收到了这次操作并且完成同步之后，主节点才可以给客户端操作成功的响应。这个操作分发的过程就是日志复制，即raft算法中主节点是将操作包装成日志的形式发送给所有从节点的。</description>
+      
+    </item>
+    
     <item>
       <title>分布式锁的几种实现方式</title>
       <link>https://yanghairui.life/post/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/</link>
