@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Redis on Website of Harry Yang</title>
+    <link>https://yanghairui.life/tags/redis/</link>
+    <description>Recent content in Redis on Website of Harry Yang</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 15 May 2021 16:52:40 +0800</lastBuildDate><atom:link href="https://yanghairui.life/tags/redis/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Redis的持久化机制</title>
+      <link>https://yanghairui.life/post/redis%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6/</link>
+      <pubDate>Sat, 15 May 2021 16:52:40 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/post/redis%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6/</guid>
+      
+        <description>Redis的持久化 Redis 的读写都是在内存中，所以它的性能较高，但在内存中的数据会随着服务器的重启而丢失，为了保证数据不丢失，我们需要将内存中的数据存储到磁盘，以便 Redis 重启时能够从磁盘中恢复原有的数据，而整个过程就叫做 Redis 持久化。
+Redis的可持久化也是redis和memcached的主要区别之一，Memcached没有持久化机制。
+Redis持久化的方式 快照方式RDB RDB(Redis DataBase)，某一个时刻，将当前内存中存储的所有数据形成一个快照，并以二进制形式写入磁盘。</description>
+      
+    </item>
+    
+  </channel>
+</rss>

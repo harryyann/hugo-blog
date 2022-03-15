@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="zh-cn"
+  data-theme=""
+><head>
+  <title>
+    
+      杨海瑞
+        |
+        Redis的持久化机制
+
+
+      
+
+
+    
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.81.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta
+    name="description"
+    content="
+      
+Per aspera ad astra.
+循此苦旅，终抵群星。
+
+
+
+    "
+  />
+  
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://yanghairui.life/post/redis%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.2a2cd9614b7d007dfbb75e8da19e3a0fa872ceab53c6d000c00b7a0c89b85bfc.js"
+    integrity="sha256-KizZYUt9AH37t16NoZ46D6hyzqtTxtAAwAt6DIm4W/w="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js"
+      integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus="
+      crossorigin="anonymous"
+    ></script>
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Redis的持久化机制"/>
+<meta name="twitter:description" content="Redis的持久化 Redis 的读写都是在内存中，所以它的性能较高，但在内存中的数据会随着服务器的重启而丢失，为了保证数据不丢失，我们需要将内存中的数据存储到磁盘，以便 Redis 重启时能够从磁盘中恢复原有的数据，而整个过程就叫做 Redis 持久化。
+Redis的可持久化也是redis和memcached的主要区别之一，Memcached没有持久化机制。
+Redis持久化的方式 快照方式RDB RDB(Redis DataBase)，某一个时刻，将当前内存中存储的所有数据形成一个快照，并以二进制形式写入磁盘。"/>
+
+
+
+  
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "post",
+        "name": "Redis的持久化机制",
+        "headline": "Redis的持久化机制",
+        "alternativeHeadline": "",
+        "description": "
+      
+        Redis的持久化 Redis 的读写都是在内存中，所以它的性能较高，但在内存中的数据会随着服务器的重启而丢失，为了保证数据不丢失，我们需要将内存中的数据存储到磁盘，以便 Redis 重启时能够从磁盘中恢复原有的数据，而整个过程就叫做 Redis 持久化。\nRedis的可持久化也是redis和memcached的主要区别之一，Memcached没有持久化机制。\nRedis持久化的方式 快照方式RDB RDB(Redis DataBase)，某一个时刻，将当前内存中存储的所有数据形成一个快照，并以二进制形式写入磁盘。
+
+
+      
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/post\/redis%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-05-15T16:52:40.00Z",
+        "datePublished": "2021-05-15T16:52:40.00Z",
+        "dateModified": "2021-05-15T16:52:40.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/post\/redis%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6\/",
+        "wordCount" : "234",
+        "genre" : [ 
+      
+      "缓存"
+
+    ],
+        "keywords" : [ 
+      
+      "Redis"
+
+    ]
+    }
+  </script>
+
+
+
+</head>
+<body>
+    <header><div
+  class="page-top 
+    animated fadeInDown
+
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>
+  <nav>
+    <ul class="nav__list" id="navMenu">
+      <div class="nav__links">
+        
+        
+          
+          <li>
+            <a
+              
+              href="/"
+              
+              title=""
+              >Home</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/post/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/portfolio/"
+              
+              title=""
+              >Portfolio</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >About</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/contact/"
+              
+              title=""
+              >Contact</a
+            >
+          </li>
+
+        
+      </div>
+      <ul>
+        
+        
+          <li>
+            <a class="theme-switch" title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </li>
+
+        
+      </ul>
+    </ul>
+  </nav>
+</div>
+</header>
+    <div class="wrapper">
+      <aside><div
+  class="sidebar
+    animated fadeInDown
+
+  "
+>
+  <div class="sidebar__content">
+    <div class="logo-title">
+      <div class="title">
+        <img src="/images/profile5.jpg" alt="profile picture" />
+        <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
+        <div class="description">
+          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+        <li>
+          <a href="https://stackoverflow.com/users/12924262/horace-yang" rel="me" aria-label="StackOverFlow" title="StackOverFlow">
+            <i class="fab fa-stack-overflow fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://github.com/harryyann" rel="me" aria-label="GitHub" title="GitHub">
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://www.zhihu.com/people/yang-hai-rui-88" rel="me" aria-label="zhihu" title="zhihu">
+            <i class="fab fa-zhihu fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=941811450@qq.com" rel="me" aria-label="e-mail" title="e-mail">
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+    </ul>
+  </div><footer class="footer footer--sidebar">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></div>
+</aside>
+      <main>
+        <div class="autopagerize_page_element">
+          <div class="content">
+  <div
+    class="post 
+      animated fadeInDown
+
+    "
+  >
+    <div class="post-content">
+      
+      <div class="post-title">
+        <h1>Redis的持久化机制</h1>
+        
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Sat, May 15, 2021
+
+
+              </span
+            >
+            <em class="fas fa-stopwatch"></em>
+            <span class="reading-time">阅读时间 2 分钟</span>
+          </div>
+
+        
+      </div><h1 id="redis的持久化">Redis的持久化</h1>
+<p>Redis 的读写都是在内存中，所以它的性能较高，但在内存中的数据会随着服务器的重启而丢失，为了保证数据不丢失，我们需要将内存中的数据存储到磁盘，以便 Redis 重启时能够从磁盘中恢复原有的数据，而整个过程就叫做 Redis 持久化。</p>
+<p>Redis的可持久化也是redis和memcached的主要区别之一，Memcached没有持久化机制。</p>
+<h2 id="redis持久化的方式">Redis持久化的方式</h2>
+<h4 id="快照方式rdb">快照方式RDB</h4>
+<p>RDB(Redis DataBase)，某一个时刻，将当前内存中存储的所有数据形成一个快照，并以二进制形式写入磁盘。</p>
+<h4 id="文件追加方式aof">文件追加方式AOF</h4>
+<p>AOF(append only file)，将操作命令，以文本追加的形式写入文件。</p>
+<h4 id="混合持久化方式">混合持久化方式</h4>
+<p>Redis4.0以后支持的方式，由于AOF的文件占用空间大，而RDB的文件占用空间小，但是RDB丢数据比较多，所以有了这种AOF和RDB混合的持久化优化方式，触发时会将当前的内存快照转为RDB文件，但是后续记录的仍是AOF的逐条写入。这样既可以让持久化文件变得小一些，可以提高重启时数据恢复的速度。同时AOF机制也能降低RDB机制的数据丢失风险。</p>
+<h1 id="rdb">RDB</h1>
+<p>将某一时刻的<strong>内存快照</strong>，以<strong>二进制</strong>的形式写入磁盘，生成dump.rdb文件。</p>
+<h2 id="触发方式">触发方式</h2>
+<h4 id="手动触发">手动触发</h4>
+<p>手动触发有两种方式：<code>save</code>和<code>bgsave</code>命令</p>
+<ol>
+<li>
+<p><code>save</code>命令：</p>
+<p>在客户端执行save就会触发redis的持久化，这种方式会<strong>阻塞</strong>redis的主线程。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"><span style="color:#ae81ff">127</span>.<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">1</span>:<span style="color:#ae81ff">6379</span><span style="color:#f92672">&gt;</span> save
+OK
+</code></pre></div></li>
+<li>
+<p><code>bgsave</code>命令：</p>
+<p>是save的后台版本，fork()一个子进程执行save，可以立即返回，不会阻塞主线程。</p>
+<pre><code>127.0.0.1:6379&gt; bgsave
+Background saving started
+</code></pre></li>
+</ol>
+<h4 id="自动触发">自动触发</h4>
+<p>有三种情况可以进行自动触发：</p>
+<ol>
+<li>
+<p>配置参数<code>save m n</code>：</p>
+<p>设置如果在m秒内，如果有n个键发生改变，就执行bgsave命令触发RDB持久化；这个命令<strong>可以设置多个</strong>，多个之间是或的关系，即任意一个条件满足都会触发持久化。</p>
+</li>
+<li>
+<p>执行命令<code>flushall</code>：</p>
+<p><code>flushall</code>命令用于清空redis数据库，执行这条命令时，如果redis配置开启了持久化，就会在清空前，执行一次持久化操作。</p>
+</li>
+<li>
+<p>主从同步时触发：</p>
+<p>当从节点执行全量复制操作时，主节点会执行一次<code>bgsave</code>命令，生成rbd文件，并将rdb文件传给从节点。</p>
+</li>
+</ol>
+<p>自动触发的配置参数可以写在redi的配置文件中：</p>
+<pre><code># RDB 保存的条件
+save 900 1
+save 300 10
+save 60 10000
+
+# bgsave 失败之后，是否停止持久化数据到磁盘，yes 表示停止持久化，no 表示忽略错误继续写文件。
+stop-writes-on-bgsave-error yes
+
+# RDB 文件压缩
+rdbcompression yes
+
+# 写入文件和读取文件时是否开启 RDB 文件检查，检查是否有无损坏，如果在启动是检查发现损坏，则停止启动。
+rdbchecksum yes
+
+# RDB 文件名
+dbfilename dump.rdb
+
+# RDB 文件目录
+dir ./
+</code></pre><ul>
+<li><strong>save</strong>参数：配置自动触发RDB持久化的条件</li>
+<li><strong>rdbcompression</strong>：默认是yes，表示开启RDB文件压缩，redis会采用LZF算法进行压缩</li>
+<li><strong>rdbchecksum</strong>：默认是yes，表示写入文件和读取文件时是否开启RDB文件检查，如果有损坏，在redis启动时会终止启动</li>
+</ul>
+<p>可以通过在客户端执行<code>config get [参数名]</code>命令来查看redis的某个参数值。</p>
+<p>配置的设置方式：</p>
+<ol>
+<li>手动修改redis的配置文件redis.conf，永久有效，但是需要重启redis</li>
+<li>使用config set [参数名] &ldquo;参数值&rdquo; 的方式进行运行时修改，但是这种方式重启redis后会丢失。比如要禁用redis持久化，可以用命令 <code>config set save &quot;&quot;</code>。</li>
+</ol>
+<h2 id="数据恢复">数据恢复</h2>
+<p>当redis服务器启动时，如果redis的根目录下有dump.rdb文件，则会自动加载该文件并恢复数据。可以通过redis的启动日志查看是否有加载数据。</p>
+<h2 id="rdb的优缺点">RDB的优缺点</h2>
+<h4 id="优点">优点</h4>
+<ul>
+<li><strong>二进制的数据存储</strong>，占用磁盘空间小，更适合做备份文件，对<strong>容灾恢复</strong>很有用，并且<strong>加载数据的速度</strong>也很快，redis重启时速度快。</li>
+<li>RDB的自动持久化机制会fork一个子进程，<strong>不会阻塞主进程</strong>。</li>
+</ul>
+<h4 id="缺点">缺点</h4>
+<ul>
+<li>RDB是根据配置的策略进行持久化的，redis挂掉会<strong>丢失上次持久化到现在的数据量</strong>。</li>
+<li>RDB需要fork子进程进行持久化，且会加载内存中的所有数据，如果数据集很大，<strong>fork的操作可能很耗资源</strong>，虽然持久化的过程是不阻塞主线程的，但是创建子进程的时间可能会偏长，甚至高达几毫秒到一秒。</li>
+</ul>
+<h1 id="aof">AOF</h1>
+<p>AOF（Append Only File）中文是附加到文件，顾名思义 AOF 可以把 Redis 每个键值对操作都记录到文件（appendonly.aof）中。</p>
+<h2 id="aof的配置">AOF的配置</h2>
+<h4 id="查看是否开启aof">查看是否开启AOF</h4>
+<p>通过命令<code>config get appendonly</code>可以查看到redis是否开启了AOF：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"><span style="color:#ae81ff">127</span>.<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">1</span>:<span style="color:#ae81ff">6379</span><span style="color:#f92672">&gt;</span> config get appendonly
+<span style="color:#ae81ff">1</span>) <span style="color:#e6db74">&#34;appendonly&#34;</span>
+<span style="color:#ae81ff">2</span>) <span style="color:#e6db74">&#34;no&#34;</span>
+</code></pre></div><h4 id="开启aof持久化">开启AOF持久化</h4>
+<p>Redis 默认是关闭 AOF 持久化的，想要开启 AOF 持久化，有以下两种方式，命令行或者配置文件：</p>
+<ol>
+<li>
+<p>修改配置文件，进行以下设置，完成后要重启redis：</p>
+<pre><code>appendonly yes
+</code></pre></li>
+<li>
+<p>运行时在命令行修改配置，只在一次启动过程中生效：</p>
+<pre><code>config set appendonly yes
+</code></pre></li>
+</ol>
+<h2 id="aof触发持久化的方式">AOF触发持久化的方式</h2>
+<p>AOF持久化也包括自动触发和手动触发两种</p>
+<h4 id="自动触发-1">自动触发</h4>
+<p>两种条件可以触发AOF，满足AOF设置的触发策略，或者满足AOF重写时，都会触发AOF</p>
+<ol>
+<li>
+<p><strong>满足AOF设置的触发策略</strong></p>
+<p>AOF的触发策略通过参数<code>appendfsync</code>设置：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"><span style="color:#ae81ff">127</span>.<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">1</span>:<span style="color:#ae81ff">6379</span><span style="color:#f92672">&gt;</span> config get appendfsync
+<span style="color:#ae81ff">1</span>) <span style="color:#e6db74">&#34;appendfsync&#34;</span>
+<span style="color:#ae81ff">2</span>) <span style="color:#e6db74">&#34;everysec&#34;</span>
+</code></pre></div><p>这个参数有三个可选值：</p>
+<ul>
+<li>always：每条redis的写入操作都会写入磁盘，如果redis宕机，最多丢失一条数据，这种性能较差，很少人用，因为每次写都要操作磁盘，就失去了redis作为内存数据库的优势。</li>
+<li>everysec：每隔一秒写入一次磁盘，最多会丢失一秒的数据。</li>
+<li>no：不设置写入的规则，根据当前操作系统决定何时写入磁盘，linux的话默认是30s写入一次。</li>
+</ul>
+<p>最长使用的就是默认值everysec。</p>
+</li>
+<li>
+<p><strong>满足AOF重写时触发</strong></p>
+<p><strong>AOF重写</strong>：由于AOF是不停的追加写入语句到dump.aof文件的，所以这个文件会越来越大，为了缩小这个文件的体积，可以对文件中的一些写入语句进行合并，已达到缩小文件体积的目的。</p>
+<p>重写的实现：触发AOF重写需要满足两个参数</p>
+<ul>
+<li><code>auto-aof-rewrite-min-size</code>：允许AOF重写的最小dump.aof文件大小，默认是64MB。</li>
+<li><code>auto-aof-rewrite-percentage</code>：AOF重写的大小比例，默认是100%，即只有当前的AOF文件，比最后一次的AOF文件大一倍时才触发重写（加入测试时每秒同步一次，就意味着这一秒里插入了大量的数据）。</li>
+</ul>
+<p><strong>AOF重写的流程</strong>：先生成一个新文件，然后根据旧的aof文件写入新文件，合并其中一些操作，然后交换两个文件，删掉旧的文件即可。</p>
+<p>在触发重写时会先立刻进行一次AOF持久化</p>
+</li>
+</ol>
+<h4 id="手动触发-1">手动触发</h4>
+<p>命令行执行<code>bgrewriteaof</code>即可手动立刻触发一次aof写入。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"><span style="color:#ae81ff">127</span>.<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">1</span>:<span style="color:#ae81ff">6379</span><span style="color:#f92672">&gt;</span> bgrewriteaof
+Background append only file rewriting started
+</code></pre></div><h2 id="数据恢复-1">数据恢复</h2>
+<p>dump.aof文件同样是保存在redis服务的根目录，也同样是随着redis启动时自动加载，并恢复数据。</p>
+<h4 id="持久化文件的加载规则">持久化文件的加载规则：</h4>
+<ul>
+<li>如果只开启了AOF，redis启动时只会加载aof文件。</li>
+<li>如果只开启了RDB，则只会加载rdb文件。</li>
+<li>如果同时启动了AOF和RDB，则会只加载aof文件。</li>
+</ul>
+<h4 id="持久化文件截断的问题">持久化文件截断的问题</h4>
+<p>在AOF写入时如果redis挂掉，那么最后一条记录会被截断，那么重启redis时这条数据就无法恢复，并且会导致redis无法启动，可以设置参数<code>aof-load-truncated=yes</code>，来让redis启动时忽略最后一行的错误数据，而正常启动。</p>
+<p>如果是AOF文件<strong>中间的部分数据出现截断</strong>的现象，上面的参数就没有用了，可以使用两种方式解决：</p>
+<ol>
+<li>使用aof修复工具，命令行输入<code>redis-check-aof</code>，会跳转到aof文件的错误的那一行，然后可以手动修复。</li>
+<li>如果无法手动修复，可以使用<code>redis-check-aof --fix</code>命令，自动修复aof文件，这样会导致错误数据之后的所有数据都被丢弃。</li>
+</ol>
+<h2 id="aof的优缺点">AOF的优缺点</h2>
+<h4 id="优点-1">优点</h4>
+<ul>
+<li>相比rdb，aof的数据更完整，一般都采用1s刷一次磁盘的策略，最多只会丢1s的数据</li>
+<li>追加的方式写入，如果出现异常，也可以通过上面两种方式修复。</li>
+<li>aof文件易于人类理解，如果使用了<code>flushall</code>命令清空了数据库，那么只需要将aof文件中最后一行的<code>flushall</code>命令删除，然后重启redis即可恢复，rdb文件因为是一个时间的内存快照则是没用。</li>
+</ul>
+<h4 id="缺点-1">缺点</h4>
+<ul>
+<li>aof文件比rdb文件大得多。</li>
+<li>在redis负载较高时，RDB效率更高，因为<strong>AOF会阻塞主线程</strong>。</li>
+<li>RDB是拷贝内存快照，而AOF是追加写入磁盘，理论上说RDB更不容易出现错误。</li>
+</ul>
+<h1 id="混合持久化方式-1">混合持久化方式</h1>
+<p>Redis4.0后增加了混合持久化的方式，结合rdb和aof的优点，redis5.0以后这个是默认开启的。</p>
+<h2 id="配置混合持久化">配置混合持久化</h2>
+<p>同样有两种方式可以开启混合持久化：</p>
+<ul>
+<li>
+<p>命令行方式：</p>
+<pre><code>config set aof-use-rdb-preamble yes
+</code></pre></li>
+<li>
+<p>配置文件方式</p>
+<pre><code>aof-use-rdb-preamble yes
+</code></pre></li>
+</ul>
+<h2 id="混合持久化的实现方式">混合持久化的实现方式</h2>
+<p>在进行AOF重写时，会将当前的内存快照以RDB的形式写入aof文件，而后续则继续以aof的格式一条条书写。这样文件大小就大大见减小了，同时rdb的数据恢复也会更快。</p>
+<p>这样aof文件就会是这样：</p>
+<p><img src="/images/redis_persistence/hybrid.png" alt=""></p>
+<h2 id="数据恢复-2">数据恢复</h2>
+<p>同样的，redis会加载相同目录下的dump.aof文件，然后前面rdb的部分就用rbd的方式恢复，后面aof的部分就用aof的方式恢复。</p>
+<h2 id="混合持久化方式的优缺点">混合持久化方式的优缺点</h2>
+<h4 id="优点-2">优点</h4>
+<p>结合了rdb和aof的优势，让redis的数据恢复更快，同时减小了文件大小，并且还能尽量减少数据丢失，和资源消耗。</p>
+<h4 id="缺点-2">缺点</h4>
+<ul>
+<li>aof文件的可读性消失了</li>
+<li>不能向前兼容，只有redis4.0以后的版本能用</li>
+</ul>
+<h1 id="关于redis持久化的一些技巧">关于Redis持久化的一些技巧</h1>
+<ul>
+<li>持久化能保证数据不丢，但同时也影响了Redis的性能，所以需要一个平衡。</li>
+<li>数据丢失不敏感的情况下，可以关掉持久化功能，这样的话redis和memcached差别就不那么大了，甚至memcached的吞吐还要好于redis。</li>
+<li>可以主从部署，可以让一台redis作为写入，但不开启持久化，从redis只读数据，并且开始持久化。</li>
+<li>尽量使用混合持久化的方式。</li>
+<li>Redis对cpu要求不高，但是内存和磁盘的快慢对redis影响很大，所以尽量用比较好的内存和磁盘。</li>
+</ul>
+</div>
+    <div class="post-footer">
+      <div class="info">
+        
+          <span class="separator"><a class="category" href="/categories/%E7%BC%93%E5%AD%98/">缓存</a></span>
+
+
+
+
+        
+
+        
+          <span class="separator"><a class="tag" href="/tags/redis/">Redis</a></span>
+
+
+
+
+        
+      </div>
+    </div>
+
+    
+  </div>
+
+
+          </div>
+        </div>
+      </main>
+    </div><footer class="footer footer--base">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></body>
+</html>
