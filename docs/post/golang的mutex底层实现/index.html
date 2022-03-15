@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="zh-cn"
+  data-theme=""
+><head>
+  <title>
+    
+      杨海瑞
+        |
+        Golang的mutex底层实现
+
+
+      
+
+
+    
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.81.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta
+    name="description"
+    content="
+      
+Per aspera ad astra.
+循此苦旅，终抵群星。
+
+
+
+    "
+  />
+  
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://yanghairui.life/post/golang%E7%9A%84mutex%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.2a2cd9614b7d007dfbb75e8da19e3a0fa872ceab53c6d000c00b7a0c89b85bfc.js"
+    integrity="sha256-KizZYUt9AH37t16NoZ46D6hyzqtTxtAAwAt6DIm4W/w="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js"
+      integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus="
+      crossorigin="anonymous"
+    ></script>
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Golang的mutex底层实现"/>
+<meta name="twitter:description" content="互斥锁 互斥锁的数据结构 互斥锁是并发程序中对一个共享资源进行访问控制的常用手段，Golang中提供了mutex作为互斥锁的实现。mutex的数据结构如下：
+// 定义在src/sync/mutex.go  type Mutex struct{ state int32 sema uint32 } 包括两个字段："/>
+
+
+
+  
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "post",
+        "name": "Golang的mutex底层实现",
+        "headline": "Golang的mutex底层实现",
+        "alternativeHeadline": "",
+        "description": "
+      
+        互斥锁 互斥锁的数据结构 互斥锁是并发程序中对一个共享资源进行访问控制的常用手段，Golang中提供了mutex作为互斥锁的实现。mutex的数据结构如下：\n\/\/ 定义在src\/sync\/mutex.go  type Mutex struct{ state int32 sema uint32 } 包括两个字段：
+
+
+      
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/post\/golang%E7%9A%84mutex%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-10-14T20:01:29.00Z",
+        "datePublished": "2021-10-14T20:01:29.00Z",
+        "dateModified": "2021-10-14T20:01:29.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/post\/golang%E7%9A%84mutex%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0\/",
+        "wordCount" : "66",
+        "genre" : [ 
+      
+      "golang"
+
+    ],
+        "keywords" : [ 
+      
+      "golang"
+
+    ]
+    }
+  </script>
+
+
+
+</head>
+<body>
+    <header><div
+  class="page-top 
+    animated fadeInDown
+
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>
+  <nav>
+    <ul class="nav__list" id="navMenu">
+      <div class="nav__links">
+        
+        
+          
+          <li>
+            <a
+              
+              href="/"
+              
+              title=""
+              >Home</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/post/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/portfolio/"
+              
+              title=""
+              >Portfolio</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >About</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/contact/"
+              
+              title=""
+              >Contact</a
+            >
+          </li>
+
+        
+      </div>
+      <ul>
+        
+        
+          <li>
+            <a class="theme-switch" title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </li>
+
+        
+      </ul>
+    </ul>
+  </nav>
+</div>
+</header>
+    <div class="wrapper">
+      <aside><div
+  class="sidebar
+    animated fadeInDown
+
+  "
+>
+  <div class="sidebar__content">
+    <div class="logo-title">
+      <div class="title">
+        <img src="/images/profile5.jpg" alt="profile picture" />
+        <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
+        <div class="description">
+          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+        <li>
+          <a href="https://stackoverflow.com/users/12924262/horace-yang" rel="me" aria-label="StackOverFlow" title="StackOverFlow">
+            <i class="fab fa-stack-overflow fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://github.com/harryyann" rel="me" aria-label="GitHub" title="GitHub">
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://www.zhihu.com/people/yang-hai-rui-88" rel="me" aria-label="zhihu" title="zhihu">
+            <i class="fab fa-zhihu fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=941811450@qq.com" rel="me" aria-label="e-mail" title="e-mail">
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+    </ul>
+  </div><footer class="footer footer--sidebar">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></div>
+</aside>
+      <main>
+        <div class="autopagerize_page_element">
+          <div class="content">
+  <div
+    class="post 
+      animated fadeInDown
+
+    "
+  >
+    <div class="post-content">
+      
+      <div class="post-title">
+        <h1>Golang的mutex底层实现</h1>
+        
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Thu, Oct 14, 2021
+
+
+              </span
+            >
+            <em class="fas fa-stopwatch"></em>
+            <span class="reading-time">阅读时间 1 分钟</span>
+          </div>
+
+        
+      </div><h1 id="互斥锁">互斥锁</h1>
+<h2 id="互斥锁的数据结构">互斥锁的数据结构</h2>
+<p>互斥锁是并发程序中对一个共享资源进行访问控制的常用手段，Golang中提供了mutex作为互斥锁的实现。mutex的数据结构如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 定义在src/sync/mutex.go
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Mutex</span> <span style="color:#66d9ef">struct</span>{
+    <span style="color:#a6e22e">state</span> <span style="color:#66d9ef">int32</span>
+    <span style="color:#a6e22e">sema</span> <span style="color:#66d9ef">uint32</span>
+}
+</code></pre></div><p>包括两个字段：</p>
+<ul>
+<li>state：表示互斥锁的状态，比如是否被锁定等。</li>
+<li>sema：表示信号量，想要占用这个锁的协程会等待该信号量，解锁的协程会释放该信号量从而唤醒等待信号量的协程。</li>
+</ul>
+<h2 id="mutex的内存布局">Mutex的内存布局</h2>
+<p><img src="/images/mutex/layout.png" alt=""></p>
+<p>state字段是个32位的整型变量，内部实现时把该变量分成四份，用于记录mutex的四种状态，如上图。</p>
+<ul>
+<li>Locked：表示该mutex是否已被锁定，0没有锁定，1已被锁定。</li>
+<li>Woken：表示是否有协程已被唤醒，0没有协程唤醒，1已有协程被唤醒，正在加锁过程中。</li>
+<li>Starving：表示该mutex是否处于饥饿状态，0没有饥饿，1饥饿状态，说明有协程阻塞了超过1ms。</li>
+<li>Waiter：表示处于阻塞中等待锁的协程个数，协程解锁时根据此值来判断是否需要释放信号量。</li>
+</ul>
+<p>goroutine之间抢占锁，实际上就是抢给locked赋值的权力，给Locked域置为1，则说明抢锁成功，抢不到就等待sema信号量，一旦持有锁的协程解锁，等待的协程会依次被唤醒。woken和Starving主要用于控制协程间的抢锁过程。</p>
+<h2 id="mutex加锁解锁的过程">Mutex加锁解锁的过程</h2>
+<h4 id="简单加锁">简单加锁</h4>
+<p>假设当前只有一个协程在加锁，没有其他协程干扰：</p>
+<p><img src="/images/mutex/simple.png" alt=""></p>
+<p>加锁过程会判断Locked标志位是否为0，如果是0则把Locked位置为1，代表加锁成功，其他状态位没变化。</p>
+<h4 id="加锁时锁已被占">加锁时锁已被占</h4>
+<p><img src="/images/mutex/occupy.png" alt=""></p>
+<p>当A已经占用了锁以后，B也想要占用锁时，waiter计数器增加了1，此时协程B会被阻塞，直到Locked变为0后才会被唤醒</p>
+<h4 id="简单解锁">简单解锁</h4>
+<p>解锁时没有其他协程阻塞：</p>
+<p><img src="/images/mutex/simple_unlock.png" alt=""></p>
+<p>由于没有其他协程阻塞等待加锁，所以此时解锁只需要把Locked位置置为0即可，不需要释放信号量。</p>
+<h4 id="解锁时有其他goroutine阻塞">解锁时有其他goroutine阻塞</h4>
+<p>需要将其他goroutine唤醒：</p>
+<p><img src="/images/mutex/occupy_unlock.png" alt=""></p>
+<p>协程A解锁需要分两个步骤：</p>
+<ul>
+<li>一是把Locked位置为0。</li>
+<li>二是查看到Waiter&gt;0，所以释放一个信号量，唤醒一个阻塞的协程，被唤醒的协程B把Locked位置为1，于是B获得锁。</li>
+</ul>
+<h2 id="自旋">自旋</h2>
+<p>自旋时CPU会执行<code>PAUSE</code>指令，CPU对该指令什么都不做，相当于CPU空转，对程序而言相当于sleep了一会，当前实现是30个时钟周期。每次PAUSE后探测一次看看Locked是否被解锁。</p>
+<h4 id="自旋的过程">自旋的过程</h4>
+<ol>
+<li>在尝试加锁时，如果当前该锁的Locked位为1，说明该锁被其他协程持有，尝试加锁的协程并不是马上转入阻塞，而是会通过轮询的方式持续探测该mutex的Locked位是否变为0，这个过程叫做自旋过程。</li>
+<li>自旋的持续时间很短，但如果在自旋过程中发现锁已经被释放，那么该协程可以立刻获得锁，此时即便有其他协程被唤醒也无法获取到锁只能再次被阻塞。</li>
+</ol>
+<p>自旋的好处是，当加锁失败时不必立刻转入阻塞，有一定机会可以不久之后获取到锁，可以避免协程的切换。</p>
+<h4 id="自旋的条件">自旋的条件</h4>
+<p>无限制的自旋会给CPU带来巨大压力，所以自旋的条件至关重要：</p>
+<ul>
+<li>自旋次数要足够小，通常为4次，即cpu会<code>PAUSE</code>四次去探测。</li>
+<li>CPU核数要大于1，否则自旋没意义，因为如果CPU只有一颗，此时其他协程不可能释放锁。</li>
+<li>协程调度机制中的Process数要大于1，比如使用<code>GOMAXPROCS()</code>将处理器设置为1就不能启用自旋。</li>
+<li>协程调度机制中的可运行队列必须为空，否则会延迟协程调度。</li>
+</ul>
+<p>总而言之，协程自旋的条件是十分苛刻的，一定要在不忙的时候才会启用自旋。</p>
+<h4 id="自旋的优势">自旋的优势</h4>
+<p>充分利用CPU，避免协程切换，因为<strong>当前申请加锁的协程拥有CPU</strong>，如果经过短时间的自旋可以获得锁，当前协程就可以继续运行，不必进入阻塞状态，换成另一个协程，增加了上下文切换。</p>
+<h4 id="自旋的问题">自旋的问题</h4>
+<ul>
+<li>自旋过程中能抢到锁，一定意味着同一时刻有协程释放了锁。而当锁被释放时还会释放一个信号量来唤醒一个等待的协程，被唤醒的协程得到cpu后开始运行，此时发现协程已经被抢占了，所以只好再次阻塞，不过阻塞时会判断上次阻塞到本次阻塞经过了多少时间，如果超过1ms，就会将mutex标记为Starving状态。然后再阻塞这个协程。</li>
+<li>当mutex被标记为饥饿状态，则会取消自旋过程，当当前协程交出锁以后，会按顺序唤醒协程，而新协程不会自旋，而是直接排队，新协程被唤醒后，mutex的等待计数也会减1。</li>
+</ul>
+<h2 id="mutex的模式">Mutex的模式</h2>
+<p>每个Mutex都有两个模式：<strong>normal</strong>和<strong>starving</strong>。</p>
+<ul>
+<li>
+<p>normal模式：</p>
+<p>默认情况下为normal模式，协程如果加锁不成功不会立刻转入阻塞排队，而是判断是否满足自旋的条件，如果满足则会启动自旋，尝试抢锁。</p>
+</li>
+<li>
+<p>starving模式：</p>
+<p>自旋过程中能抢到锁，一定意味着同一时刻有协程释放了锁。而当锁被释放时还会释放一个信号量来唤醒一个等待的协程，被唤醒的协程得到CPU后开始运行，此时发现协程已经被抢占了，所以只好再次阻塞，不过阻塞时会判断上次阻塞到本次阻塞经过了多少时间，如果超过1ms，就会将mutex标记为starving状态。然后再阻塞这个协程。</p>
+<p>当mutex被标记为饥饿状态，则会取消自旋过程，当当前协程交出锁以后，会按顺序唤醒协程，而新协程不会自旋，而是直接排队，新协程被唤醒后，mutex的等待计数也会减1。</p>
+</li>
+</ul>
+<h2 id="state的woken状态">state的woken状态</h2>
+<p>woken状态用于加锁和解锁过程的通信。比如，两个协程一个在解锁，而另一个通过自旋后正在加锁，此时把woken标记为1，用于通知解锁协程不用释放信号量唤醒其他协程了，这个锁我要了，你解完锁就完事了。</p>
+<h2 id="为什么重复解锁要panic">为什么重复解锁要panic</h2>
+<p>unlock的过程分为将locked置为0，然后判断waiter的值，waiter&gt;0则释放信号量唤醒其他协程。如果多次unlock，那么可能每次都释放一个信号量，这样会唤醒多个协程，多个协程唤醒后会继续在lock()的逻辑下争抢锁，那么Lock()会增加复杂度，并且还有不必要的协程切换。</p>
+</div>
+    <div class="post-footer">
+      <div class="info">
+        
+          <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
+
+
+
+
+        
+
+        
+          <span class="separator"><a class="tag" href="/tags/golang/">golang</a></span>
+
+
+
+
+        
+      </div>
+    </div>
+
+    
+  </div>
+
+
+          </div>
+        </div>
+      </main>
+    </div><footer class="footer footer--base">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></body>
+</html>

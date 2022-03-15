@@ -487,6 +487,62 @@ Raft算法的三个核心问题 对于一个基于raft算法的分布式集群�
     >
       
       <div class="post-title">
+        <h3><a href="/post/golang%E7%9A%84mutex%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/">Golang的mutex底层实现</a></h3>
+      </div>
+      <div class="post-content">
+        <div class="p_part">
+          <p>
+            
+              互斥锁 互斥锁的数据结构 互斥锁是并发程序中对一个共享资源进行访问控制的常用手段，Golang中提供了mutex作为互斥锁的实现。mutex的数据结构如下：
+// 定义在src/sync/mutex.go  type Mutex struct{ state int32 sema uint32 } 包括两个字段：
+
+
+            
+          </p>
+          <a href="/post/golang%E7%9A%84mutex%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/" class="read_more">继续阅读</a></div>
+      </div>
+
+      
+      <div class="post-footer">
+        <div class="meta">
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Thu, Oct 14, 2021
+
+
+              </span
+            >
+            
+              <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
+
+
+
+
+            
+
+            
+              <span class="separator"><a class="tag" href="/tags/golang/">golang</a></span>
+
+
+
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div
+      class="post 
+        animated fadeInDown
+
+      "
+    >
+      
+      <div class="post-title">
         <h3><a href="/post/golang%E7%9A%84channel%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/">Golang的channel底层实现</a></h3>
       </div>
       <div class="post-content">
@@ -810,63 +866,6 @@ hmap的数据结构： map的实现实际上就是runtime包里的hmap：
 
             
               <span class="separator"><a class="tag" href="/tags/golang/">golang</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
-        <h3><a href="/post/golang%E5%8D%95%E4%BE%8B/">Golang实现单例模式</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              单例模式 单例模式是保证一个类，确保在一个系统中永远只有一个实例。在go中，就是保证一个结构体，永远只有一个实例化的对象。
-当一个应用程序中某个对象需要是全局唯一的，就要使用单例模式。单例模式常用在以下场景中：
- 配置类 日志类 必须要以共享模式访问的资源类 需要频繁的创建和删除对象，而对象又可以复用的场景  单例模式不适用的场景：
-
-
-            
-          </p>
-          <a href="/post/golang%E5%8D%95%E4%BE%8B/" class="read_more">继续阅读</a></div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Tue, Jul 13, 2021
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/golang/">golang</a><a class="tag" href="/tags/%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/">编程模式</a></span>
 
 
 

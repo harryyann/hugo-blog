@@ -49,6 +49,18 @@ Raft算法的三个核心问题 对于一个基于raft算法的分布式集群�
     </item>
     
     <item>
+      <title>Golang的mutex底层实现</title>
+      <link>https://yanghairui.life/post/golang%E7%9A%84mutex%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Thu, 14 Oct 2021 20:01:29 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/post/golang%E7%9A%84mutex%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/</guid>
+      
+        <description>互斥锁 互斥锁的数据结构 互斥锁是并发程序中对一个共享资源进行访问控制的常用手段，Golang中提供了mutex作为互斥锁的实现。mutex的数据结构如下：
+// 定义在src/sync/mutex.go  type Mutex struct{ state int32 sema uint32 } 包括两个字段：</description>
+      
+    </item>
+    
+    <item>
       <title>Golang的channel底层实现</title>
       <link>https://yanghairui.life/post/golang%E7%9A%84channel%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/</link>
       <pubDate>Sat, 18 Sep 2021 20:01:29 +0800</pubDate>
