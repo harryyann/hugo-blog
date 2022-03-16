@@ -1,6 +1,6 @@
 ---
 title: "k8s的Informer机制"
-date: 2021-03-12T23:55:43+08:00
+date: 2021-05-12T23:55:43+08:00
 Description: ""
 draft: false
 Tags: [k8s,golang]
@@ -104,4 +104,4 @@ podInfomer.Run(stopch)
 
 
 
-最后，不仅仅k8s原生的API对象可以使用Informer，我们自己创建的CRD(Custom Resource Defined)也可以使用Informer，通过CRD我们就可以创建我们自己的API对象，然后通过Informer机制来监听集群中CRD对象的变化，进而实现一些控制，这就是自定义控制器，和k8s的**operator**模式。
+最后，不仅仅k8s原生的API对象可以使用Informer，我们自己创建的CRD(Custom Resource Defined)也可以使用Informer，通过CRD我们就可以创建我们自己的API对象，然后通过Informer机制来监听集群中CRD对象的变化，进而实现一些控制，这就是自定义控制器，k8s的**operator**模式。

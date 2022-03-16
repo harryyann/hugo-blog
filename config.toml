@@ -104,7 +104,7 @@ url = "http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=941811450@qq.com"
 
 #  [[menu.main]]
 #  name = "Records"
-#  weight = 300
+#  weight = 250
 #  identifier = "records"
 #  url = "/records/"
 

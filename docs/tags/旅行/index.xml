@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Records on Website of Harry Yang</title>
-    <link>https://yanghairui.life/records/</link>
-    <description>Recent content in Records on Website of Harry Yang</description>
+    <title>旅行 on Website of Harry Yang</title>
+    <link>https://yanghairui.life/tags/%E6%97%85%E8%A1%8C/</link>
+    <description>Recent content in 旅行 on Website of Harry Yang</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language><atom:link href="https://yanghairui.life/records/index.xml" rel="self" type="application/rss+xml" />
+    <language>zh-cn</language><atom:link href="https://yanghairui.life/tags/%E6%97%85%E8%A1%8C/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>大连之旅</title>
       <link>https://yanghairui.life/records/%E5%A4%A7%E8%BF%9E/</link>

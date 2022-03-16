@@ -172,5 +172,13 @@
     <loc>https://yanghairui.life/records/</loc>
   </url><url>
     <loc>https://yanghairui.life/series/</loc>
+  </url><url>
+    <loc>https://yanghairui.life/tags/%E5%A4%A7%E8%BF%9E/</loc>
+  </url><url>
+    <loc>https://yanghairui.life/records/%E5%A4%A7%E8%BF%9E/</loc>
+  </url><url>
+    <loc>https://yanghairui.life/tags/%E6%97%85%E8%A1%8C/</loc>
+  </url><url>
+    <loc>https://yanghairui.life/categories/%E6%97%85%E8%A1%8C/</loc>
   </url>
 </urlset>
