@@ -6,7 +6,22 @@
     <description>Recent content in Docker on Website of Harry Yang</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 14 May 2021 10:29:42 +0800</lastBuildDate><atom:link href="https://yanghairui.life/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 16 Jun 2021 15:18:13 +0800</lastBuildDate><atom:link href="https://yanghairui.life/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Docker的底层原理——Namespace和Cgroups技术</title>
+      <link>https://yanghairui.life/post/docker%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/</link>
+      <pubDate>Wed, 16 Jun 2021 15:18:13 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/post/docker%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/</guid>
+      
+        <description>Docker容器技术 容器是一种沙盒技术，可以像一个集装箱一样，把你写的应用程序包起来，这样多个应用之间就会有各自的边界而不互相干扰，而这个容器也可以随意的搬来搬去。容器在外在表现上就像一个轻量级的虚拟机，它有自己的文件系统，自己的CPU和内存大小，自己的网络栈等等，多个容器运行在同一台宿主机上，就像每个容器各自从一台物理机上切了一块一样。但是容器并不像虚拟机一样采用了虚拟化技术，而是直接在操作系统上就可以隔离出多个容器。下面这张图就是容器和虚拟机的对比图：
+左侧就是虚拟机的实现原理，通过Hypervisor提供硬件虚拟化功能，模拟出一个操作系统的各种硬件状况，然后在这个虚拟的硬件上安装一个新的操作系统，也就是图上的Guest OS。
+而右侧就是容器技术，可以看到容器是使用了Docker Engine替代了Hypervisor，并且不需要创建Guest OS，而是直接就构造出了多套文件目录。
+那么容器技术到底是怎么实现的呢？
+通过Namespace让进程&amp;quot;隔离&amp;quot; Linux系统在使用clone()或者fork()函数创建一个进程时，可以给它指定很多参数，比如CLONE_NEWPID参数，就可以在进程创建起来后，让这个进程&amp;quot;看到&amp;quot;一个全新的进程空间：</description>
+      
+    </item>
+    
     <item>
       <title>Docker开启TLS远程连接</title>
       <link>https://yanghairui.life/post/docker%E5%BC%80%E5%90%AFtls%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/</link>

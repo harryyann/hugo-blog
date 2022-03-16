@@ -146,9 +146,9 @@ FIFO Queue的实现者为DeltaFIFO，store是一个内存级的缓存，存储�
             "name": "杨海瑞"
         },
         "copyrightYear" : "2021",
-        "dateCreated": "2021-03-12T23:55:43.00Z",
-        "datePublished": "2021-03-12T23:55:43.00Z",
-        "dateModified": "2021-03-12T23:55:43.00Z",
+        "dateCreated": "2021-05-12T23:55:43.00Z",
+        "datePublished": "2021-05-12T23:55:43.00Z",
+        "dateModified": "2021-05-12T23:55:43.00Z",
         "publisher":{
             "@type":"Organization",
             "name": "杨海瑞",
@@ -371,7 +371,7 @@ FIFO Queue的实现者为DeltaFIFO，store是一个内存级的缓存，存储�
             <em class="fas fa-calendar-day"></em>
             <span class="date"
               >
-                Fri, Mar 12, 2021
+                Wed, May 12, 2021
 
 
               </span
@@ -438,7 +438,7 @@ FIFO Queue的实现者为DeltaFIFO，store是一个内存级的缓存，存储�
 <span style="color:#66d9ef">defer</span> close(<span style="color:#a6e22e">stopch</span>)
 <span style="color:#a6e22e">podInfomer</span>.<span style="color:#a6e22e">Run</span>(<span style="color:#a6e22e">stopch</span>)
 </code></pre></div><p>这样当informer启动后，将会监控集群内的pod事件，当出现add、update、delete事件时就可以通过我们编写的eventHandler进行处理了。</p>
-<p>最后，不仅仅k8s原生的API对象可以使用Informer，我们自己创建的CRD(Custom Resource Defined)也可以使用Informer，通过CRD我们就可以创建我们自己的API对象，然后通过Informer机制来监听集群中CRD对象的变化，进而实现一些控制，这就是自定义控制器，和k8s的<strong>operator</strong>模式。</p>
+<p>最后，不仅仅k8s原生的API对象可以使用Informer，我们自己创建的CRD(Custom Resource Defined)也可以使用Informer，通过CRD我们就可以创建我们自己的API对象，然后通过Informer机制来监听集群中CRD对象的变化，进而实现一些控制，这就是自定义控制器，k8s的<strong>operator</strong>模式。</p>
 </div>
     <div class="post-footer">
       <div class="info">

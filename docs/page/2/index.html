@@ -483,6 +483,65 @@ type Server struct { Addr string Port int Protocol string Timeout time.
     >
       
       <div class="post-title">
+        <h3><a href="/post/docker%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">Docker的底层原理——Namespace和Cgroups技术</a></h3>
+      </div>
+      <div class="post-content">
+        <div class="p_part">
+          <p>
+            
+              Docker容器技术 容器是一种沙盒技术，可以像一个集装箱一样，把你写的应用程序包起来，这样多个应用之间就会有各自的边界而不互相干扰，而这个容器也可以随意的搬来搬去。容器在外在表现上就像一个轻量级的虚拟机，它有自己的文件系统，自己的CPU和内存大小，自己的网络栈等等，多个容器运行在同一台宿主机上，就像每个容器各自从一台物理机上切了一块一样。但是容器并不像虚拟机一样采用了虚拟化技术，而是直接在操作系统上就可以隔离出多个容器。下面这张图就是容器和虚拟机的对比图：
+左侧就是虚拟机的实现原理，通过Hypervisor提供硬件虚拟化功能，模拟出一个操作系统的各种硬件状况，然后在这个虚拟的硬件上安装一个新的操作系统，也就是图上的Guest OS。
+而右侧就是容器技术，可以看到容器是使用了Docker Engine替代了Hypervisor，并且不需要创建Guest OS，而是直接就构造出了多套文件目录。
+那么容器技术到底是怎么实现的呢？
+通过Namespace让进程&quot;隔离&quot; Linux系统在使用clone()或者fork()函数创建一个进程时，可以给它指定很多参数，比如CLONE_NEWPID参数，就可以在进程创建起来后，让这个进程&quot;看到&quot;一个全新的进程空间：
+
+
+            
+          </p>
+          <a href="/post/docker%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="read_more">继续阅读</a></div>
+      </div>
+
+      
+      <div class="post-footer">
+        <div class="meta">
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Wed, Jun 16, 2021
+
+
+              </span
+            >
+            
+              <span class="separator"><a class="category" href="/categories/docker/">docker</a></span>
+
+
+
+
+            
+
+            
+              <span class="separator"><a class="tag" href="/tags/docker/">docker</a><a class="tag" href="/tags/%E5%AE%B9%E5%99%A8/">容器</a></span>
+
+
+
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div
+      class="post 
+        animated fadeInDown
+
+      "
+    >
+      
+      <div class="post-title">
         <h3><a href="/post/innodb%E7%9A%84%E9%9D%9E%E9%94%81%E5%AE%9A%E4%B8%80%E8%87%B4%E6%80%A7%E8%AF%BB/">InnoDB的非锁定一致性读</a></h3>
       </div>
       <div class="post-content">
@@ -713,6 +772,65 @@ Docker也支持远程通过socket进行连接，可以选择开启或者不开�
     >
       
       <div class="post-title">
+        <h3><a href="/post/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/">k8s的Informer机制</a></h3>
+      </div>
+      <div class="post-content">
+        <div class="p_part">
+          <p>
+            
+              Client-go client-go与其他语言版本的k8s不同的地方在于，它不仅仅是一个k8s的客户端，而且还是k8s的核心库，k8s中各个组件与api-server之间的通信都是通过client-go的iformer机制实现的快速低延迟的数据同步。kubernetes中的各个组件和api-server之间都是通过http通信，那么需要非常高的可靠性，时效性。核心就是使用了client-go的informer机制。
+Informer机制 下图是client-go中Informer机制的架构图：
+最外层是一个Informer，可以看到所有功能都被封装到了Informer中，通过Informer与kube-apiserver通信，实现对API资源的list/watch，Informer也可以连接用户定义的eventHandler对捕获到的某些事件进行处理，还可以将watch到的更新，输出到外部，比如存到本地数据库等等。
+Informer的三个组成部分 Reflector 如上图，Reflector包含一个通过clientset实现的ListerWatcher对象和一个Store对象，Reflector会通过ListerWatcher方法对api-server进行watch，通过比对resourceVersion来捕获API资源的变化，然后送入store。store是一个FIFO Queue(先入先出队列)。
+FIFO Queue的实现者为DeltaFIFO，store是一个内存级的缓存，存储捕获到的变更，对Store提供了pop()方法，就实现了一个Queue。
+
+
+            
+          </p>
+          <a href="/post/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/" class="read_more">继续阅读</a></div>
+      </div>
+
+      
+      <div class="post-footer">
+        <div class="meta">
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Wed, May 12, 2021
+
+
+              </span
+            >
+            
+              <span class="separator"><a class="category" href="/categories/k8s/">k8s</a></span>
+
+
+
+
+            
+
+            
+              <span class="separator"><a class="tag" href="/tags/k8s/">k8s</a><a class="tag" href="/tags/golang/">golang</a></span>
+
+
+
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div
+      class="post 
+        animated fadeInDown
+
+      "
+    >
+      
+      <div class="post-title">
         <h3><a href="/post/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/">redo log的两阶段提交</a></h3>
       </div>
       <div class="post-content">
@@ -738,120 +856,6 @@ Docker也支持远程通过socket进行连接，可以选择开启或者不开�
             <span class="date"
               >
                 Sat, May 8, 2021
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/mysql/">MySQL</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
-        <h3><a href="/post/innodb%E7%89%B9%E6%80%A7/">Innodb存储引擎的特性</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              InnoDB存储引擎的体系架构 InnoDB存储引擎的体系架构大致如下图所示，可以看到主要包含了一系列后台线程，和一个大的缓冲池。最底层则是文件系统。
-InnoDB的线程模型 InnoDB的线程主要分为Master线程、IO线程、Purge线程和Page Cleaner线程。
-Master 线程 是核心的后台线程，主要负责调度其他线程，以及脏页的刷新，undo页的回收，redo log的刷新，合并缓冲区等。（版本不同做的工作不一样）
-IO线程 innodb中大量使用了AIO（异步IO）来处理写请求，以提高性能，IO线程用于处理这些IO操作的回调。
-
-
-            
-          </p>
-          <a href="/post/innodb%E7%89%B9%E6%80%A7/" class="read_more">继续阅读</a></div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Fri, May 7, 2021
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/mysql/">MySQL</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
-        <h3><a href="/post/mysql%E5%A4%8D%E5%88%B6/">MySQL的复制</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              复制 复制是让一台服务器的数据和其他服务器保持同步。MySQL的复制是通过binlog实现的，binlog有三种类型：
- statement：记录的就是SQL语句，优点是人类可读，并且占用空间较小，但是基于该类型binlog的复制可能会产生不一致，比如执行某个特定函数，在复制后的结果可能和之前不一样。 raw：记录的是具体的每一行的变化细节，可以保证复制的正确性，保证数据一致，但是一行一行的记录占用空间较大。实际使用中采用raw的比较多。 mixed：是statement和raw的结合，一般的语句修改都采用statement格式保存，当碰到一些可能引起复制不一致的函数时，改为采用raw保存。这样既能缩小日志占用空间，也可以保证复制的数据一致性。  复制的过程  主库产生binlog 备库的IO线程，请求主库的binlog，并将binlog保存到自己本地的中继日志relay log中 备库的sql线程读取relay log，通过重放relay log完成复制  后续会进行详细说明，大体的过程如下图：
-
-
-            
-          </p>
-          <a href="/post/mysql%E5%A4%8D%E5%88%B6/" class="read_more">继续阅读</a></div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Thu, May 6, 2021
 
 
               </span
