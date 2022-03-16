@@ -253,9 +253,8 @@ Docker也支持远程通过socket进行连接，可以选择开启或者不开�
       
         <description>Client-go client-go与其他语言版本的k8s不同的地方在于，它不仅仅是一个k8s的客户端，而且还是k8s的核心库，k8s中各个组件与api-server之间的通信都是通过client-go的iformer机制实现的快速低延迟的数据同步。kubernetes中的各个组件和api-server之间都是通过http通信，那么需要非常高的可靠性，时效性。核心就是使用了client-go的informer机制。
 Informer机制 下图是client-go中Informer机制的架构图：
-最外层是一个Informer，可以看到所有功能都被封装到了Informer中，通过Informer与kube-apiserver通信，实现对API资源的list/watch，Informer也可以连接用户定义的eventHandler对捕获到的某些事件进行处理，还可以将watch到的更新，输出到外部，比如存到本地数据库等等。
-Informer的三个组成部分 Reflector 如上图，Reflector包含一个通过clientset实现的ListerWatcher对象和一个Store对象，Reflector会通过ListerWatcher方法对api-server进行watch，通过比对resourceVersion来捕获API资源的变化，然后送入store。store是一个FIFO Queue(先入先出队列)。
-FIFO Queue的实现者为DeltaFIFO，store是一个内存级的缓存，存储捕获到的变更，对Store提供了pop()方法，就实现了一个Queue。</description>
+最外层是一个Informer，可以看到所有功能都被封装到了Informer中，通过Informer与kube-apiserver通信，实现对API资源的list/watch（所谓ListAndWatch就是通过List获取到所有最新版本的API对象，然后再通过Watch机制监听这些API对象的变化），Informer也可以连接用户定义的eventHandler对捕获到的某些事件进行处理，还可以将watch到的更新，输出到外部，比如存到本地数据库等等。总体而言，所谓的 Informer，就是一个自带缓存和索引机制，可以触发 Handler 的客户端库。
+Informer的三个组成部分 Reflector 如上图，Reflector包含一个通过clientset实现的ListerWatcher对象和一个Store对象，Reflector会通过ListerWatcher方法对api-server进行watch，通过比对resourceVersion来捕获API资源的变化，然后送入store。store是一个FIFO Queue(先入先出队列)。</description>
       
     </item>
     

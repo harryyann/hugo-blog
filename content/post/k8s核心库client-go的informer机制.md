@@ -18,7 +18,7 @@ client-go与其他语言版本的k8s不同的地方在于，它不仅仅是一�
 
 ![Image](/images/informer.png)
 
-最外层是一个Informer，可以看到所有功能都被封装到了Informer中，通过Informer与kube-apiserver通信，实现对API资源的list/watch，Informer也可以连接用户定义的eventHandler对捕获到的某些事件进行处理，还可以将watch到的更新，输出到外部，比如存到本地数据库等等。
+最外层是一个Informer，可以看到所有功能都被封装到了Informer中，通过Informer与kube-apiserver通信，实现对API资源的list/watch（所谓ListAndWatch就是通过List获取到所有最新版本的API对象，然后再通过Watch机制监听这些API对象的变化），Informer也可以连接用户定义的eventHandler对捕获到的某些事件进行处理，还可以将watch到的更新，输出到外部，比如存到本地数据库等等。总体而言，所谓的 Informer，就是一个自带缓存和索引机制，可以触发 Handler 的客户端库。
 
 ### Informer的三个组成部分
 
@@ -34,7 +34,7 @@ ontroller将会从Reflector的FIFOQueue中逐条获取到变更事件，然后�
 
 #### Store
 
-护着和apiserver中相同的数据，这里面的数据不是变更数据，而是list的数据，外部可以从Indexer中Get/List到数据。这样如果用户需要获取数据，就可以直接从Store中拿，而不是访问kube-apiserver。通过Store就实现了缓存级别的List/Get我们想要的API对象的方式。
+维护着和apiserver中相同的数据，这里面的数据不是变更数据，而是list的数据，外部可以从Indexer中Get/List到数据。这样如果用户需要获取数据，就可以直接从Store中拿，而不是访问kube-apiserver。通过Store就实现了缓存级别的List/Get我们想要的API对象的方式。
 
 ## Informer的使用方式
 
@@ -104,4 +104,4 @@ podInfomer.Run(stopch)
 
 
 
-最后，不仅仅k8s原生的API对象可以使用Informer，我们自己创建的CRD(Custom Resource Defined)也可以使用Informer，通过CRD我们就可以创建我们自己的API对象，然后通过Informer机制来监听集群中CRD对象的变化，进而实现一些控制，这就是自定义控制器，k8s的**operator**模式。
+最后，不仅仅k8s原生的API对象可以使用Informer，我们自己创建的CRD(Custom Resource Defined)也可以使用Informer，通过CRD我们就可以创建我们自己的API对象，然后通过Informer机制来监听集群中CRD对象的变化，进而实现一些控制，这就是自定义控制器。而通过自定义控制器去管理有状态应用，就是k8s的**Operator**模式。
