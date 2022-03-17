@@ -6,7 +6,18 @@
     <description>Recent content in golang on Website of Harry Yang</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 14 Oct 2021 20:01:29 +0800</lastBuildDate><atom:link href="https://yanghairui.life/categories/golang/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 15 Oct 2021 19:34:46 +0800</lastBuildDate><atom:link href="https://yanghairui.life/categories/golang/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CPU的cache line和false sharding问题</title>
+      <link>https://yanghairui.life/post/cpu%E7%9A%84%E7%BC%93%E5%AD%98%E8%A1%8C/</link>
+      <pubDate>Fri, 15 Oct 2021 19:34:46 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/post/cpu%E7%9A%84%E7%BC%93%E5%AD%98%E8%A1%8C/</guid>
+      
+        <description>CPU的多级缓存 随着计算机进入多核时代，CPU处理速度和内存之间的鸿沟越来越大，因此多核CPU都通过缓存行提高CPU和内存的交互效率。CPU 缓存（Cache Memory）是位于 CPU 与内存之间的临时存储器，它的容量比内存小的多但是交换速度却比内存要快得多。在缓存中的数据是内存中的一小部分，但这一小部分是短时间内 CPU 即将访问的，当 CPU 调用大量数据时，就可避开内存直接从缓存中调用，从而加快读取速度。</description>
+      
+    </item>
+    
     <item>
       <title>Golang的mutex底层实现</title>
       <link>https://yanghairui.life/post/golang%E7%9A%84mutex%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/</link>
@@ -41,20 +52,6 @@
         <description>指针 golang中的指针种类 golang的指针类型分为三种，*类型，unsafe.Pointer，uintptr。
  *类型：普通指针类型，用于传递对象地址，不能进行指针运算。 unsafe.Pointer：通用指针类型，用于转换不同类型的指针，不能进行指针运算，不能读取内存存储的值，必须要转换到某一类型的普通指针。 uintptr：用于指针运算，GC不把uintptr当指针，uintptr无法持有对象，uintptr类型的目标会被回收。  通过以上就可以看出：
  unsafe.</description>
-      
-    </item>
-    
-    <item>
-      <title>CPU的多级缓存和cache line</title>
-      <link>https://yanghairui.life/post/cpu%E7%9A%84%E7%BC%93%E5%AD%98%E8%A1%8C/</link>
-      <pubDate>Sun, 15 Aug 2021 19:34:46 +0800</pubDate>
-      
-      <guid>https://yanghairui.life/post/cpu%E7%9A%84%E7%BC%93%E5%AD%98%E8%A1%8C/</guid>
-      
-        <description>CPU的多级缓存 随着计算机进入多核时代，CPU处理速度和内存之间的鸿沟越来越大，因此多核CPU都通过缓存行提高CPU和内存的交互效率。
-CPU根据型号不同都会有三层以上的缓存行：
-如上图，是一个CPU的典型架构，共有三级缓存
- L1缓存：一般都是分成指令缓存，和数据缓存，分开放。 L2缓存：从L2缓存开始部分指令和数据，L1和L2缓存都是在一个真实的核中的。 L3缓存：从L3开始，往往都是一颗CPU中所有核心共享的。  这三级缓存也是离CPU越远的速度越慢：</description>
       
     </item>
     

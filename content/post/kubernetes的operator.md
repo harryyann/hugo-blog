@@ -1,5 +1,5 @@
 ---
-title: "编写Operator管理有状态应用"
+title: "使用kubebuilder编写Operator"
 date: 2021-09-20T17:39:32+08:00
 Description: ""
 Tags: [k8s, operator]
