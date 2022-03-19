@@ -603,7 +603,7 @@ I0318 02:52:29.431037       <span style="color:#ae81ff">1</span> leaderelection.
 <p>Reconcile函数位于<code>controllers</code>目录下。它的定义是这样的：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">MyPodReconciler</span>) <span style="color:#a6e22e">Reconcile</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">req</span> <span style="color:#a6e22e">ctrl</span>.<span style="color:#a6e22e">Request</span>) (<span style="color:#a6e22e">ctrl</span>.<span style="color:#a6e22e">Result</span>, <span style="color:#66d9ef">error</span>)
 </code></pre></div><p>参数req中会包含当前所变更对象的namespace和name信息，通过这两个值，就可以获取到我们创建、修改、删除的MyPod对象，进而完成一些操作。</p>
-<p>这部分主要是写逻辑，我就不细说了，代码我放在我们<a href="https://github.com/harryyann/mypod-operator">仓库</a>里了。</p>
+<p>这部分主要是写逻辑，我就不细说了，代码我放在这个<a href="https://github.com/harryyann/mypod-operator">仓库</a>里了。</p>
 <h2 id="在集群上调试">在集群上调试</h2>
 <p>改完代码后，执行<code>make docker-build</code>构建镜像，执行<code>make docker-push</code>推送镜像。</p>
 <p>然后在集群中通过上设置deployment的<code>imagePullPolicy=Always</code>，然后删除manager的pod，他就会自动重建，并拉取最新的镜像。</p>

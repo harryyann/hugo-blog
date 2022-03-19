@@ -325,7 +325,7 @@ func (r *MyPodReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 
 参数req中会包含当前所变更对象的namespace和name信息，通过这两个值，就可以获取到我们创建、修改、删除的MyPod对象，进而完成一些操作。
 
-这部分主要是写逻辑，我就不细说了，代码我放在我们[仓库](https://github.com/harryyann/mypod-operator)里了。
+这部分主要是写逻辑，我就不细说了，代码我放在这个[仓库](https://github.com/harryyann/mypod-operator)里了。
 
 
 
