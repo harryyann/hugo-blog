@@ -314,6 +314,63 @@ Per aspera ad astra.
     >
       
       <div class="post-title">
+        <h3><a href="/post/golang%E7%9A%84map%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/">Golang的map底层实现</a></h3>
+      </div>
+      <div class="post-content">
+        <div class="p_part">
+          <p>
+            
+              Map的底层数据结构 Golang的map数据类型底层使用的是哈希表实现，一个哈希表可以有多个哈希表节点，即bucket，一个bucket保存着map中的一个或者一组键值对。
+hmap的数据结构： map的实现实际上就是runtime包里的hmap：
+// 定义在src/runtime/map.go中  type hmap struct{ count int // 当前保存的元素个数  .
+
+
+            
+          </p>
+          <a href="/post/golang%E7%9A%84map%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/" class="read_more">继续阅读</a></div>
+      </div>
+
+      
+      <div class="post-footer">
+        <div class="meta">
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Wed, Jul 14, 2021
+
+
+              </span
+            >
+            
+              <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
+
+
+
+
+            
+
+            
+              <span class="separator"><a class="tag" href="/tags/golang/">golang</a></span>
+
+
+
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div
+      class="post 
+        animated fadeInDown
+
+      "
+    >
+      
+      <div class="post-title">
         <h3><a href="/post/golang%E5%8D%95%E4%BE%8B/">Golang实现单例模式</a></h3>
       </div>
       <div class="post-content">
@@ -811,64 +868,6 @@ Informer的三个组成部分 Reflector 如上图，Reflector包含一个通过c
 
             
               <span class="separator"><a class="tag" href="/tags/k8s/">k8s</a><a class="tag" href="/tags/golang/">golang</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
-        <h3><a href="/post/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/">redo log的两阶段提交</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              WAL技术 WAL(Write-Ahead Logging)，就是先些日志，再写磁盘。
-当我们向MySQL更新一条记录的时候，InnoDB存储引擎就会把记录顺序的写到redo log中，然后更新InnoDB的buffer pool，并不更新磁盘中的数据页，然后这次更新操作就算是完成了，之后InnoDB存储引擎就会在它有空的时候，把redo log中记录的记录刷到磁盘上的数据页中完成最终的持久化。
-由于磁盘的顺序写入效率要远高于随机写入，并且还有组提交等优化，这种方式可以大大提高数据更新时的效率。
-关于磁盘的顺序写入，需要注意一下。不是说打开一个文件之后append就是顺序写入了。顺序写入需要知道磁盘上要写入的位置，直接操作磁盘，向某个特定的地址写入，顺序写入时，磁盘的磁头不需要移动就可以直接写入，这样才有效率的提升。Redo log Redo log是Innodb存储引擎提供的用于优化更新操作的日志。它的结构可以看成是个环形的磁盘区域。
-
-
-            
-          </p>
-          <a href="/post/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/" class="read_more">继续阅读</a></div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Sat, May 8, 2021
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/mysql/">MySQL</a></span>
 
 
 

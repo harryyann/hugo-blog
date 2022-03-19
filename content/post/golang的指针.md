@@ -75,7 +75,7 @@ struct：
 
 #### unsafe.Pointer进行普通指针类型转换
 
-```
+```go
 v := int(13)
 p := unsafe.Pointer(&v) // 接收一个指针，返回一个Pointer对象
 uv := (*uint)(p)  //将p强制转换为uint类型的指针

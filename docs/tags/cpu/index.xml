@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>cpu on Website of Harry Yang</title>
+    <link>https://yanghairui.life/tags/cpu/</link>
+    <description>Recent content in cpu on Website of Harry Yang</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 15 Oct 2021 19:34:46 +0800</lastBuildDate><atom:link href="https://yanghairui.life/tags/cpu/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CPU的cache line和false sharding问题</title>
+      <link>https://yanghairui.life/post/cpu%E7%9A%84%E7%BC%93%E5%AD%98%E8%A1%8C/</link>
+      <pubDate>Fri, 15 Oct 2021 19:34:46 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/post/cpu%E7%9A%84%E7%BC%93%E5%AD%98%E8%A1%8C/</guid>
+      
+        <description>CPU的多级缓存 随着计算机进入多核时代，CPU处理速度和内存之间的鸿沟越来越大，因此多核CPU都通过缓存行提高CPU和内存的交互效率。CPU 缓存（Cache Memory）是位于 CPU 与内存之间的临时存储器，它的容量比内存小的多但是交换速度却比内存要快得多。在缓存中的数据是内存中的一小部分，但这一小部分是短时间内 CPU 即将访问的，当 CPU 调用大量数据时，就可避开内存直接从缓存中调用，从而加快读取速度。</description>
+      
+    </item>
+    
+  </channel>
+</rss>

@@ -314,6 +314,64 @@ Per aspera ad astra.
     >
       
       <div class="post-title">
+        <h3><a href="/post/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/">redo log的两阶段提交</a></h3>
+      </div>
+      <div class="post-content">
+        <div class="p_part">
+          <p>
+            
+              WAL技术 WAL(Write-Ahead Logging)，就是先些日志，再写磁盘。
+当我们向MySQL更新一条记录的时候，InnoDB存储引擎就会把记录顺序的写到redo log中，然后更新InnoDB的buffer pool，并不更新磁盘中的数据页，然后这次更新操作就算是完成了，之后InnoDB存储引擎就会在它有空的时候，把redo log中记录的记录刷到磁盘上的数据页中完成最终的持久化。
+由于磁盘的顺序写入效率要远高于随机写入，并且还有组提交等优化，这种方式可以大大提高数据更新时的效率。
+关于磁盘的顺序写入，需要注意一下。不是说打开一个文件之后append就是顺序写入了。顺序写入需要知道磁盘上要写入的位置，直接操作磁盘，向某个特定的地址写入，顺序写入时，磁盘的磁头不需要移动就可以直接写入，这样才有效率的提升。Redo log Redo log是Innodb存储引擎提供的用于优化更新操作的日志。它的结构可以看成是个环形的磁盘区域。
+
+
+            
+          </p>
+          <a href="/post/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/" class="read_more">继续阅读</a></div>
+      </div>
+
+      
+      <div class="post-footer">
+        <div class="meta">
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Sat, May 8, 2021
+
+
+              </span
+            >
+            
+              <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
+
+
+
+
+            
+
+            
+              <span class="separator"><a class="tag" href="/tags/mysql/">MySQL</a></span>
+
+
+
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div
+      class="post 
+        animated fadeInDown
+
+      "
+    >
+      
+      <div class="post-title">
         <h3><a href="/post/innodb%E7%89%B9%E6%80%A7/">Innodb存储引擎的特性</a></h3>
       </div>
       <div class="post-content">
@@ -723,7 +781,7 @@ Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需
         <div class="p_part">
           <p>
             
-               
+              2021年10月2日，出发去大连&hellip;&hellip; 周水子机场外的牌子: 海边的空气很好，但是风也很大，看见一束飘向空中的氢气球，有点美好，也很残酷： 到达傍晚时的星海湾： 海鸥天天会来这蹭吃的： 星海广场附近的一个城堡式酒店，以后有钱了进去住住看： 晚上的星海湾，一个在船上钓鱼的老头： 第二天我们去了威尼斯水城，这里海边的别墅真不错，我看了一下价格一套八百多万 Σ( ° △ °|||)︴ 威尼斯水城的一间教堂，感觉跟我家那边的风格不太一样： 大连到处都是广场，在一个广场上我们遇见了婉玲 婉玲的建议，尝试坐一下大连的有轨电车，很有复古风： 晚上回星海湾一个名叫《浪》的酒吧里喝了点酒，聊了会天： 大连有的地名很好听，比如“海之韵” 海之韵附近的棒棰岛： 我们的旅程快结束了，最后去了一个公园，大连除了广场很多，公园也很多： 公园的山上可以看到星海湾大桥： 最后拍了张合影，希望以后还能再见吧 （从左至右：昊哥，婉玲，我）
 
 
             

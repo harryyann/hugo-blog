@@ -162,15 +162,22 @@ Per aspera ad astra.
 
     ,
         "url" : "https:\/\/yanghairui.life\/post\/cpu%E7%9A%84%E7%BC%93%E5%AD%98%E8%A1%8C\/",
-        "wordCount" : "211",
+        "wordCount" : "219",
         "genre" : [ 
       
-      "golang"
+      "计算机基础"
 
     ],
         "keywords" : [ 
       
-      "golang"
+      "cpu"
+
+    
+      
+        ,
+
+      
+      "cache"
 
     ]
     }
@@ -366,7 +373,7 @@ Per aspera ad astra.
               </span
             >
             <em class="fas fa-stopwatch"></em>
-            <span class="reading-time">阅读时间 1 分钟</span>
+            <span class="reading-time">阅读时间 2 分钟</span>
           </div>
 
         
@@ -414,7 +421,7 @@ Per aspera ad astra.
 <li>write back：写操作只写cache，然后再flush到内存。</li>
 <li>write through：写操作同时写cache和内存。</li>
 </ul>
-<p>因为内存和cache的性能鸿沟，所以同时写的话太慢了，一般都会采用write back的方案。但是这样就会有这样一个场景，当多个线程操作的数据，刚好在同一个缓存行时，就需要通过协议来进行同步，大量同步反而会造成性能下降，甚至还不如没有缓存行，就出现了**伪共享（False sharding）**问题。</p>
+<p>因为内存和cache的性能鸿沟，所以同时写的话太慢了，一般都会采用write back的方案。但是这样就会有这样一个场景，当多个线程操作的数据，刚好在同一个缓存行时，就需要通过协议来进行同步，大量同步反而会造成性能下降，甚至还不如没有缓存行，就出现了<strong>伪共享</strong>(False sharding)问题。</p>
 <h1 id="false-sharding">False sharding</h1>
 <h2 id="mesi协议和rfo请求">MESI协议和RFO请求</h2>
 <p>多线程编程时，一个核想要访问另一个核的 L1 或 L2 级缓存上的数据时，该怎么办呢？容易想到的方法是让这个核直接跨核心去访问另一个核的数据，这种方法的缺点是速度不够快，跨核访问需要通过 Memory Controller (内存控制器，用于CPU核心间的数据交换)。典型的情况是第 2 个核经常访问第 1 个核的这条数据，那么每次都有跨核的消耗。更糟的是，有可能第 2 个核与第 1 个核就不在一个插槽内；况且 Memory Controller 的总线带宽是有限的，也扛不住这么多数据传输。</p>
@@ -449,15 +456,15 @@ Per aspera ad astra.
 <p>表面上 X 和 Y 都是被独立线程操作的，而且两操作之间也没有任何关系。就因为这两个数据共享了一个缓存行，就造成了 L1 和 L2 缓存的几乎失效。而所有的竞争冲突都是来源于共享。</p>
 <h2 id="如何避免false-sharding">如何避免False sharding</h2>
 <p>既然False sharding的根本原因，就是缓存行共享。那么解决方式自然是不要共享，我们知道一个缓存行有64个字节，当我们用多线程操作数据时，尽量让这些数据不在一个缓存行中，比如我们可以通过填充缓存行的方式，把多线程操作的多个数据隔离开，让他们不要共享。</p>
-<p>举个例子，比如我有一个线程 A，它要操作一个数组 1，还有一个线程B，要操作数组 2，那么我们就把数组 1和数组 2填充到两倍的cache line大小，则无论两个数组在内存中是如何排布的，CPU在取任何一个数组的任何一个元素，在加载到自己缓存的cache line时，这个cache line中都不可能拥有另一个数组中的元素，两个数组的元素永远都不可能在同一个cache line中，则不会有False sharding问题了。</p>
+<p>举个例子，比如我有一个线程 A，它要操作一个数组 1，还有一个线程B，要操作数组 2，那么我们就把数组 1和数组 2填充到两倍的 cache line 大小，则无论两个数组在内存中是如何排布的，CPU在取任何一个数组的任何一个元素，在加载到自己缓存的 cache line 时，这个cache line中都不可能拥有另一个数组中的元素，两个数组的元素永远都不可能在同一个 cache line 中，则不会有 False sharding 问题了。</p>
 <h2 id="实际开发中要不要关注false-sharding">实际开发中要不要关注False sharding</h2>
-<p>False sharding问题十分隐蔽，而且不同的机器缓存行大小也不一样，不同的语言不同的数据结构，不同的业务代码，占用的内容空间也不一样，我们暂时也无法从系统层面上通过工具来探测伪共享事件。而且填充缓存行也会造成CPU缓存的浪费。</p>
-<p>所以这个问题，如果是很底层的开发，十分要求性能，那么根据实际情况可以考虑这个问题。如果是上层开发，没那么极端的要求，在这个问题上浪费时间，我觉得就是得不偿失的了。</p>
+<p>False sharding问题十分隐蔽，而且不同的机器缓存行大小也不一样，不同的语言不同的数据结构，不同的业务代码，占用的缓存空间也不一样，我们暂时也无法从系统层面上通过工具来探测伪共享事件。而且填充缓存行也会造成CPU缓存的浪费。</p>
+<p>所以这个问题，如果是很底层的开发，十分要求性能，那么根据实际情况可以考虑优化这个问题。如果是上层开发，没那么极端的要求，在这个问题上浪费时间，我觉得就有些得不偿失了。</p>
 </div>
     <div class="post-footer">
       <div class="info">
         
-          <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
+          <span class="separator"><a class="category" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a></span>
 
 
 
@@ -465,7 +472,7 @@ Per aspera ad astra.
         
 
         
-          <span class="separator"><a class="tag" href="/tags/golang/">golang</a></span>
+          <span class="separator"><a class="tag" href="/tags/cpu/">cpu</a><a class="tag" href="/tags/cache/">cache</a></span>
 
 
 

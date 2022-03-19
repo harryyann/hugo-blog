@@ -72,6 +72,17 @@ Raft算法的三个核心问题 对于一个基于raft算法的分布式集群�
     </item>
     
     <item>
+      <title>使用Kubebuilder编写Operator</title>
+      <link>https://yanghairui.life/post/kubernetes%E7%9A%84operator/</link>
+      <pubDate>Mon, 20 Sep 2021 17:39:32 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/post/kubernetes%E7%9A%84operator/</guid>
+      
+        <description>CRD和自定义控制器 在k8s的Informer机制这篇文章中我们了解了K8s的Informer机制，以及对于k8s原生资源的Informer对象的使用方式。Informer机制归根到底就是利用了kube-apiserver的ListAndWatch机制，去监听集群中特定的API对象的变更，进而去实现一些控制。而且k8s的API对象是支持拓展的，允许用户在 Kubernetes 中添加一个跟 Pod、Node 类似的、新的 API 资源类型，然后编写一个针对自定义API对象的控制器，通过Informer机制去监听这个新的API对象在集群中的变更，然后实现一些控制。这中自定义的API对象就是CRD(Custom Resource Definition)。</description>
+      
+    </item>
+    
+    <item>
       <title>Golang的channel底层实现</title>
       <link>https://yanghairui.life/post/golang%E7%9A%84channel%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/</link>
       <pubDate>Sat, 18 Sep 2021 20:01:29 +0800</pubDate>
@@ -398,7 +409,7 @@ wechat: redamancy40520</description>
       
       <guid>https://yanghairui.life/records/%E5%A4%A7%E8%BF%9E/</guid>
       
-        <description> </description>
+        <description>2021年10月2日，出发去大连&amp;hellip;&amp;hellip; 周水子机场外的牌子: 海边的空气很好，但是风也很大，看见一束飘向空中的氢气球，有点美好，也很残酷： 到达傍晚时的星海湾： 海鸥天天会来这蹭吃的： 星海广场附近的一个城堡式酒店，以后有钱了进去住住看： 晚上的星海湾，一个在船上钓鱼的老头： 第二天我们去了威尼斯水城，这里海边的别墅真不错，我看了一下价格一套八百多万 Σ( ° △ °|||)︴ 威尼斯水城的一间教堂，感觉跟我家那边的风格不太一样： 大连到处都是广场，在一个广场上我们遇见了婉玲 婉玲的建议，尝试坐一下大连的有轨电车，很有复古风： 晚上回星海湾一个名叫《浪》的酒吧里喝了点酒，聊了会天： 大连有的地名很好听，比如“海之韵” 海之韵附近的棒棰岛： 我们的旅程快结束了，最后去了一个公园，大连除了广场很多，公园也很多： 公园的山上可以看到星海湾大桥： 最后拍了张合影，希望以后还能再见吧 （从左至右：昊哥，婉玲，我）</description>
       
     </item>
     

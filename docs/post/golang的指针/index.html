@@ -422,12 +422,12 @@ Per aspera ad astra.
 </ul>
 <h3 id="常用使用方式">常用使用方式</h3>
 <h4 id="unsafepointer进行普通指针类型转换">unsafe.Pointer进行普通指针类型转换</h4>
-<pre><code>v := int(13)
-p := unsafe.Pointer(&amp;v) // 接收一个指针，返回一个Pointer对象
-uv := (*uint)(p)  //将p强制转换为uint类型的指针
-fmt.Println(reflect.TypeOf(uv))  // *uint
-fmt.Println(*uv)  // 13
-</code></pre><h4 id="unsafepointer用于操作结构体的私有变量">unsafe.Pointer用于操作结构体的私有变量</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> int(<span style="color:#ae81ff">13</span>)
+<span style="color:#a6e22e">p</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">v</span>) <span style="color:#75715e">// 接收一个指针，返回一个Pointer对象
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">uv</span> <span style="color:#f92672">:=</span> (<span style="color:#f92672">*</span><span style="color:#66d9ef">uint</span>)(<span style="color:#a6e22e">p</span>)  <span style="color:#75715e">//将p强制转换为uint类型的指针
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">TypeOf</span>(<span style="color:#a6e22e">uv</span>))  <span style="color:#75715e">// *uint
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">uv</span>)  <span style="color:#75715e">// 13
+</span></code></pre></div><h4 id="unsafepointer用于操作结构体的私有变量">unsafe.Pointer用于操作结构体的私有变量</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">a</span>
 
 <span style="color:#66d9ef">type</span> <span style="color:#a6e22e">V</span> <span style="color:#66d9ef">struct</span> {

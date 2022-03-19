@@ -514,7 +514,7 @@ Raft算法的三个核心问题 对于一个基于raft算法的分布式集群�
               </span
             >
             
-              <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
+              <span class="separator"><a class="category" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a></span>
 
 
 
@@ -522,7 +522,7 @@ Raft算法的三个核心问题 对于一个基于raft算法的分布式集群�
             
 
             
-              <span class="separator"><a class="tag" href="/tags/golang/">golang</a></span>
+              <span class="separator"><a class="tag" href="/tags/cpu/">cpu</a><a class="tag" href="/tags/cache/">cache</a></span>
 
 
 
@@ -579,6 +579,61 @@ Raft算法的三个核心问题 对于一个基于raft算法的分布式集群�
 
             
               <span class="separator"><a class="tag" href="/tags/golang/">golang</a></span>
+
+
+
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div
+      class="post 
+        animated fadeInDown
+
+      "
+    >
+      
+      <div class="post-title">
+        <h3><a href="/post/kubernetes%E7%9A%84operator/">使用Kubebuilder编写Operator</a></h3>
+      </div>
+      <div class="post-content">
+        <div class="p_part">
+          <p>
+            
+              CRD和自定义控制器 在k8s的Informer机制这篇文章中我们了解了K8s的Informer机制，以及对于k8s原生资源的Informer对象的使用方式。Informer机制归根到底就是利用了kube-apiserver的ListAndWatch机制，去监听集群中特定的API对象的变更，进而去实现一些控制。而且k8s的API对象是支持拓展的，允许用户在 Kubernetes 中添加一个跟 Pod、Node 类似的、新的 API 资源类型，然后编写一个针对自定义API对象的控制器，通过Informer机制去监听这个新的API对象在集群中的变更，然后实现一些控制。这中自定义的API对象就是CRD(Custom Resource Definition)。
+
+
+            
+          </p>
+          <a href="/post/kubernetes%E7%9A%84operator/" class="read_more">继续阅读</a></div>
+      </div>
+
+      
+      <div class="post-footer">
+        <div class="meta">
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Mon, Sep 20, 2021
+
+
+              </span
+            >
+            
+              <span class="separator"><a class="category" href="/categories/k8s/">k8s</a></span>
+
+
+
+
+            
+
+            
+              <span class="separator"><a class="tag" href="/tags/k8s/">k8s</a><a class="tag" href="/tags/operator/">operator</a></span>
 
 
 
@@ -792,63 +847,6 @@ Raft算法的三个核心问题 对于一个基于raft算法的分布式集群�
             <span class="date"
               >
                 Sat, Aug 14, 2021
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/golang/">golang</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
-        <h3><a href="/post/golang%E7%9A%84map%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/">Golang的map底层实现</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              Map的底层数据结构 Golang的map数据类型底层使用的是哈希表实现，一个哈希表可以有多个哈希表节点，即bucket，一个bucket保存着map中的一个或者一组键值对。
-hmap的数据结构： map的实现实际上就是runtime包里的hmap：
-// 定义在src/runtime/map.go中  type hmap struct{ count int // 当前保存的元素个数  .
-
-
-            
-          </p>
-          <a href="/post/golang%E7%9A%84map%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/" class="read_more">继续阅读</a></div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Wed, Jul 14, 2021
 
 
               </span
