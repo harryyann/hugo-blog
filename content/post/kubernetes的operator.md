@@ -323,7 +323,7 @@ Reconcile函数位于`controllers`目录下。它的定义是这样的：
 func (r *MyPodReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error)
 ```
 
-参数req中会包含当前所变更对象的namespace和name信息，通过这两个值，就可以获取到我们创建、修改、删除的MyPod对象，进而完成一些操作。
+参数**req中会包含当前所变更对象的namespace和name信息**，通过这两个值，就可以获取到我们创建、修改、删除的MyPod对象，进而完成一些操作。
 
 这部分主要是写逻辑，我就不细说了，代码我放在这个[仓库](https://github.com/harryyann/mypod-operator)里了。
 
@@ -392,7 +392,42 @@ mypod-manager-56d6687f75-h8cwd   1/1     Running   0          6m20s
 mypod-sample                     1/1     Running   0          5m54s
 ```
 
-这就证明我们的Operator生效了。
+查看MyPod对象的Status字段也被填充好了：
+
+```bash
+# kubectl get mypod -n test-mypod mypod-sample  -oyaml
+apiVersion: harryyann.github.io/v1
+kind: MyPod
+metadata:
+  creationTimestamp: "2022-03-19T10:12:31Z"
+  generation: 1
+  name: mypod-sample
+  namespace: test-mypod
+  resourceVersion: "314990422"
+  selfLink: /apis/harryyann.github.io/v1/namespaces/test-mypod/mypods/mypod-sample
+  uid: ec645507-23c0-4158-9d3f-cfe01f8d52db
+spec:
+  podLabels:
+    sym-app: mypod
+  podSpec:
+    containers:
+    - image: ncr.nie.netease.com/gcr.io/google-containers/pause:3.1
+      imagePullPolicy: IfNotPresent
+      name: main
+      resources:
+        limits:
+          cpu: 50m
+          memory: 50Mi
+    nodeSelector:
+      project: test
+status:
+  createdTimestamp: 0
+  nodeIp: 7.34.19.17
+  podIp: 7.53.69.18
+  podPhase: Running
+```
+
+这就证明我们的Operator生效了，如果有问题，就是调谐里的逻辑没写对，修改代码然后重复执行构建镜像，重新创建manager的pod的过程反复调试即可。
 
 
 

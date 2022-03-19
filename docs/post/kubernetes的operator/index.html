@@ -162,7 +162,7 @@ Per aspera ad astra.
 
     ,
         "url" : "https:\/\/yanghairui.life\/post\/kubernetes%E7%9A%84operator\/",
-        "wordCount" : "683",
+        "wordCount" : "742",
         "genre" : [ 
       
       "k8s"
@@ -602,7 +602,7 @@ I0318 02:52:29.431037       <span style="color:#ae81ff">1</span> leaderelection.
 <h2 id="编写reconcile函数">编写Reconcile函数</h2>
 <p>Reconcile函数位于<code>controllers</code>目录下。它的定义是这样的：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">MyPodReconciler</span>) <span style="color:#a6e22e">Reconcile</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">req</span> <span style="color:#a6e22e">ctrl</span>.<span style="color:#a6e22e">Request</span>) (<span style="color:#a6e22e">ctrl</span>.<span style="color:#a6e22e">Result</span>, <span style="color:#66d9ef">error</span>)
-</code></pre></div><p>参数req中会包含当前所变更对象的namespace和name信息，通过这两个值，就可以获取到我们创建、修改、删除的MyPod对象，进而完成一些操作。</p>
+</code></pre></div><p>参数<strong>req中会包含当前所变更对象的namespace和name信息</strong>，通过这两个值，就可以获取到我们创建、修改、删除的MyPod对象，进而完成一些操作。</p>
 <p>这部分主要是写逻辑，我就不细说了，代码我放在这个<a href="https://github.com/harryyann/mypod-operator">仓库</a>里了。</p>
 <h2 id="在集群上调试">在集群上调试</h2>
 <p>改完代码后，执行<code>make docker-build</code>构建镜像，执行<code>make docker-push</code>推送镜像。</p>
@@ -644,7 +644,38 @@ mypod-sample   4m33s
 NAME                             READY   STATUS    RESTARTS   AGE
 mypod-manager-56d6687f75-h8cwd   1/1     Running   <span style="color:#ae81ff">0</span>          6m20s
 mypod-sample                     1/1     Running   <span style="color:#ae81ff">0</span>          5m54s
-</code></pre></div><p>这就证明我们的Operator生效了。</p>
+</code></pre></div><p>查看MyPod对象的Status字段也被填充好了：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># kubectl get mypod -n test-mypod mypod-sample  -oyaml</span>
+apiVersion: harryyann.github.io/v1
+kind: MyPod
+metadata:
+  creationTimestamp: <span style="color:#e6db74">&#34;2022-03-19T10:12:31Z&#34;</span>
+  generation: <span style="color:#ae81ff">1</span>
+  name: mypod-sample
+  namespace: test-mypod
+  resourceVersion: <span style="color:#e6db74">&#34;314990422&#34;</span>
+  selfLink: /apis/harryyann.github.io/v1/namespaces/test-mypod/mypods/mypod-sample
+  uid: ec645507-23c0-4158-9d3f-cfe01f8d52db
+spec:
+  podLabels:
+    sym-app: mypod
+  podSpec:
+    containers:
+    - image: ncr.nie.netease.com/gcr.io/google-containers/pause:3.1
+      imagePullPolicy: IfNotPresent
+      name: main
+      resources:
+        limits:
+          cpu: 50m
+          memory: 50Mi
+    nodeSelector:
+      project: test
+status:
+  createdTimestamp: <span style="color:#ae81ff">0</span>
+  nodeIp: 7.34.19.17
+  podIp: 7.53.69.18
+  podPhase: Running
+</code></pre></div><p>这就证明我们的Operator生效了，如果有问题，就是调谐里的逻辑没写对，修改代码然后重复执行构建镜像，重新创建manager的pod的过程反复调试即可。</p>
 </div>
     <div class="post-footer">
       <div class="info">
