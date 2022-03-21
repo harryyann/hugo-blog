@@ -6,7 +6,23 @@
     <description>Recent content in golang on Website of Harry Yang</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 14 Oct 2021 20:01:29 +0800</lastBuildDate><atom:link href="https://yanghairui.life/categories/golang/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 21 Nov 2021 10:18:27 +0800</lastBuildDate><atom:link href="https://yanghairui.life/categories/golang/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>防缓存击穿利器singleflight介绍</title>
+      <link>https://yanghairui.life/post/%E9%98%B2%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E5%88%A9%E5%99%A8singleflight%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Sun, 21 Nov 2021 10:18:27 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/post/%E9%98%B2%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E5%88%A9%E5%99%A8singleflight%E4%BB%8B%E7%BB%8D/</guid>
+      
+        <description>缓存击穿 一般一个并发量大的服务，往往会在服务和数据库之间增加一层缓存，来减轻数据库的压力，因为数据库在高并发时往往会是整个系统的瓶颈。大概的过程就是查询时，先从缓存中查询，缓存中查不到，则从数据库中查询，并把数据回填到缓存中，再返回给用户，那么下次用户访问同一份数据时，就可以命中缓存而不用访问数据库，以此减轻数据库的压力。而在系统刚启动时一般也会采用缓存预热的方式，把数据库中的一些可能的热点数据预先加载到缓存中，以防止系统刚刚启动时数据库的压力过大。
+而缓存中的key往往都需要有过期时间，当缓存中(Redis或者Memcached)的某个热点key，在承受大量并发时突然过期，导致查询这个key的所有请求穿透缓存到达数据库，增大数据库的压力，严重时甚至可能让数据库宕机，这就是缓存击穿。就像下图这样，所有请求都透传到了数据库：
+解决这个问题比较重型的武器是分布式锁，即缓存miss后访问数据库需要先获取分布式锁，拿到分布式锁后才能从数据库中查到想要的数据，没拿到分布式锁就需要等待其他占有锁的线程完成从数据库中取数据和缓存的回填操作后，再从缓存中获取数据并返回。
+但是这种解决方式消耗资源过大，且并且不是每个系统都需要分布式锁。singleflight就是一个解决该问题的利器。
+Singleflight的使用 singleflight 库，直译过来就是单飞，这个库的主要作用就是将一组相同的请求合并成一个请求，实际上只会去请求一次，然后对所有的请求返回相同的结果即可。当并发访问数据库中某个数据时，可以通过singleflight保证在一定的时间周期内，同一个key的并发访问实际上只有一次请求真正访问数据库，以此来大大降低数据库的压力，如下图：
+使用方式 首先获取这个包</description>
+      
+    </item>
+    
     <item>
       <title>Golang的mutex底层实现</title>
       <link>https://yanghairui.life/post/golang%E7%9A%84mutex%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/</link>

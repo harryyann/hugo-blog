@@ -314,6 +314,62 @@ Per aspera ad astra.
     >
       
       <div class="post-title">
+        <h3><a href="/post/deferselect%E5%92%8Crange%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">Golang中的defer、select和range的底层原理</a></h3>
+      </div>
+      <div class="post-content">
+        <div class="p_part">
+          <p>
+            
+              Defer defer语句用于延迟函数的调用，每次defer都会把一个函数压入栈中，当前函数返回前，再把延迟的函数取出来并执行，所以多个defer语句是后写的先执行的。
+几个题目 问题1：以下输出什么？ func deferFuncParameter() { var aInt = 1 defer fmt.
+
+
+            
+          </p>
+          <a href="/post/deferselect%E5%92%8Crange%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="read_more">继续阅读</a></div>
+      </div>
+
+      
+      <div class="post-footer">
+        <div class="meta">
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Sat, Aug 14, 2021
+
+
+              </span
+            >
+            
+              <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
+
+
+
+
+            
+
+            
+              <span class="separator"><a class="tag" href="/tags/golang/">golang</a></span>
+
+
+
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div
+      class="post 
+        animated fadeInDown
+
+      "
+    >
+      
+      <div class="post-title">
         <h3><a href="/post/golang%E7%9A%84map%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/">Golang的map底层实现</a></h3>
       </div>
       <div class="post-content">
@@ -810,64 +866,6 @@ Docker也支持远程通过socket进行连接，可以选择开启或者不开�
 
             
               <span class="separator"><a class="tag" href="/tags/docker/">Docker</a><a class="tag" href="/tags/%E5%AE%B9%E5%99%A8/">容器</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
-        <h3><a href="/post/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/">k8s的Informer机制</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              Client-go client-go与其他语言版本的k8s不同的地方在于，它不仅仅是一个k8s的客户端，而且还是k8s的核心库，k8s中各个组件与api-server之间的通信都是通过client-go的iformer机制实现的快速低延迟的数据同步。kubernetes中的各个组件和api-server之间都是通过http通信，那么需要非常高的可靠性，时效性。核心就是使用了client-go的informer机制。
-Informer机制 下图是client-go中Informer机制的架构图：
-最外层是一个Informer，可以看到所有功能都被封装到了Informer中，通过Informer与kube-apiserver通信，实现对API资源的list/watch（所谓ListAndWatch就是通过List获取到所有最新版本的API对象，然后再通过Watch机制监听这些API对象的变化），Informer也可以连接用户定义的eventHandler对捕获到的某些事件进行处理，还可以将watch到的更新，输出到外部，比如存到本地数据库等等。总体而言，所谓的 Informer，就是一个自带缓存和索引机制，可以触发 Handler 的客户端库。
-Informer的三个组成部分 Reflector 如上图，Reflector包含一个通过clientset实现的ListerWatcher对象和一个Store对象，Reflector会通过ListerWatcher方法对api-server进行watch，通过比对resourceVersion来捕获API资源的变化，然后送入store。store是一个FIFO Queue(先入先出队列)。
-
-
-            
-          </p>
-          <a href="/post/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/" class="read_more">继续阅读</a></div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Wed, May 12, 2021
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/k8s/">k8s</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/k8s/">k8s</a><a class="tag" href="/tags/golang/">golang</a></span>
 
 
 

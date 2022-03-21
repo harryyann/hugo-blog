@@ -431,6 +431,66 @@ Raft算法的三个核心问题 对于一个基于raft算法的分布式集群�
     >
       
       <div class="post-title">
+        <h3><a href="/post/%E9%98%B2%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E5%88%A9%E5%99%A8singleflight%E4%BB%8B%E7%BB%8D/">防缓存击穿利器singleflight介绍</a></h3>
+      </div>
+      <div class="post-content">
+        <div class="p_part">
+          <p>
+            
+              缓存击穿 一般一个并发量大的服务，往往会在服务和数据库之间增加一层缓存，来减轻数据库的压力，因为数据库在高并发时往往会是整个系统的瓶颈。大概的过程就是查询时，先从缓存中查询，缓存中查不到，则从数据库中查询，并把数据回填到缓存中，再返回给用户，那么下次用户访问同一份数据时，就可以命中缓存而不用访问数据库，以此减轻数据库的压力。而在系统刚启动时一般也会采用缓存预热的方式，把数据库中的一些可能的热点数据预先加载到缓存中，以防止系统刚刚启动时数据库的压力过大。
+而缓存中的key往往都需要有过期时间，当缓存中(Redis或者Memcached)的某个热点key，在承受大量并发时突然过期，导致查询这个key的所有请求穿透缓存到达数据库，增大数据库的压力，严重时甚至可能让数据库宕机，这就是缓存击穿。就像下图这样，所有请求都透传到了数据库：
+解决这个问题比较重型的武器是分布式锁，即缓存miss后访问数据库需要先获取分布式锁，拿到分布式锁后才能从数据库中查到想要的数据，没拿到分布式锁就需要等待其他占有锁的线程完成从数据库中取数据和缓存的回填操作后，再从缓存中获取数据并返回。
+但是这种解决方式消耗资源过大，且并且不是每个系统都需要分布式锁。singleflight就是一个解决该问题的利器。
+Singleflight的使用 singleflight 库，直译过来就是单飞，这个库的主要作用就是将一组相同的请求合并成一个请求，实际上只会去请求一次，然后对所有的请求返回相同的结果即可。当并发访问数据库中某个数据时，可以通过singleflight保证在一定的时间周期内，同一个key的并发访问实际上只有一次请求真正访问数据库，以此来大大降低数据库的压力，如下图：
+使用方式 首先获取这个包
+
+
+            
+          </p>
+          <a href="/post/%E9%98%B2%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E5%88%A9%E5%99%A8singleflight%E4%BB%8B%E7%BB%8D/" class="read_more">继续阅读</a></div>
+      </div>
+
+      
+      <div class="post-footer">
+        <div class="meta">
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Sun, Nov 21, 2021
+
+
+              </span
+            >
+            
+              <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
+
+
+
+
+            
+
+            
+              <span class="separator"><a class="tag" href="/tags/golang/">golang</a><a class="tag" href="/tags/%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF/">缓存击穿</a></span>
+
+
+
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div
+      class="post 
+        animated fadeInDown
+
+      "
+    >
+      
+      <div class="post-title">
         <h3><a href="/post/%E4%BB%8E0%E5%BC%80%E5%A7%8B%E5%AD%A6%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AC%94%E8%AE%B0/">微服务概览</a></h3>
       </div>
       <div class="post-content">
@@ -791,62 +851,6 @@ Raft算法的三个核心问题 对于一个基于raft算法的分布式集群�
             <span class="date"
               >
                 Fri, Aug 20, 2021
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/golang/">golang</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
-        <h3><a href="/post/deferselect%E5%92%8Crange%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">Golang中的defer、select和range的底层原理</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              Defer defer语句用于延迟函数的调用，每次defer都会把一个函数压入栈中，当前函数返回前，再把延迟的函数取出来并执行，所以多个defer语句是后写的先执行的。
-几个题目 问题1：以下输出什么？ func deferFuncParameter() { var aInt = 1 defer fmt.
-
-
-            
-          </p>
-          <a href="/post/deferselect%E5%92%8Crange%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="read_more">继续阅读</a></div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Sat, Aug 14, 2021
 
 
               </span
