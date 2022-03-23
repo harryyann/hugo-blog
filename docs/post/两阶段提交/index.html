@@ -417,7 +417,7 @@
 <p>如果在1和2之间MySQL宕机，则会导致redo log处于prepare阶段，而binlog未写入，此时MySQL重启时，发现redo log处于prepare阶段，就会检查binlog，观察到binlog中没有这条事务的记录，则会忽视这条redo log。redo log和bin log之间通过<strong>事务ID</strong>对应</p>
 <pre><code>事务ID即transaction_id，在每个事务开始时分配，递增且全局唯一。
 </code></pre><p>如果在2和3之间MySQL宕机，则redo log仍是处于prepare阶段，但是binlog已经写入了，此时MySQL重启时，发现redo log处于prepare阶段，就会检查binlog，观察到binlog是完整的，则会自动将这条redo log提交，并恢复数据。</p>
-<p>两阶段提交是分布式系统维持数据逻辑一致性时的常用方案。</p>
+<p>MySQL的两阶段提交实际上是XA规范的应用，两阶段提交是分布式系统维持数据逻辑一致性时的常用方案。</p>
 </div>
     <div class="post-footer">
       <div class="info">

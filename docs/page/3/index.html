@@ -314,6 +314,65 @@ Per aspera ad astra.
     >
       
       <div class="post-title">
+        <h3><a href="/post/docker%E5%BC%80%E5%90%AFtls%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/">Docker开启TLS远程连接</a></h3>
+      </div>
+      <div class="post-content">
+        <div class="p_part">
+          <p>
+            
+              Docker远程连接 Docker是C/S架构，通过docker的客户端连接到docker daemon，然后由docker daemon在宿主机上执行构建镜像，运行容器等指令。
+Docker支持多种方式将docker客户端连接到server。如果docker客户端和server都在同一台宿主机上，那么可以直接使用Unix域套接字文件/var/run/docker.sock连接，我们直接使用docker命令时实际上就是采用这种方式进行连接的。
+Docker也支持远程通过socket进行连接，可以选择开启或者不开启TLS，为了安全我们大多数时候还是采用开启TLS的方式进行远程连接。
+启动远程连接的过程 首先需要保证宿主机上docker daemon已安装，安装过程可查看官网
+制作证书 首先需要制作证书，包括服务端证书，和客户端证书。
+
+
+            
+          </p>
+          <a href="/post/docker%E5%BC%80%E5%90%AFtls%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/" class="read_more">继续阅读</a></div>
+      </div>
+
+      
+      <div class="post-footer">
+        <div class="meta">
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Fri, May 14, 2021
+
+
+              </span
+            >
+            
+              <span class="separator"><a class="category" href="/categories/docker/">Docker</a></span>
+
+
+
+
+            
+
+            
+              <span class="separator"><a class="tag" href="/tags/docker/">Docker</a><a class="tag" href="/tags/%E5%AE%B9%E5%99%A8/">容器</a></span>
+
+
+
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div
+      class="post 
+        animated fadeInDown
+
+      "
+    >
+      
+      <div class="post-title">
         <h3><a href="/post/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/">k8s的Informer机制</a></h3>
       </div>
       <div class="post-content">
@@ -825,61 +884,6 @@ Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需
     </div>
 
   
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
-        <h3><a href="/records/%E5%A4%A7%E8%BF%9E/">大连之旅</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              2021年10月2日，出发去大连&hellip;&hellip; 周水子机场外的牌子: 海边的空气很好，但是风也很大，看见一束飘向空中的氢气球，有点美好，也很残酷： 到达傍晚时的星海湾： 海鸥天天会来这蹭吃的： 星海广场附近的一个城堡式酒店，以后有钱了进去住住看： 晚上的星海湾，一个在船上钓鱼的老头： 第二天我们去了威尼斯水城，这里海边的别墅真不错，我看了一下价格一套八百多万 Σ( ° △ °|||)︴ 威尼斯水城的一间教堂，感觉跟我家那边的风格不太一样： 大连到处都是广场，我们也是在一个广场上遇见了婉玲 跟着婉玲的建议去坐了大连的有轨电车，很有复古风： 晚上回星海湾一个名叫《浪》的酒吧里喝了点酒，聊了会天： 大连有的地名很好听，比如“海之韵” 海之韵附近的棒棰岛： 我们的旅程快结束了，最后去了一个公园，大连除了广场很多，公园也很多： 公园的山上可以看到星海湾大桥： 然后和婉玲道别，希望以后还能再见 我们的合影： （昊哥，婉玲，我）
-
-
-            
-          </p>
-          </div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Mon, Jan 1, 0001
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/%E6%97%85%E8%A1%8C/">旅行</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/%E6%97%85%E8%A1%8C/">旅行</a><a class="tag" href="/tags/%E5%A4%A7%E8%BF%9E/">大连</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
   <div class="pagination">
     
   <ul class="pagination">
@@ -921,6 +925,22 @@ Makefile的编写 Makefile中需要指明要进行哪些操作，这些操作需
 
 
     
+      
+        <li class="page-item">
+          <a class="page-link" href="/page/4/">4</a>
+        </li>
+
+      
+
+
+    
+    
+      <li class="page-item">
+        <a class="page-link" href="/page/4/">
+          <i class="fa fa-angle-right" aria-label="Next"></i>
+        </a>
+      </li>
+
     
   </ul>
 

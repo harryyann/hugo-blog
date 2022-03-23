@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="zh-cn"
+  data-theme=""
+><head>
+  <title>
+    
+      杨海瑞
+        |
+        分布式事务的实现方式
+
+
+      
+
+
+    
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.81.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta
+    name="description"
+    content="
+      
+Per aspera ad astra.
+循此苦旅，终抵群星。
+
+
+
+    "
+  />
+  
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://yanghairui.life/post/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.2a2cd9614b7d007dfbb75e8da19e3a0fa872ceab53c6d000c00b7a0c89b85bfc.js"
+    integrity="sha256-KizZYUt9AH37t16NoZ46D6hyzqtTxtAAwAt6DIm4W/w="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js"
+      integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus="
+      crossorigin="anonymous"
+    ></script>
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="分布式事务的实现方式"/>
+<meta name="twitter:description" content="分布式基础理论 CAP CAP 理论可以表述为，一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition Tolerance）这三项中的两项。
+ C（Consistency）：一致性，所有节点同时看到相同的数据，即每次写入，都是要保证所有节点都写入成功。 A（Availability）：可用性，任何时候，读写都是成功的，即服务总是可用的，比如稳定性可以做到三个9，四个9等，这就是对可用性的描述 P（Partition Tolerance）：分区容错性，当部分节点故障或者网络错误时，系统仍然可用。  CAP理论用反证法很容易证明，如果CAP都满足，有分区容错P，就一定不能满足一致性C。"/>
+
+
+
+  
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "post",
+        "name": "分布式事务的实现方式",
+        "headline": "分布式事务的实现方式",
+        "alternativeHeadline": "",
+        "description": "
+      
+        分布式基础理论 CAP CAP 理论可以表述为，一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition Tolerance）这三项中的两项。\n C（Consistency）：一致性，所有节点同时看到相同的数据，即每次写入，都是要保证所有节点都写入成功。 A（Availability）：可用性，任何时候，读写都是成功的，即服务总是可用的，比如稳定性可以做到三个9，四个9等，这就是对可用性的描述 P（Partition Tolerance）：分区容错性，当部分节点故障或者网络错误时，系统仍然可用。  CAP理论用反证法很容易证明，如果CAP都满足，有分区容错P，就一定不能满足一致性C。
+
+
+      
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/post\/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-09-12T16:00:54.00Z",
+        "datePublished": "2021-09-12T16:00:54.00Z",
+        "dateModified": "2021-09-12T16:00:54.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/post\/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1\/",
+        "wordCount" : "180",
+        "genre" : [ 
+      
+      "分布式"
+
+    ],
+        "keywords" : [ 
+      
+      "分布式事务"
+
+    
+      
+        ,
+
+      
+      "CAP"
+
+    ]
+    }
+  </script>
+
+
+
+</head>
+<body>
+    <header><div
+  class="page-top 
+    animated fadeInDown
+
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>
+  <nav>
+    <ul class="nav__list" id="navMenu">
+      <div class="nav__links">
+        
+        
+          
+          <li>
+            <a
+              
+              href="/"
+              
+              title=""
+              >Home</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/post/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/portfolio/"
+              
+              title=""
+              >Portfolio</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >About</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/contact/"
+              
+              title=""
+              >Contact</a
+            >
+          </li>
+
+        
+      </div>
+      <ul>
+        
+        
+          <li>
+            <a class="theme-switch" title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </li>
+
+        
+      </ul>
+    </ul>
+  </nav>
+</div>
+</header>
+    <div class="wrapper">
+      <aside><div
+  class="sidebar
+    animated fadeInDown
+
+  "
+>
+  <div class="sidebar__content">
+    <div class="logo-title">
+      <div class="title">
+        <img src="/images/profile5.jpg" alt="profile picture" />
+        <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
+        <div class="description">
+          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+        <li>
+          <a href="https://stackoverflow.com/users/12924262/horace-yang" rel="me" aria-label="StackOverFlow" title="StackOverFlow">
+            <i class="fab fa-stack-overflow fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://github.com/harryyann" rel="me" aria-label="GitHub" title="GitHub">
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://www.zhihu.com/people/yang-hai-rui-88" rel="me" aria-label="zhihu" title="zhihu">
+            <i class="fab fa-zhihu fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=941811450@qq.com" rel="me" aria-label="e-mail" title="e-mail">
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+    </ul>
+  </div><footer class="footer footer--sidebar">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></div>
+</aside>
+      <main>
+        <div class="autopagerize_page_element">
+          <div class="content">
+  <div
+    class="post 
+      animated fadeInDown
+
+    "
+  >
+    <div class="post-content">
+      
+      <div class="post-title">
+        <h1>分布式事务的实现方式</h1>
+        
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Sun, Sep 12, 2021
+
+
+              </span
+            >
+            <em class="fas fa-stopwatch"></em>
+            <span class="reading-time">阅读时间 1 分钟</span>
+          </div>
+
+        
+      </div><h1 id="分布式基础理论">分布式基础理论</h1>
+<h2 id="cap">CAP</h2>
+<p>CAP 理论可以表述为，<strong>一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition Tolerance）这三项中的两项</strong>。</p>
+<ul>
+<li>C（Consistency）：一致性，所有节点同时看到相同的数据，即每次写入，都是要保证所有节点都写入成功。</li>
+<li>A（Availability）：可用性，任何时候，读写都是成功的，即服务总是可用的，比如稳定性可以做到三个9，四个9等，这就是对可用性的描述</li>
+<li>P（Partition Tolerance）：分区容错性，当部分节点故障或者网络错误时，系统仍然可用。</li>
+</ul>
+<p>CAP理论用反证法很容易证明，如果CAP都满足，有分区容错P，就一定不能满足一致性C。</p>
+<p>对于分布式系统来说，P(分区容错性)是一定要的，CAP理论的实际应用模型，就是<strong>CP</strong>（强调一致）或者<strong>AP</strong>（强调可用）。AC的话，没有分区容错就是单机了，不是分布式系统。</p>
+<ul>
+<li>CP：放弃可用性，追求一致性。在面对网络分区时，系统可能会是不可用的。典型例子：Zookeeper。</li>
+<li>AP：放弃强一致性，追求可用性，这是更常见的选择，为了保证可用，在某时刻，多个节点的数据可能不一致。典型例子：Eureka，只剩一个节点也能提供服务。</li>
+</ul>
+<h2 id="base">Base</h2>
+<p>Base 是三个短语的简写，即基本可用（Basically Available）、软状态（Soft State）和最终一致性（Eventually Consistent）。</p>
+<p>Base 理论的核心思想是<strong>最终一致性</strong>，即使无法做到强一致性（Strong Consistency），但每个应用都可以根据自身的业务特点，采用适当的方式来使系统达到最终一致性（Eventual Consistency）。</p>
+<ul>
+<li>
+<p><strong>基本可用</strong>：</p>
+<p>追求任何时候读写都成功，而是系统能基本运行，它是允许损失部分可用性的，可能是响应时间变长，或者服务被降级，比如当QPS过高时的限流，一部分流量不可用，另一部分可用，整体是基本可用的，通过一些类似的手段保持系统稳定。</p>
+</li>
+<li>
+<p><strong>软状态</strong></p>
+<p>和事务的原子性做对比，软状态允许系统的数据存在中间状态，即允许多个节点中的数据存在一定延迟。</p>
+</li>
+<li>
+<p><strong>最终一致</strong></p>
+<p>数据不能一直是中间状态，必须要在经过一段时间后达成一致，这个时间取决于网络，负载，存储选型，复制方案等等因素。</p>
+</li>
+</ul>
+<h2 id="一致性的模型">一致性的模型</h2>
+<h4 id="强一致性">强一致性</h4>
+<p>当更新操作完成之后，任何多个后续进程的访问都会返回最新的更新过的值，这种是对用户最友好的，就是用户上一次写什么，下一次就保证能读到什么。根据 CAP 理论，这种实现需要牺牲可用性。</p>
+<h4 id="弱一致性">弱一致性</h4>
+<p>写入成功后，不要求立刻读到最新值，可以有一段时间的不一致。</p>
+<h4 id="最终一致性">最终一致性</h4>
+<p>最终一致是弱一致的特例，强调所有数据副本，经过一段时间的同步后，都能达到一个一致的状态。</p>
+<p>最终一致性模型根据其提供的不同保证可以划分为更多的模型，包括<strong>因果一致性和会话一致性</strong>等：</p>
+<ul>
+<li>
+<p>因果一致性</p>
+<p>有因果的操作，顺序可以得到保证，比如你写的评论和别人对你的回复，写评论的操作必须要在回复之前。没有因果关系的数据，可以允许操作顺序不一致。</p>
+</li>
+<li>
+<p>会话一致性</p>
+<p>会话一致，就是一个会话中，可以做到<strong>读己之所写</strong>，比如MySQL的MVCC，同一个事务中写的数据，这个事务中是可以读到的，不需要等事务提交。</p>
+</li>
+</ul>
+<p>Base理论就是CAP理论的实际应用，由于CAP的制约，通过放弃强一致，放弃绝对的可用，允许基本可用，允许最终一致，相当于保证P的情况下，割舍了一部分A和C。Base理论面向的是高可用、可扩展的分布式系统，在实际开发中更加常见。绝对的CP模型，则适合传统金融等业务。</p>
+<h1 id="什么是分布式事务">什么是分布式事务</h1>
+<p>分布式事务关注的是分布式场景下如何处理事务，是指事务的参与者、支持事务操作的服务器、存储等资源分别位于分布式系统的不同节点之上。简单来说，分布式事务就是一个业务操作，是由多个细分操作完成的，而这些细分操作又分布在不同的服务器上；分布式事务，就是这些操作要么全部成功执行，要么全部不执行。</p>
+<p>在实际开发中，分布式事务产生的原因主要来源于存储和服务的拆分：</p>
+<ul>
+<li>
+<p><strong>存储层拆分</strong></p>
+<p>典型的就是数据库的分库分表，一般来说，当单表容量打到千万级别，就要考虑拆分，那么拆分后，要实现跨库跨表的更新，就产生了分布式事务。</p>
+</li>
+<li>
+<p><strong>服务层拆分</strong></p>
+<p>一个大系统的各个业务拆分成一个一个的微服务，那么多个业务操作之间，就也可能需要分布式事务。</p>
+</li>
+</ul>
+<h1 id="分布式事务的解决方案">分布式事务的解决方案</h1>
+<p>分布式事务的解决方案，典型的有两阶段和三阶段提交协议、 TCC 分段提交，和基于消息补偿的最终一致性设计。</p>
+<p>首先我们看一下基于消息补偿的最终一致性设计：</p>
+<h2 id="基于消息补偿的最终一致性设计">基于消息补偿的最终一致性设计</h2>
+<p>顾名思义，就是通过异步补偿的方式，保证最终一致性。主要有本地消息表，和第三方可靠消息表等。我们以本地信息表为例进行说明：</p>
+<p>这是一种业务耦合的设计，消息生产者需要额外建立一个<strong>事务消息表</strong>，并记录消息发送状态，消息消费方需要处理这个消息，并完成自己的业务逻辑，另外会有一个异步线程来定期扫描未完成的消息，确保最终一致性。</p>
+<p><img src="/images/transaction/async.png" alt=""></p>
+<p>上图是一个创建订单减库存的例子。订单系统收到下单请求，创建一个订单插入数据库，并且同时存储该订单对应的消息数据，比如购买商品的ID和数量，消息和订单表是同一个数据库，他们的写入是一个事务，需要保证同时成功或失败。</p>
+<p>然后订单系统会把扣库存的消息发到消息中间件，库存系统收到消息中间件，就扣库存，库存扣成功了，就把执行成功或失败的结果发给订单服务。</p>
+<p>订单服务收到扣库存成功，就把消息表中这个消息置为已完成。订单服务还有一个异步任务，定期扫描消息表，发现有失败的，就重试。</p>
+<p>如果业务允许，这种方案还可以做成不要求最终一致性的柔性事务：不强制要求异步处理的消息一定完成，尽力完成，比如多重试几次就得了，而不是无限制去重试，允许数据还是有可能会最终不一致。</p>
+<h2 id="两阶段提交2pc">两阶段提交(2PC)</h2>
+<h4 id="事务协调者">事务协调者</h4>
+<p>一台服务器在执行本地事务时，无法知道其他服务器的执行情况的，所以所有的一致性算法中，都需要一个leader进程进行多个节点之间的协调者，大多数分布式事务的实现方案里，都会有这样一个角色。</p>
+<h4 id="二阶段提交的实现">二阶段提交的实现</h4>
+<p>二阶段提交协议中，首先会存在一个协调者，其他是事务的参与者，所有节点之都可以网络通信。所有节点都采用预写式日志，日志写入后被保存在可靠的存储设备上，即使节点损坏也不会导致日志的丢失。并且所有节点不会永久性损坏，损坏后也可以恢复。</p>
+<p>二阶段提交的流程：</p>
+<p><img src="/images/transaction/2pc.png" alt=""></p>
+<p>二阶段提交分成了两部分：Commit-Request 提交请求阶段，和 Commit 提交阶段</p>
+<ul>
+<li>
+<p><strong>Commit-request阶段</strong>：</p>
+<p>在提交请求阶段，协调者通知所有事务参与者，准备提交各自的事务。然后事务的参与者将告知协调者自己是否可以提交，同意（事务参与者本地事务执行成功）或者取消（本地事务执行故障）。在这个阶段，事务参与者并没有进行commit操作。</p>
+</li>
+<li>
+<p><strong>Commit提交阶段</strong></p>
+<p>协调者收到所有事务参与者的投票后进行决策，提交还是取消这个事务，要提交必须<strong>所有事务参与者都同意提交</strong>，事务参与者收到协调者发来的消息后将执行对应的操作，即本地Commit或者Rollback。</p>
+</li>
+</ul>
+<h4 id="二阶段提交的问题">二阶段提交的问题</h4>
+<p><img src="/images/transaction/2pc_pro.png" alt=""></p>
+<ol>
+<li>
+<p>资源被同步阻塞</p>
+<p>在执行过程中，所有参与节点都是事务独占状态，当参与者占有公共资源时，那么其他服务访问事务参与者的公共资源就会被阻塞。</p>
+</li>
+<li>
+<p>协调者可能出现单点故障</p>
+<p>在事务提交阶段，如果有的事务参与者没收到提交的信号，则就会造成有的事务提交了，而另一些事务没提交。</p>
+</li>
+</ol>
+<h4 id="mysql的redo-log的两阶段提交">MySQL的redo log的两阶段提交</h4>
+<p>MySQL采用两阶段协议来完成分布式事务的处理，即XA规范。为了保证binlog和redo log的一致性。binlog被当做事务协调者，以binlog的写入成功是事务提交成功的标志。如果在第一或者第二步失败，则整个事务回滚，如果是第三步失败，MySQL重启后会检查XID是否已经提交，若没有提交，则会再执行一次提交。这部分内容，可以查看<a href="https://yanghairui.life/post/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/">Redo log的两阶段提交</a>这篇文章。</p>
+<h2 id="三阶段提交3pc">三阶段提交（3PC）</h2>
+<p>为了解决二阶段协议中的同步阻塞等问题，三阶段提交在协调者和参与者中都添加了超时机制，二阶段变成了三步：询问、锁资源、提交。</p>
+<h4 id="三阶段提交的实现">三阶段提交的实现</h4>
+<p><img src="/images/transaction/3pc.png" alt=""></p>
+<p>三阶段提交分为 CanCommit、PreCommit、DoCommit 三个阶段：</p>
+<ul>
+<li>
+<p><strong>CanCommit阶段</strong></p>
+<p>类似二阶段提交的准备提交阶段，协调者向所有参与者发送Can-Commit请求，参与者如果可以提交就返回yes，否则就返回no。</p>
+</li>
+<li>
+<p><strong>PreCommit阶段</strong></p>
+<p>协调者根据所有参与者的响应决定执行何种操作：</p>
+<ol>
+<li>
+<p>如果都是yes，则发送预提交请求：协调者向参与者发送PreCommit请求，并进入Prepared阶段参与者收到 PreCommit 请求后，会执行事务操作。如果参与者成功执行了事务，则回复 ACK 给协调者。</p>
+</li>
+<li>
+<p>如果有no或者等待某个参与者时执行超时了，则协调者会向所有参与者发送 abort 中断请求。参与者收到abort后，则执行事务的中断。</p>
+</li>
+</ol>
+</li>
+<li>
+<p><strong>DoCommit阶段</strong></p>
+<p>该阶段也分为两种情况：</p>
+<ol>
+<li>协调者收到了所有参与者的 ACK 完成预提交，协调者会向所有参与者发送执行请求。参与者收到执行请求后，执行正式的事务提交，参与者完成事务提交后，向协调者返回 ACK 。协调者收到所有的ACK，完成事务。</li>
+<li>中断事务的情况，协调者没有收到参与者发送的 ACK，可能是因为参与者没有发送 ACK，也可能是网络超时了，这时<strong>协调者会执行中断事务的操作</strong>。对于参与者来说，**参与者如果没有收到协调者的 DoCommit 通知，超时后会自动执行 Commit **。</li>
+</ol>
+</li>
+</ul>
+<h4 id="三阶段提交相比二阶段提交的改进">三阶段提交相比二阶段提交的改进</h4>
+<ol>
+<li>引入了超时机制：2PC中，只有协调者有超时机制，如果一定时间没收到参与者的消息则默认失败，3PC在协调者和参与者中都添加了超时机制。</li>
+<li>添加了预提交阶段：PreCommit是一个缓冲，保证了在最后提交阶段之前各个节点的状态是一致的。</li>
+</ol>
+<h4 id="三阶段提交的问题">三阶段提交的问题</h4>
+<p>如果在DoCommit阶段，参与者在收到了PreCommit之后，网络断了，那么在超时后，参与者依然会完成提交，而协调者超时后会进行事务中断，这就造成了这个节点的事务提交了， 而其他节点的事务却中断了。</p>
+<h2 id="tcc事务模型">TCC事务模型</h2>
+<p>TCC（Try-Confirm-Cancel），基于业务层面的事务定义，锁粒度完全由业务自己控制，目的是解决复杂业务中，跨表吗跨库等大颗粒的资源锁定问题，TCC把事务运行过程分成<strong>Try、Confirm/Cancel两个阶段</strong>，每个阶段的逻辑由业务代码控制，避免了长事务，以获得更高的性能。</p>
+<h4 id="tcc的各个阶段">TCC的各个阶段</h4>
+<p><img src="/images/transaction/tcc.png" alt=""></p>
+<p>如上图，每个服务都提供了三个接口，Try、Confirm、Cancel，try接口是由业务应用（想要发起一个分布式事务的应用）调用的，Confirm和Cancel是由事务协调者调用的。</p>
+<ul>
+<li>
+<p>Try 阶段：</p>
+<p>调用 Try 接口，尝试执行业务，完成所有业务检查，预留业务资源。</p>
+</li>
+<li>
+<p>Confirm/Cancel阶段</p>
+<ul>
+<li>Confirm 操作，对业务系统做确认提交，确认执行业务操作，使用try阶段预留的业务资源</li>
+<li>Cancel 操作：在业务执行错误，需要回滚的状态下执行业务取消，释放预留资源</li>
+</ul>
+</li>
+</ul>
+<p>Try阶段如果失败了，根据失败的类型，业务应用可以决定要继续 Confirm 还是 Cancel，如果是 Confirm 或者Cancel 失败了，TCC中会添加事务日志，并进行重试，所以服务的 <strong>Confirm 和 Cancel 接口需要是幂等</strong>的，如果重试依然失败，则需要人工进行处理。</p>
+<h4 id="tcc的优点">TCC的优点</h4>
+<ol>
+<li>TCC是将二阶段提交上升到服务层面来做，避免传统的二阶段提交中长事务带来的低性能。</li>
+<li>TCC对业务进行拆解，让应用自己定义数据库操作的粒度，降低锁冲突，提高业务吞吐</li>
+</ol>
+<h4 id="tcc的缺点">TCC的缺点</h4>
+<ol>
+<li>侵入性强，必须对微服务进行改造，每个业务逻辑，都要实现Try、Confirm、Cancel三个接口，而且Confirm和Cancel还要保证幂等。</li>
+<li>TCC的事务协调器要记录事务日志，写磁盘，也会带来性能消耗。</li>
+</ol>
+<h4 id="一个tcc的例子">一个TCC的例子</h4>
+<p><img src="/images/transaction/lizi.png" alt=""></p>
+<p>上图是一个电商中的支付业务。用户在支付以后，需要进行更新订单状态、扣减账户余额、增加账户积分和扣减商品操作，而这些操作是一个分布式事务。</p>
+<p>支付业务的子事务拆解：</p>
+<ul>
+<li>订单更新为支付完成状态</li>
+<li>扣减用户账户余额</li>
+<li>增加用户账户积分</li>
+<li>扣减当前商品的库存</li>
+</ul>
+<p>根据事务拆解，我们要改造业务系统，给各个服务接口都提供Try、Confirm、Cancel接口：</p>
+<ul>
+<li>
+<p>Try：</p>
+<p>Try 操作都是锁定某个资源，设置一个预备的状态，冻结部分数据，比如订单服务给这个订单设置一个预备状态字段，通过这个字段冻结订单的操作，而不是直接修改订单为支付成功。</p>
+<p>库存服务也要冻结库存，可以在库存表增加一个字段标识冻结，也可以添加一个新的库存冻结表，专门存储冻结的库存数据，积分服务也一样，增加字段表示积分数量预增加。</p>
+</li>
+<li>
+<p>Confirm</p>
+<p>Confirm 就是把try的锁定的资源提交，包括订单状态修改为支付成功，库存数据要减去，积分数据增加。</p>
+</li>
+<li>
+<p>Cancel</p>
+<p>Cancel 操作要回滚，订单服务去掉预备状态，更改为待支付或者取消状态，库存服务删除冻结库存，添加到可销售中，积分就是把增加的积分减掉。</p>
+</li>
+</ul>
+<h4 id="tcc和2pc的区别">TCC和2PC的区别</h4>
+<p>2PC或者XA，是<strong>数据库存储资源层面的事务</strong>，实现的是强一致性，两阶段提交的整个阶段，一直会持有数据库的锁。</p>
+<p>TCC 关注的是业务层的正确提交和回滚，try阶段不涉及加锁，只是冻结资源，是<strong>业务层的分布式事务</strong>，关注最终一致性，不会一直持有各个资源的锁。</p>
+<p>TCC 的核心思想：就是<strong>针对每个业务操作，都要提供一个对应的准备、确认和补偿操作，同时把相关的处理，从数据库转移到业务中</strong>。</p>
+</div>
+    <div class="post-footer">
+      <div class="info">
+        
+          <span class="separator"><a class="category" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></span>
+
+
+
+
+        
+
+        
+          <span class="separator"><a class="tag" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/">分布式事务</a><a class="tag" href="/tags/cap/">CAP</a></span>
+
+
+
+
+        
+      </div>
+    </div>
+
+    
+  </div>
+
+
+          </div>
+        </div>
+      </main>
+    </div><footer class="footer footer--base">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></body>
+</html>
