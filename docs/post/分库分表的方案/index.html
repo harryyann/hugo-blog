@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="zh-cn"
+  data-theme=""
+><head>
+  <title>
+    
+      杨海瑞
+        |
+        分库分表的实现方式
+
+
+      
+
+
+    
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.81.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta
+    name="description"
+    content="
+      
+Per aspera ad astra.
+循此苦旅，终抵群星。
+
+
+
+    "
+  />
+  
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://yanghairui.life/post/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9A%84%E6%96%B9%E6%A1%88/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.2a2cd9614b7d007dfbb75e8da19e3a0fa872ceab53c6d000c00b7a0c89b85bfc.js"
+    integrity="sha256-KizZYUt9AH37t16NoZ46D6hyzqtTxtAAwAt6DIm4W/w="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js"
+      integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus="
+      crossorigin="anonymous"
+    ></script>
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="分库分表的实现方式"/>
+<meta name="twitter:description" content="分库分表 数据库的数据量增大会直接影响读写的性能，比如一次查询操作，扫描 5 万条数据和 500 万条数据，查询速度肯定是不同的。分库分表就是把一个表拆分成多个库的多个表，这些表可以在同一个服务器上，也可以在不同的服务器上，总而言之，就是要通过拆分，减小单库单表的读写压力。
+那么什么时候才需要分库分表呢？
+参考阿里巴巴的《Java 开发手册》中数据库部分的建表规约： **单表行数超过 500 万行或者单表容量超过 2GB，才推荐进行分库分表。**由于不同的服务器配置、数据的存储结构都不同，所以这个数据并不确切，但可以作为一个参考。"/>
+
+
+
+  
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "post",
+        "name": "分库分表的实现方式",
+        "headline": "分库分表的实现方式",
+        "alternativeHeadline": "",
+        "description": "
+      
+        分库分表 数据库的数据量增大会直接影响读写的性能，比如一次查询操作，扫描 5 万条数据和 500 万条数据，查询速度肯定是不同的。分库分表就是把一个表拆分成多个库的多个表，这些表可以在同一个服务器上，也可以在不同的服务器上，总而言之，就是要通过拆分，减小单库单表的读写压力。\n那么什么时候才需要分库分表呢？\n参考阿里巴巴的《Java 开发手册》中数据库部分的建表规约： **单表行数超过 500 万行或者单表容量超过 2GB，才推荐进行分库分表。**由于不同的服务器配置、数据的存储结构都不同，所以这个数据并不确切，但可以作为一个参考。
+
+
+      
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/post\/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9A%84%E6%96%B9%E6%A1%88\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2021",
+        "dateCreated": "2021-09-30T17:56:02.00Z",
+        "datePublished": "2021-09-30T17:56:02.00Z",
+        "dateModified": "2021-09-30T17:56:02.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/post\/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9A%84%E6%96%B9%E6%A1%88\/",
+        "wordCount" : "177",
+        "genre" : [ 
+      
+      "数据库"
+
+    ],
+        "keywords" : [ 
+      
+      "数据库"
+
+    
+      
+        ,
+
+      
+      "MySQL"
+
+    
+      
+        ,
+
+      
+      "分布式"
+
+    ]
+    }
+  </script>
+
+
+
+</head>
+<body>
+    <header><div
+  class="page-top 
+    animated fadeInDown
+
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>
+  <nav>
+    <ul class="nav__list" id="navMenu">
+      <div class="nav__links">
+        
+        
+          
+          <li>
+            <a
+              
+              href="/"
+              
+              title=""
+              >Home</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/post/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/portfolio/"
+              
+              title=""
+              >Portfolio</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >About</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/contact/"
+              
+              title=""
+              >Contact</a
+            >
+          </li>
+
+        
+      </div>
+      <ul>
+        
+        
+          <li>
+            <a class="theme-switch" title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </li>
+
+        
+      </ul>
+    </ul>
+  </nav>
+</div>
+</header>
+    <div class="wrapper">
+      <aside><div
+  class="sidebar
+    animated fadeInDown
+
+  "
+>
+  <div class="sidebar__content">
+    <div class="logo-title">
+      <div class="title">
+        <img src="/images/profile5.jpg" alt="profile picture" />
+        <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
+        <div class="description">
+          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+        <li>
+          <a href="https://stackoverflow.com/users/12924262/horace-yang" rel="me" aria-label="StackOverFlow" title="StackOverFlow">
+            <i class="fab fa-stack-overflow fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://github.com/harryyann" rel="me" aria-label="GitHub" title="GitHub">
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://www.zhihu.com/people/yang-hai-rui-88" rel="me" aria-label="zhihu" title="zhihu">
+            <i class="fab fa-zhihu fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=941811450@qq.com" rel="me" aria-label="e-mail" title="e-mail">
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+    </ul>
+  </div><footer class="footer footer--sidebar">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></div>
+</aside>
+      <main>
+        <div class="autopagerize_page_element">
+          <div class="content">
+  <div
+    class="post 
+      animated fadeInDown
+
+    "
+  >
+    <div class="post-content">
+      
+      <div class="post-title">
+        <h1>分库分表的实现方式</h1>
+        
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Thu, Sep 30, 2021
+
+
+              </span
+            >
+            <em class="fas fa-stopwatch"></em>
+            <span class="reading-time">阅读时间 1 分钟</span>
+          </div>
+
+        
+      </div><h1 id="分库分表">分库分表</h1>
+<p>数据库的数据量增大会直接影响读写的性能，比如一次查询操作，扫描 5 万条数据和 500 万条数据，查询速度肯定是不同的。分库分表就是把一个表拆分成多个库的多个表，这些表可以在同一个服务器上，也可以在不同的服务器上，总而言之，就是要通过拆分，减小单库单表的读写压力。</p>
+<p>那么什么时候才需要分库分表呢？</p>
+<p>参考阿里巴巴的《Java 开发手册》中数据库部分的建表规约： **单表行数超过 500 万行或者单表容量超过 2GB，才推荐进行分库分表。**由于不同的服务器配置、数据的存储结构都不同，所以这个数据并不确切，但可以作为一个参考。</p>
+<p>另外单表的数据库的连接是有限制的，不能无限制创建，比如 MySQL 中可以使用 max_connections 查看默认的最大连接数，当访问连接数过多时，就会导致连接失败。当并发量过大时，可能导致数据库无法支持业务请求。使用<strong>数据库连接池</strong>，可以优化连接数问题，但是更好更根除的方式是通过分库分表，来避免数据库连接成为业务瓶颈。</p>
+<h1 id="分库分表的方式">分库分表的方式</h1>
+<h2 id="垂直拆分">垂直拆分</h2>
+<p>垂直拆分就是按照表的列进行拆分，对于一个字段数过多的表，可以用这种方式拆分。可以把一些频繁更新的字段划到一个表中，把另一些不常写入的数据放到另一张表。这也可以提升性能（因为MySQL的bufer pool从磁盘上加载页时，字段变少可以让一个页中存储的行数增加，减少加载的次数，具体可以查看<a href="https://yanghairui.life/post/innodb%E7%89%B9%E6%80%A7/">InnoDB</a>的特性这篇文章）。</p>
+<p>垂直拆分也可以把总是要一起操作的字段放到一张表，来缩小事务锁定的粒度。</p>
+<h2 id="水平拆分">水平拆分</h2>
+<p>垂直拆分就是按照表的行进行拆分。根据某个规则，一部分行存在一张表上，另一部分行存在其他表上，减小单个表的行数，提高查询效率。</p>
+<hr>
+<p>实际上垂直拆分和水平拆分可以结合使用，先垂直拆分，再水平拆分。可以发挥各自的优势。</p>
+<h1 id="分库分表带来的问题">分库分表带来的问题</h1>
+<h2 id="分布式事务的问题">分布式事务的问题</h2>
+<p>对业务进行分库之后，同一个操作会分散到多个数据库中，涉及跨库执行 SQL 语句，也就出现了分布式事务问题。分布式事务的解决方案比如TCC模型，异步补偿的事务模型等，具体可以查看<a href="https://yanghairui.life/post/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/">分布式事务</a>这篇文章。</p>
+<h2 id="跨表的关联查询">跨表的关联查询</h2>
+<p>分库分表后，跨库和跨表的查询操作实现起来会比较复杂，性能也无法保证。所以最好通过一些手段避免跨表查询，比如可以适当的建立合理的数据库字段冗余，避免出现跨库查询。如果非要跨表查询，在实际开发中，一般会使用额外的存储，比如维护一份文件索引。</p>
+<h2 id="跨库跨表的数据合并和排序">跨库跨表的数据合并和排序</h2>
+<p>分库分表以后，数据分散存储到不同的数据库和表中，如果查询指定数据列表，或者需要对数据列表进行排序时，就变得异常复杂，可能需要在应用程序的内存中进行处理。所以还是要尽量避免，或者使用分库分表的中间件来进行处理。</p>
+<hr>
+<p>分库分表的中间件：</p>
+<p>比如 Apache ShardingSphere，或者淘宝的TDDL，但是它们都是java的，我不是java技术栈，所以了解不多。</p>
+<h1 id="分库分表保证唯一主键的解决方案">分库分表保证唯一主键的解决方案</h1>
+<p>在单库单表时，业务 ID 可以依赖数据库的自增主键实现，现在我们把存储拆分到了多处，各个数据表就需要生成一个全局唯一的主键。生成一个全局唯一的主键。下面介绍几种生成全局唯一主键的解决方式。</p>
+<h2 id="使用单个表的自增主键实现">使用单个表的自增主键实现</h2>
+<p>就是创建一个表，只有一个 ID 字段作为主键。每个表要插入数据时，先向这个表里插入一行，得到的主键值作为业务ID。</p>
+<p>这个方案实现起来简单，但问题也很明显。首先，性能无法保证，在并发比较高的情况下，如果通过这样的数据表来创建自增 ID，对这个单个表的写入就会成为性能瓶颈。第二，存在单点故障，如果生成自增 ID 的数据库挂掉，那么会直接影响创建功能。</p>
+<h2 id="使用单个表自增主键的区间分配">使用单个表自增主键的区间分配</h2>
+<p>上面那个方案的优化版本。既然每一次插入时，都要去插入一个表会导致性能问题，那就每次从这个表中获取一个区间自己维护。减少访问这张表的次数不就好了，具体的方案是：</p>
+<p>先建立一个sequence表，用于记录某个业务主键当前被占用的ID区间的最大值。sequence表主要有两个字段：name 和 value，name是业务序列的名字，value是这个分配出去的 ID 最大值。</p>
+<p>接下来插入一条行记录，当需要获取主键时，每台服务器主机从数据表中取对应的 ID 区间缓存在本地，同时更新 sequence 表中的 value 最大值记录。</p>
+<p>取到对应的 ID 区间后，在服务器内部进行分配，涉及的并发问题可以依赖乐观锁等机制解决。本地就可以使用 AtomicInteger 等方式进行 ID 分配。</p>
+<p>比如，当一个服务器想要插入时，可以先去 sequence 表，发现此时value是1000， 获取200的区间后，更新value值为1200，则其他服务要获取主键只能从1200往后获取。</p>
+<p>同时，为了防止单点故障，sequence 表所在的数据库，通常会配置多个从库，实现高可用。</p>
+<p>淘宝的 TDDL 中间件使用了这个策略。</p>
+<h2 id="使用uuid">使用UUID</h2>
+<p>UUID 虽然很好地满足了全局唯一这个要求，但是并不适合作为数据库存储的唯一主键。</p>
+<p>首先 UUID 作为数据库主键太长了，会导致比较大的存储开销。</p>
+<p>第二，UUID 是无序的，如果使用 UUID 作为主键，会降低数据库的写入性能，因为无序的主键在插入B+树时，会频繁的触发页分裂（具体可以查看<a href="https://yanghairui.life/post/mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">MySQL的索引</a>这篇文章）。</p>
+<h2 id="基于snowflake算法生成全局唯一id">基于Snowflake算法生成全局唯一ID</h2>
+<p>雪花算法是twitter开源的ID生成算法，由64位二进制数字组成，分为四部分，如下图：</p>
+<p><img src="/images/sharding/snow.png" alt=""></p>
+<p>第一位默认不使用，总是0，保证数值是正数。</p>
+<p>然后是41位的时间戳，表示毫秒数，41位可以表示69年多点，一般够用，用时间戳来保证递增。</p>
+<p>然后是10位的机器ID，支持最多1024个节点。</p>
+<p>最后是12位的序列号，作为当前时间戳和机器下的流水号， 每个节点每毫秒内支持 212 的区间，也就是 4096 个 ID， 换算成秒，相当于可以允许 409 万的 QPS（每秒钟409万次插入都不会冲突），如果在这个区间内超出了 4096，则等待至下一毫秒计算。</p>
+<p>Twitter 给出了 Snowflake 算法的示例，可以点击<a href="https://github.com/twitter-archive/snowflake/blob/snowflake-2010/src/main/scala/com/twitter/service/snowflake/IdWorker.scala">代码库</a>查看。</p>
+<p>Snowflake算法几乎可以解决生成全局ID的一切问题，又唯一，又递增，也不长，还有意义。唯一的问题是，当出现服务器时钟回拨时，会导致混乱，可能出现重复ID，不过这种可能性较小吧，运维同学注意一下就好。</p>
+<h1 id="分库分表的拆分方案">分库分表的拆分方案</h1>
+<p>从一个实际的业务场景出发进行讨论。</p>
+<p>某个电商网站的订单数据库模块，经过对业务增长的估算，预估三年后，数据规模可能达到 6000 万，每日订单数会超过 10 万。</p>
+<p>首先选择<strong>存储实现</strong>，订单作为电商业务的核心数据，应该尽量避免数据丢失，并且对数据一致性有强要求，还要支持事务，那么可以选择 MySQL 的 InnoDB 存储引擎。</p>
+<p>然后是<strong>数据库的可用性设计</strong>，订单数据是典型读多写少的数据，不仅要面向消费者端的读请求，内部也有很多上下游关联的业务模块在调用，所以可以搭建MySQL的一主多从模式，读写分离，写操作走主库，读操作走从库。</p>
+<p>最后是<strong>数据规模</strong>，6000 万的数据量，参考《阿里巴巴 Java 开发手册》中「单表行数超过 500 万行」进行分表的建议，此时需要考虑进行分库分表，那么如何进行拆分呢，6000 万的数据规模，我们按照单表承载百万数量级来拆分，拆分成 64 张表，进一步可以把 64 张表拆分到两个数据库中，每个库中配置 32 张表。</p>
+<p>那么接下来要考虑的就是如何把数据分布到这 64 张表上呢。</p>
+<h2 id="哈希取模的方式">哈希取模的方式</h2>
+<p>每次插入数据时，根据不同的业务主键值，对数据表的个数进行取模，得到表序号然后插入。</p>
+<p>通过哈希取模的方式进行路由，优点是数据拆分比较均匀，类似轮询的插入方式，但缺点是不利于后面的扩容，因为吗，每增加一张表，那么哈希取模的值都要变化，需要进行大量的数据迁移工作，并且增加新表后要插入新表的数据，混乱的存储在所有数据表上，非常麻烦。</p>
+<h2 id="根据数据范围进行拆分">根据数据范围进行拆分</h2>
+<p>根据主键 ID 的范围，划分成不同区间，比如这64张表，订单 ID 在3000万以下的数据，就划到第一个库，剩下订单划到第二个库，然后每个库内部再根据每张表100万的数据量按区段继续划分。</p>
+<p>这种方案的有点是扩容方便，直接增加新表即可。但是缺点就更大了，数据访问十分不均匀，前期一直都是第一个库在写入，写满了后，又总是第二个库在写入，而且每一个时刻，几乎都是写同一张表，失去了分库分表对写入性能的优化。</p>
+<h2 id="哈希取模和范围划分相结合的方式">哈希取模和范围划分相结合的方式</h2>
+<p>把上述的两种拆分数据的方式结合起来。首先用 ID 对库的个数取模，算出在哪个库，再按照区间范围，划到库里的具体表上。</p>
+<p>这种方式避免了单纯基于数据范围可能出现的热点存储，并且在后期扩展时，可以直接增加对应的扩展表，避免了复杂的数据迁移工作。缺点就是，拓展库时比较麻烦，所以最好只需要拓展表，不要拓展库。因为一旦拓展库，就会导致哈希值发生变化，哈希值变化的话数据迁移是十分麻烦的。</p>
+<h2 id="一致性哈希解决分库扩容问题">一致性哈希解决分库扩容问题</h2>
+<p>这个方案略显复杂，我们结合图片讲解。</p>
+<p>首先我们构造一个环，环上有2^32-1个点，如下图：</p>
+<p><img src="/images/sharding/hash1.png" alt=""></p>
+<p>然后我们可以根据一台MySQL服务器的IP、服务器编号、服务器名称等信息进行哈希运算（对2^32-1取模），运算结果会落在环上的某个点上：</p>
+<p><img src="/images/sharding/hash2.png" alt=""></p>
+<p>如果多台服务器计算出来的值恰好是均匀的，那么它们就会均匀的分布在这个环上：</p>
+<p><img src="/images/sharding/hash3.png" alt=""></p>
+<p>然后我们在插入数据时，根据数据的 ID 进行相同的哈希运算，那么这条数据也会落在这个环上的某个点，如下图：</p>
+<p><img src="/images/sharding/hash4.png" alt=""></p>
+<p>然后我们按照顺时针的方式，这行数据将会归属到A服务器上，再插入更多数据，也是按照这个方式去分配数据，如下：</p>
+<p><img src="/images/sharding/hash5.png" alt=""></p>
+<p>如果我们的 ID 也是均匀递增，或者递增幅度抖动不剧烈的话，数据在所有服务器上的分布也应该是差不多均匀的。</p>
+<p>接下来我们看看如果需要摘除一个节点的话，数据要怎么迁移。</p>
+<p>如下图，如果B节点被摘除，那么B节点上的所有数据<strong>只需要全部迁移到C节点上即可</strong>，C上原本的数据不用动，A上的数据也不用动：</p>
+<p><img src="/images/sharding/hash6.png" alt=""></p>
+<p>但是这种只是理想的情况，更常见的情况是三个服务器在环上的分布是不均匀的，那么自然数据在这些数据库上的分布也是不均匀的：</p>
+<p><img src="/images/sharding/hash7.png" alt=""></p>
+<p>这个问题，我们可以通过引入虚拟节点来解决。</p>
+<p>如下图，我们引入了三个虚拟节点，并且这三个虚拟节点都指向了三个真实的节点，所有虚拟节点的数据，都会指向对应的真实节点上，以此实现数据分布的均匀：</p>
+<p><img src="/images/sharding/hash8.png" alt=""></p>
+<p>如果我们要插入一个新节点的话，如下图，新加入一个节点D，数据要怎么迁移呢？</p>
+<p><img src="/images/sharding/hash9.png" alt=""></p>
+<p>首先我们要暂停服务，然后确认数据范围，发现6号数据在虚拟节点C上，对应了真实节点C，即6号数据是存在真实节点C上的，那么我们只需要将6号数据迁移到新节点D上，其他数据完全不用动，然后将D节点加入分片集群然后重启服务即可。</p>
+<p>虽然一致性哈希方法很好，但是目前还没有什么开源的实现，所有的实现都得自己写。</p>
+</div>
+    <div class="post-footer">
+      <div class="info">
+        
+          <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
+
+
+
+
+        
+
+        
+          <span class="separator"><a class="tag" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><a class="tag" href="/tags/mysql/">MySQL</a><a class="tag" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></span>
+
+
+
+
+        
+      </div>
+    </div>
+
+    
+  </div>
+
+
+          </div>
+        </div>
+      </main>
+    </div><footer class="footer footer--base">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
+    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    crossorigin="anonymous"
+  ></script></body>
+</html>
