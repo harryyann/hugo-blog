@@ -18,7 +18,7 @@
   </title>
 
   
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.81.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta
     name="description"
     content="
@@ -35,8 +35,8 @@ Per aspera ad astra.
   
   <link
     rel="stylesheet"
-    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
-    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
+    href="/css/main.min.7ca9a7b7632c545387f4ab9f7f943afeab89e7ed1c092ce9fb39263257779ce5.css"
+    integrity="sha256-fKmnt2MsVFOH9Kuff5Q6/quJ5&#43;0cCSzp&#43;zkmMld3nOU="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -44,8 +44,8 @@ Per aspera ad astra.
   
   <link
     rel="stylesheet"
-    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
-    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
+    href="/css/markupHighlight.min.8f07fad4abedfd5eb1396c6fef85ba7ec00ec867a79fb545c9db18df87f6760a.css"
+    integrity="sha256-jwf61Kvt/V6xOWxv74W6fsAOyGenn7VFydsY34f2dgo="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -70,8 +70,8 @@ Per aspera ad astra.
   
   <script
     type="text/javascript"
-    src="/js/anatole-header.min.2a2cd9614b7d007dfbb75e8da19e3a0fa872ceab53c6d000c00b7a0c89b85bfc.js"
-    integrity="sha256-KizZYUt9AH37t16NoZ46D6hyzqtTxtAAwAt6DIm4W/w="
+    src="/js/anatole-header.min.413f798d8aa82610bef17a5ca1d7e962ec185be395f1aeb3f45d1891af568b65.js"
+    integrity="sha256-QT95jYqoJhC&#43;8XpcodfpYuwYW&#43;OV8a6z9F0Yka9Wi2U="
     crossorigin="anonymous"
   ></script>
 
@@ -80,8 +80,8 @@ Per aspera ad astra.
     
     <script
       type="text/javascript"
-      src="/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js"
-      integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus="
+      src="/js/anatole-theme-switcher.min.fcf9526f15b3b4e08472de192969ab28a4cdcb32ac94f83e85a8b84e9b45acd2.js"
+      integrity="sha256-/PlSbxWztOCEct4ZKWmrKKTNyzKslPg&#43;hai4TptFrNI="
       crossorigin="anonymous"
     ></script>
 
@@ -92,7 +92,7 @@ Per aspera ad astra.
   <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="分布式事务的实现方式"/>
 <meta name="twitter:description" content="分布式基础理论 CAP CAP 理论可以表述为，一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition Tolerance）这三项中的两项。
- C（Consistency）：一致性，所有节点同时看到相同的数据，即每次写入，都是要保证所有节点都写入成功。 A（Availability）：可用性，任何时候，读写都是成功的，即服务总是可用的，比如稳定性可以做到三个9，四个9等，这就是对可用性的描述 P（Partition Tolerance）：分区容错性，当部分节点故障或者网络错误时，系统仍然可用。  CAP理论用反证法很容易证明，如果CAP都满足，有分区容错P，就一定不能满足一致性C。"/>
+ C（Consistency）：一致性，所有节点同时看到相同的数据，即每次写入，都是要保证所有节点都写入成功。 A（Availability）：可用性，任何时候，读写都是成功的，即服务总是可用的，比如稳定性可以做到三个9，四个9等，这就是对可用性的描述。 P（Partition Tolerance）：分区容错性，当部分节点故障或者网络错误时，系统仍然可用。  CAP理论用反证法很容易证明，如果CAP都满足，有分区容错P，就一定不能满足一致性C。"/>
 
 
 
@@ -113,7 +113,7 @@ Per aspera ad astra.
         "alternativeHeadline": "",
         "description": "
       
-        分布式基础理论 CAP CAP 理论可以表述为，一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition Tolerance）这三项中的两项。\n C（Consistency）：一致性，所有节点同时看到相同的数据，即每次写入，都是要保证所有节点都写入成功。 A（Availability）：可用性，任何时候，读写都是成功的，即服务总是可用的，比如稳定性可以做到三个9，四个9等，这就是对可用性的描述 P（Partition Tolerance）：分区容错性，当部分节点故障或者网络错误时，系统仍然可用。  CAP理论用反证法很容易证明，如果CAP都满足，有分区容错P，就一定不能满足一致性C。
+        分布式基础理论 CAP CAP 理论可以表述为，一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition Tolerance）这三项中的两项。\n C（Consistency）：一致性，所有节点同时看到相同的数据，即每次写入，都是要保证所有节点都写入成功。 A（Availability）：可用性，任何时候，读写都是成功的，即服务总是可用的，比如稳定性可以做到三个9，四个9等，这就是对可用性的描述。 P（Partition Tolerance）：分区容错性，当部分节点故障或者网络错误时，系统仍然可用。  CAP理论用反证法很容易证明，如果CAP都满足，有分区容错P，就一定不能满足一致性C。
 
 
       
@@ -163,7 +163,7 @@ Per aspera ad astra.
 
     ,
         "url" : "https:\/\/yanghairui.life\/post\/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1\/",
-        "wordCount" : "180",
+        "wordCount" : "193",
         "genre" : [ 
       
       "分布式"
@@ -345,8 +345,8 @@ Per aspera ad astra.
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
-    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
+    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
     crossorigin="anonymous"
   ></script></div>
 </aside>
@@ -382,18 +382,18 @@ Per aspera ad astra.
 <h2 id="cap">CAP</h2>
 <p>CAP 理论可以表述为，<strong>一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition Tolerance）这三项中的两项</strong>。</p>
 <ul>
-<li>C（Consistency）：一致性，所有节点同时看到相同的数据，即每次写入，都是要保证所有节点都写入成功。</li>
-<li>A（Availability）：可用性，任何时候，读写都是成功的，即服务总是可用的，比如稳定性可以做到三个9，四个9等，这就是对可用性的描述</li>
-<li>P（Partition Tolerance）：分区容错性，当部分节点故障或者网络错误时，系统仍然可用。</li>
+<li>C（Consistency）：一致性，<strong>所有节点同时看到相同的数据</strong>，即每次写入，都是要保证所有节点都写入成功。</li>
+<li>A（Availability）：可用性，<strong>任何时候，读写都是成功的</strong>，即服务总是可用的，比如稳定性可以做到三个9，四个9等，这就是对可用性的描述。</li>
+<li>P（Partition Tolerance）：分区容错性，当<strong>部分节点故障或者网络错误时，系统仍然可用</strong>。</li>
 </ul>
 <p>CAP理论用反证法很容易证明，如果CAP都满足，有分区容错P，就一定不能满足一致性C。</p>
-<p>对于分布式系统来说，P(分区容错性)是一定要的，CAP理论的实际应用模型，就是<strong>CP</strong>（强调一致）或者<strong>AP</strong>（强调可用）。AC的话，没有分区容错就是单机了，不是分布式系统。</p>
+<p>对于分布式系统来说，P(分区容错性)是一定要的，CAP理论的实际应用模型，就是<strong>CP</strong>（强调一致）或者<strong>AP</strong>（强调可用）。AC的话，没有分区容错就是退化到单机了，不是分布式系统。</p>
 <ul>
-<li>CP：放弃可用性，追求一致性。在面对网络分区时，系统可能会是不可用的。典型例子：Zookeeper。</li>
-<li>AP：放弃强一致性，追求可用性，这是更常见的选择，为了保证可用，在某时刻，多个节点的数据可能不一致。典型例子：Eureka，只剩一个节点也能提供服务。</li>
+<li>CP：放弃可用性，追求强一致性。对金融等安全性要求高的行业一般使用CP，在面对网络分区时，系统可能会是不可用的。典型例子：Zookeeper。</li>
+<li>AP：放弃强一致性，追求可用性。这是互联网行业更常见的选择，为了保证可用，在某时刻，多个节点的数据可能不一致。典型例子：Eureka，只剩一个节点也能提供服务。</li>
 </ul>
 <h2 id="base">Base</h2>
-<p>Base 是三个短语的简写，即基本可用（Basically Available）、软状态（Soft State）和最终一致性（Eventually Consistent）。</p>
+<p>Base 是三个短语的简写，即<strong>基本可用（Basically Available）、软状态（Soft State）和最终一致性（Eventually Consistent）</strong>。</p>
 <p>Base 理论的核心思想是<strong>最终一致性</strong>，即使无法做到强一致性（Strong Consistency），但每个应用都可以根据自身的业务特点，采用适当的方式来使系统达到最终一致性（Eventual Consistency）。</p>
 <ul>
 <li>
@@ -420,17 +420,17 @@ Per aspera ad astra.
 <ul>
 <li>
 <p>因果一致性</p>
-<p>有因果的操作，顺序可以得到保证，比如你写的评论和别人对你的回复，写评论的操作必须要在回复之前。没有因果关系的数据，可以允许操作顺序不一致。</p>
+<p>有因果的操作，顺序可以得到保证，比如你写的评论和别人对你的回复，写评论的操作必须要在回复之前。没有因果关系的数据，则可以允许操作顺序不一致。</p>
 </li>
 <li>
 <p>会话一致性</p>
 <p>会话一致，就是一个会话中，可以做到<strong>读己之所写</strong>，比如MySQL的MVCC，同一个事务中写的数据，这个事务中是可以读到的，不需要等事务提交。</p>
 </li>
 </ul>
-<p>Base理论就是CAP理论的实际应用，由于CAP的制约，通过放弃强一致，放弃绝对的可用，允许基本可用，允许最终一致，相当于保证P的情况下，割舍了一部分A和C。Base理论面向的是高可用、可扩展的分布式系统，在实际开发中更加常见。绝对的CP模型，则适合传统金融等业务。</p>
+<p>Base理论就是CAP理论的实际应用，由于CAP的制约，通过放弃强一致，放弃绝对的可用，允许基本可用（允许被降级、被限流等），允许最终一致，相当于保证P的情况下，割舍了一部分A和C。Base理论面向的是高可用、可扩展的分布式系统，在实际开发中更加常见。绝对的CP模型，则适合传统金融等业务。</p>
 <h1 id="什么是分布式事务">什么是分布式事务</h1>
 <p>分布式事务关注的是分布式场景下如何处理事务，是指事务的参与者、支持事务操作的服务器、存储等资源分别位于分布式系统的不同节点之上。简单来说，分布式事务就是一个业务操作，是由多个细分操作完成的，而这些细分操作又分布在不同的服务器上；分布式事务，就是这些操作要么全部成功执行，要么全部不执行。</p>
-<p>在实际开发中，分布式事务产生的原因主要来源于存储和服务的拆分：</p>
+<p>在实际开发中，<strong>分布式事务产生的原因主要来源于存储和服务的拆分</strong>：</p>
 <ul>
 <li>
 <p><strong>存储层拆分</strong></p>
@@ -445,13 +445,28 @@ Per aspera ad astra.
 <p>分布式事务的解决方案，典型的有两阶段和三阶段提交协议、 TCC 分段提交，和基于消息补偿的最终一致性设计。</p>
 <p>首先我们看一下基于消息补偿的最终一致性设计：</p>
 <h2 id="基于消息补偿的最终一致性设计">基于消息补偿的最终一致性设计</h2>
-<p>顾名思义，就是通过异步补偿的方式，保证最终一致性。主要有本地消息表，和第三方可靠消息表等。我们以本地信息表为例进行说明：</p>
+<p>顾名思义，就是通过异步补偿的方式，保证最终一致性。主要有本地消息表，和第三方可靠消息表等。我们以本地消息表为例进行说明：</p>
 <p>这是一种业务耦合的设计，消息生产者需要额外建立一个<strong>事务消息表</strong>，并记录消息发送状态，消息消费方需要处理这个消息，并完成自己的业务逻辑，另外会有一个异步线程来定期扫描未完成的消息，确保最终一致性。</p>
 <p><img src="/images/transaction/async.png" alt=""></p>
-<p>上图是一个创建订单减库存的例子。订单系统收到下单请求，创建一个订单插入数据库，并且同时存储该订单对应的消息数据，比如购买商品的ID和数量，消息和订单表是同一个数据库，他们的写入是一个事务，需要保证同时成功或失败。</p>
-<p>然后订单系统会把扣库存的消息发到消息中间件，库存系统收到消息中间件，就扣库存，库存扣成功了，就把执行成功或失败的结果发给订单服务。</p>
-<p>订单服务收到扣库存成功，就把消息表中这个消息置为已完成。订单服务还有一个异步任务，定期扫描消息表，发现有失败的，就重试。</p>
-<p>如果业务允许，这种方案还可以做成不要求最终一致性的柔性事务：不强制要求异步处理的消息一定完成，尽力完成，比如多重试几次就得了，而不是无限制去重试，允许数据还是有可能会最终不一致。</p>
+<p>上图是一个创建订单减库存的例子。订单系统收到下单请求，创建一个订单插入数据库，并且同时存储该订单对应的消息数据，比如购买商品的ID和数量，消息和订单表是同一个数据库，他们的写入可以放在一个本地事务中，需要保证同时成功或失败。</p>
+<p>然后订单系统会把扣库存的消息发到消息中间件，库存系统收到消息中间件的消息，就扣库存，库存扣成功了，就把执行成功或失败的结果发给订单服务。</p>
+<p>订单服务收到扣库存成功，就把消息表中这个消息置为已完成。订单服务还需要有一个异步任务，定期扫描消息表，发现有失败的，就重试（努力送达，Best Effort）。</p>
+<p>如果业务允许，这种方案还可以做成不要求最终一致性的柔性事务：不强制要求异步处理的消息一定完成，尽力完成，比如多重试几次就得了，而不是无限制去重试，允许数据还是有可能会最终不一致。这种情况下如果出现了事务执行失败，需要人工介入去解决。</p>
+<p>还要注意的是，这种实现方式，订单系统的订单是一定会创建的，它没有回滚。就是说，会把第一个子事务作为分布式事务执行成功的标志，然后尽力去完成第二个子事务。</p>
+<h4 id="利用canal">利用Canal</h4>
+<p>Canal是阿里开源的中间件，可以订阅MySQL的binlog，流入其他的数据引擎。在这里我们其实可以直接用Canal将事务消息表的数据流入到消息队列中，通过这种方式解耦订单服务和消息队列的耦合，也是个不错的方案。</p>
+<h4 id="保证幂等的方式">保证幂等的方式</h4>
+<p>由于网络等复杂原因，可能由于努力送达的时候，出现多次重试或者消息重复投递导致另一个子事务执行了多次。为了防止这种情况下可能对业务产生的影响，任何一个子事务都要保证幂等性。并且在后续介绍的分布式事务实现方式里，幂等性也都是十分重要的。</p>
+<ul>
+<li>
+<p>天然就幂等的操作不需要额外处理</p>
+</li>
+<li>
+<p>可以利用数据库去重</p>
+<p>在消费者事务（上面例子中的库存扣减事务）中，也添加一个事务消息表，记录某个事务是否处理过，如果处理过的话，重复的消息投递就不再处理，以此来保证幂等。</p>
+<p>为了对每个分布式事务进行唯一的标记，需要给每个事务添加一个全局唯一的事务ID，这样消费者事务才可以识别重复事务。</p>
+</li>
+</ul>
 <h2 id="两阶段提交2pc">两阶段提交(2PC)</h2>
 <h4 id="事务协调者">事务协调者</h4>
 <p>一台服务器在执行本地事务时，无法知道其他服务器的执行情况的，所以所有的一致性算法中，都需要一个leader进程进行多个节点之间的协调者，大多数分布式事务的实现方案里，都会有这样一个角色。</p>
@@ -483,7 +498,10 @@ Per aspera ad astra.
 </li>
 </ol>
 <h4 id="mysql的redo-log的两阶段提交">MySQL的redo log的两阶段提交</h4>
-<p>MySQL采用两阶段协议来完成分布式事务的处理，即XA规范。为了保证binlog和redo log的一致性。binlog被当做事务协调者，以binlog的写入成功是事务提交成功的标志。如果在第一或者第二步失败，则整个事务回滚，如果是第三步失败，MySQL重启后会检查XID是否已经提交，若没有提交，则会再执行一次提交。这部分内容，可以查看<a href="https://yanghairui.life/post/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/">Redo log的两阶段提交</a>这篇文章。</p>
+<p>MySQL采用两阶段协议来完成分布式事务的处理，即<strong>XA规范</strong>。为了保证binlog和redo log的一致性。binlog被当做事务协调者，以binlog的写入成功作为事务提交成功的标志。如果在第一或者第二步失败，则整个事务回滚，如果是第三步失败，MySQL重启后会检查XID是否已经提交，若没有提交，则会再执行一次提交。这部分内容，可以查看<a href="https://yanghairui.life/post/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/">Redo log的两阶段提交</a>这篇文章。</p>
+<h4 id="两阶段提交结合消息队列的实现">两阶段提交结合消息队列的实现</h4>
+<p>由于两节点提交需要增加一个事务协调者的角色，所以稍显复杂。如果不追求强一致，可以用消息队列异步完成。如下图：</p>
+<p><img src="/images/transaction/mq.png" alt=""></p>
 <h2 id="三阶段提交3pc">三阶段提交（3PC）</h2>
 <p>为了解决二阶段协议中的同步阻塞等问题，三阶段提交在协调者和参与者中都添加了超时机制，二阶段变成了三步：询问、锁资源、提交。</p>
 <h4 id="三阶段提交的实现">三阶段提交的实现</h4>
@@ -523,7 +541,7 @@ Per aspera ad astra.
 <h4 id="三阶段提交的问题">三阶段提交的问题</h4>
 <p>如果在DoCommit阶段，参与者在收到了PreCommit之后，网络断了，那么在超时后，参与者依然会完成提交，而协调者超时后会进行事务中断，这就造成了这个节点的事务提交了， 而其他节点的事务却中断了。</p>
 <h2 id="tcc事务模型">TCC事务模型</h2>
-<p>TCC（Try-Confirm-Cancel），基于业务层面的事务定义，锁粒度完全由业务自己控制，目的是解决复杂业务中，跨表吗跨库等大颗粒的资源锁定问题，TCC把事务运行过程分成<strong>Try、Confirm/Cancel两个阶段</strong>，每个阶段的逻辑由业务代码控制，避免了长事务，以获得更高的性能。</p>
+<p>TCC（Try-Confirm-Cancel），基于业务层面的事务定义，锁粒度完全由业务自己控制，目的是解决复杂业务中，跨表跨库等大颗粒的资源锁定问题，TCC把事务运行过程分成<strong>Try、Confirm/Cancel两个阶段</strong>，每个阶段的逻辑由业务代码控制，避免了长事务，以获得更高的性能。</p>
 <h4 id="tcc的各个阶段">TCC的各个阶段</h4>
 <p><img src="/images/transaction/tcc.png" alt=""></p>
 <p>如上图，每个服务都提供了三个接口，Try、Confirm、Cancel，try接口是由业务应用（想要发起一个分布式事务的应用）调用的，Confirm和Cancel是由事务协调者调用的。</p>
@@ -581,6 +599,7 @@ Per aspera ad astra.
 <p>2PC或者XA，是<strong>数据库存储资源层面的事务</strong>，实现的是强一致性，两阶段提交的整个阶段，一直会持有数据库的锁。</p>
 <p>TCC 关注的是业务层的正确提交和回滚，try阶段不涉及加锁，只是冻结资源，是<strong>业务层的分布式事务</strong>，关注最终一致性，不会一直持有各个资源的锁。</p>
 <p>TCC 的核心思想：就是<strong>针对每个业务操作，都要提供一个对应的准备、确认和补偿操作，同时把相关的处理，从数据库转移到业务中</strong>。</p>
+<h2 id="seata">Seata</h2>
 </div>
     <div class="post-footer">
       <div class="info">
@@ -626,8 +645,8 @@ Per aspera ad astra.
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.71100d84fab0ad794b8399a66ac810700cc78d703f715dc10af4d7ba7b761362.js"
-    integrity="sha256-cRANhPqwrXlLg5mmasgQcAzHjXA/cV3BCvTXunt2E2I="
+    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
+    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
     crossorigin="anonymous"
   ></script></body>
 </html>
