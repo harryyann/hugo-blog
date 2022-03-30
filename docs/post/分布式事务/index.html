@@ -18,12 +18,11 @@
   </title>
 
   
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.96.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta
     name="description"
     content="
-      
-Per aspera ad astra.
+      Per aspera ad astra.
 循此苦旅，终抵群星。
 
 
@@ -35,8 +34,8 @@ Per aspera ad astra.
   
   <link
     rel="stylesheet"
-    href="/css/main.min.7ca9a7b7632c545387f4ab9f7f943afeab89e7ed1c092ce9fb39263257779ce5.css"
-    integrity="sha256-fKmnt2MsVFOH9Kuff5Q6/quJ5&#43;0cCSzp&#43;zkmMld3nOU="
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -44,8 +43,8 @@ Per aspera ad astra.
   
   <link
     rel="stylesheet"
-    href="/css/markupHighlight.min.8f07fad4abedfd5eb1396c6fef85ba7ec00ec867a79fb545c9db18df87f6760a.css"
-    integrity="sha256-jwf61Kvt/V6xOWxv74W6fsAOyGenn7VFydsY34f2dgo="
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -70,8 +69,8 @@ Per aspera ad astra.
   
   <script
     type="text/javascript"
-    src="/js/anatole-header.min.413f798d8aa82610bef17a5ca1d7e962ec185be395f1aeb3f45d1891af568b65.js"
-    integrity="sha256-QT95jYqoJhC&#43;8XpcodfpYuwYW&#43;OV8a6z9F0Yka9Wi2U="
+    src="/js/anatole-header.min.d0408165d31a17f17bba83038bf54e86121f85021bdf936382e636f0f77a952f.js"
+    integrity="sha256-0ECBZdMaF/F7uoMDi/VOhhIfhQIb35NjguY28Pd6lS8="
     crossorigin="anonymous"
   ></script>
 
@@ -80,8 +79,8 @@ Per aspera ad astra.
     
     <script
       type="text/javascript"
-      src="/js/anatole-theme-switcher.min.fcf9526f15b3b4e08472de192969ab28a4cdcb32ac94f83e85a8b84e9b45acd2.js"
-      integrity="sha256-/PlSbxWztOCEct4ZKWmrKKTNyzKslPg&#43;hai4TptFrNI="
+      src="/js/anatole-theme-switcher.min.65e936b591bf81484a5ac438c8e4ae6454fb25516d58ce911e4888d7f230bdc5.js"
+      integrity="sha256-Zek2tZG/gUhKWsQ4yOSuZFT7JVFtWM6RHkiI1/IwvcU="
       crossorigin="anonymous"
     ></script>
 
@@ -163,7 +162,7 @@ Per aspera ad astra.
 
     ,
         "url" : "https:\/\/yanghairui.life\/post\/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1\/",
-        "wordCount" : "193",
+        "wordCount" : "223",
         "genre" : [ 
       
       "分布式"
@@ -293,7 +292,7 @@ Per aspera ad astra.
         <img src="/images/profile5.jpg" alt="profile picture" />
         <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
         <div class="description">
-          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+          <p>Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
         </div>
       </div>
     </div>
@@ -345,8 +344,8 @@ Per aspera ad astra.
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></div>
 </aside>
@@ -374,7 +373,7 @@ Per aspera ad astra.
               </span
             >
             <em class="fas fa-stopwatch"></em>
-            <span class="reading-time">阅读时间 1 分钟</span>
+            <span class="reading-time">阅读时间 2 分钟</span>
           </div>
 
         
@@ -599,7 +598,45 @@ Per aspera ad astra.
 <p>2PC或者XA，是<strong>数据库存储资源层面的事务</strong>，实现的是强一致性，两阶段提交的整个阶段，一直会持有数据库的锁。</p>
 <p>TCC 关注的是业务层的正确提交和回滚，try阶段不涉及加锁，只是冻结资源，是<strong>业务层的分布式事务</strong>，关注最终一致性，不会一直持有各个资源的锁。</p>
 <p>TCC 的核心思想：就是<strong>针对每个业务操作，都要提供一个对应的准备、确认和补偿操作，同时把相关的处理，从数据库转移到业务中</strong>。</p>
+<h4 id="tcc模型常见的三种异常">TCC模型常见的三种异常</h4>
+<ol>
+<li>
+<p>空回滚</p>
+<p>空回滚就是一个分布式事务，在没有调用Try时，调用了Cancel方法，这种情况下就需要识别出来。</p>
+<p>比如增加一张事务控制表，每次Try时都记录事务ID，当调用了Cancel方法时，先查表，没有这个事务，直接返回成功即可。</p>
+</li>
+<li>
+<p>幂等</p>
+<p>这个就不说了，Confirm和Cancel都要保证幂等。</p>
+</li>
+<li>
+<p>悬挂</p>
+<p>当Cancel调用发生在了Try之前时，因为我们解决了空回滚，这时，就会一直挂在Try这里，资源一直被锁定。</p>
+<p>Seata的解决方法是，也是每次回滚也记录一张表，调Try时，查这张表，如果发现这个事务ID已经Cancel过了，就可以认为这个事务已经完事了，返回即可。</p>
+</li>
+</ol>
+<h2 id="saga">SAGA</h2>
+<p>Saga事务模型和TCC一样都是一种补偿协议，每个操作，都要提供自己的正向操作和逆向回滚操作，和TCC的区别在于，SAGA执行事务时，每个子事务是依次执行的，一个子事务执行成功了，才会去执行下一个子事务，一旦一个子事务执行失败，则前面执行成功的子事务都要回滚。如下图：</p>
+<p><img src="/images/transaction/saga.png" alt=""></p>
+<p>SAGA的这种执行方式就导致了事务的执行周期较长，适合于那种层层审核的业务，比如金融系统。</p>
 <h2 id="seata">Seata</h2>
+<p><a href="https://github.com/seata/seata">Seata</a>是阿里开源的分布式事务解决方案，它提供了AT、TCC、SAGA、XA四种事务模型。</p>
+<p>Seata中有三个核心的角色</p>
+<ul>
+<li><strong>TC（Transaction Coordinator）</strong> ：事务协调者，是<code>Server</code>端，要单独部署，维护全局和分支事务的状态，驱动全局事务提交或回滚;</li>
+<li><strong>TM（Transaction Manager）</strong> :是<code>Client</code>端，由业务服务集成，定义全局事务，发起分布式事务，和决定是提交还是回滚的某个业务服务。</li>
+<li><strong>RM（Resource Manager）</strong> ：是<code>Client</code>端，由业务服务集成，管理分支事务处理的资源，具体处理子事务的。</li>
+</ul>
+<p><img src="/images/transaction/seata.png" alt=""></p>
+<p>如上图，Seata管理的一个分布式事务的整个过程大致如下</p>
+<ul>
+<li><code>TM</code>要求<code>TC</code>开始一项新的全局事务。<code>TC</code>生成代表全局事务的<code>XID</code>。</li>
+<li><code>XID</code>会通过微服务的调用链传播到各个子事务所在的业务系统中。</li>
+<li><code>RM</code>将本地事务注册为这个<code>XID</code>到<code>TC</code>的全局事务的分支子事务。</li>
+<li><code>TM</code>要求<code>TC</code>提交或回退相应的<code>XID</code>全局事务。</li>
+<li><code>TC</code>驱动<code>XID</code>的相应全局事务下的所有分支事务以完成分支提交或回滚。</li>
+</ul>
+<p>具体的事务执行过程，则是根据选择的事务模型不同，有所区别。</p>
 </div>
     <div class="post-footer">
       <div class="info">
@@ -645,8 +682,8 @@ Per aspera ad astra.
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></body>
 </html>

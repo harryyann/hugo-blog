@@ -18,7 +18,7 @@
   </title>
 
   
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.96.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta
     name="description"
     content="
@@ -32,8 +32,8 @@
   
   <link
     rel="stylesheet"
-    href="/css/main.min.7ca9a7b7632c545387f4ab9f7f943afeab89e7ed1c092ce9fb39263257779ce5.css"
-    integrity="sha256-fKmnt2MsVFOH9Kuff5Q6/quJ5&#43;0cCSzp&#43;zkmMld3nOU="
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -41,8 +41,8 @@
   
   <link
     rel="stylesheet"
-    href="/css/markupHighlight.min.8f07fad4abedfd5eb1396c6fef85ba7ec00ec867a79fb545c9db18df87f6760a.css"
-    integrity="sha256-jwf61Kvt/V6xOWxv74W6fsAOyGenn7VFydsY34f2dgo="
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -67,8 +67,8 @@
   
   <script
     type="text/javascript"
-    src="/js/anatole-header.min.413f798d8aa82610bef17a5ca1d7e962ec185be395f1aeb3f45d1891af568b65.js"
-    integrity="sha256-QT95jYqoJhC&#43;8XpcodfpYuwYW&#43;OV8a6z9F0Yka9Wi2U="
+    src="/js/anatole-header.min.d0408165d31a17f17bba83038bf54e86121f85021bdf936382e636f0f77a952f.js"
+    integrity="sha256-0ECBZdMaF/F7uoMDi/VOhhIfhQIb35NjguY28Pd6lS8="
     crossorigin="anonymous"
   ></script>
 
@@ -77,8 +77,8 @@
     
     <script
       type="text/javascript"
-      src="/js/anatole-theme-switcher.min.fcf9526f15b3b4e08472de192969ab28a4cdcb32ac94f83e85a8b84e9b45acd2.js"
-      integrity="sha256-/PlSbxWztOCEct4ZKWmrKKTNyzKslPg&#43;hai4TptFrNI="
+      src="/js/anatole-theme-switcher.min.65e936b591bf81484a5ac438c8e4ae6454fb25516d58ce911e4888d7f230bdc5.js"
+      integrity="sha256-Zek2tZG/gUhKWsQ4yOSuZFT7JVFtWM6RHkiI1/IwvcU="
       crossorigin="anonymous"
     ></script>
 
@@ -278,7 +278,7 @@
         <img src="/images/profile5.jpg" alt="profile picture" />
         <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
         <div class="description">
-          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+          <p>Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
         </div>
       </div>
     </div>
@@ -330,8 +330,8 @@
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></div>
 </aside>
@@ -367,7 +367,7 @@
 <p>WAL(Write-Ahead Logging)，就是先些日志，再写磁盘。</p>
 <p>当我们向MySQL更新一条记录的时候，InnoDB存储引擎就会把记录顺序的写到redo log中，然后更新InnoDB的buffer  pool，并不更新磁盘中的数据页，然后这次更新操作就算是完成了，之后InnoDB存储引擎就会在它有空的时候，把redo log中记录的记录刷到磁盘上的数据页中完成最终的持久化。</p>
 <p>由于磁盘的顺序写入效率要远高于随机写入，并且还有组提交等优化，这种方式可以大大提高数据更新时的效率。</p>
-<pre><code>关于磁盘的顺序写入，需要注意一下。不是说打开一个文件之后append就是顺序写入了。顺序写入需要知道磁盘上要写入的
+<pre tabindex="0"><code>关于磁盘的顺序写入，需要注意一下。不是说打开一个文件之后append就是顺序写入了。顺序写入需要知道磁盘上要写入的
 位置，直接操作磁盘，向某个特定的地址写入，顺序写入时，磁盘的磁头不需要移动就可以直接写入，这样才有效率的提升。
 </code></pre><h1 id="redo-log">Redo log</h1>
 <p>Redo log是Innodb存储引擎提供的用于优化更新操作的日志。它的结构可以看成是个环形的磁盘区域。</p>
@@ -379,7 +379,7 @@
 <li>redo log是InnoDB特有的，是存储引擎层的，用于crash-safe；binlog是Server层的，所有引擎都可以使用，主要用于数据归档。</li>
 <li>redo log是<strong>物理逻辑日志</strong>，会记录数据页的位置，数据页内部则是逻辑日志，而binlog是单纯的<strong>逻辑日志</strong>，记录的就是每行的数据。</li>
 </ol>
-<pre><code>物理日志：记录的是具体的对磁盘的操作，比如在哪个位置，做了哪个修改
+<pre tabindex="0"><code>物理日志：记录的是具体的对磁盘的操作，比如在哪个位置，做了哪个修改
 逻辑日志：可以理解为SQL语句，人类是可读的
 物理逻辑日志：redo log，记录页位置是物理的，记录数据内容是逻辑的
 </code></pre><ol start="3">
@@ -415,7 +415,7 @@
 <li>写入redo log，进入commit阶段</li>
 </ol>
 <p>如果在1和2之间MySQL宕机，则会导致redo log处于prepare阶段，而binlog未写入，此时MySQL重启时，发现redo log处于prepare阶段，就会检查binlog，观察到binlog中没有这条事务的记录，则会忽视这条redo log。redo log和bin log之间通过<strong>事务ID</strong>对应</p>
-<pre><code>事务ID即transaction_id，在每个事务开始时分配，递增且全局唯一。
+<pre tabindex="0"><code>事务ID即transaction_id，在每个事务开始时分配，递增且全局唯一。
 </code></pre><p>如果在2和3之间MySQL宕机，则redo log仍是处于prepare阶段，但是binlog已经写入了，此时MySQL重启时，发现redo log处于prepare阶段，就会检查binlog，观察到binlog是完整的，则会自动将这条redo log提交，并恢复数据。</p>
 <p>MySQL的两阶段提交实际上是XA规范的应用，两阶段提交是分布式系统维持数据逻辑一致性时的常用方案。</p>
 </div>
@@ -463,8 +463,8 @@
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></body>
 </html>

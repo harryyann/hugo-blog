@@ -18,12 +18,11 @@
   </title>
 
   
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.96.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta
     name="description"
     content="
-      
-Per aspera ad astra.
+      Per aspera ad astra.
 循此苦旅，终抵群星。
 
 
@@ -35,8 +34,8 @@ Per aspera ad astra.
   
   <link
     rel="stylesheet"
-    href="/css/main.min.7ca9a7b7632c545387f4ab9f7f943afeab89e7ed1c092ce9fb39263257779ce5.css"
-    integrity="sha256-fKmnt2MsVFOH9Kuff5Q6/quJ5&#43;0cCSzp&#43;zkmMld3nOU="
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -44,8 +43,8 @@ Per aspera ad astra.
   
   <link
     rel="stylesheet"
-    href="/css/markupHighlight.min.8f07fad4abedfd5eb1396c6fef85ba7ec00ec867a79fb545c9db18df87f6760a.css"
-    integrity="sha256-jwf61Kvt/V6xOWxv74W6fsAOyGenn7VFydsY34f2dgo="
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -70,8 +69,8 @@ Per aspera ad astra.
   
   <script
     type="text/javascript"
-    src="/js/anatole-header.min.413f798d8aa82610bef17a5ca1d7e962ec185be395f1aeb3f45d1891af568b65.js"
-    integrity="sha256-QT95jYqoJhC&#43;8XpcodfpYuwYW&#43;OV8a6z9F0Yka9Wi2U="
+    src="/js/anatole-header.min.d0408165d31a17f17bba83038bf54e86121f85021bdf936382e636f0f77a952f.js"
+    integrity="sha256-0ECBZdMaF/F7uoMDi/VOhhIfhQIb35NjguY28Pd6lS8="
     crossorigin="anonymous"
   ></script>
 
@@ -80,8 +79,8 @@ Per aspera ad astra.
     
     <script
       type="text/javascript"
-      src="/js/anatole-theme-switcher.min.fcf9526f15b3b4e08472de192969ab28a4cdcb32ac94f83e85a8b84e9b45acd2.js"
-      integrity="sha256-/PlSbxWztOCEct4ZKWmrKKTNyzKslPg&#43;hai4TptFrNI="
+      src="/js/anatole-theme-switcher.min.65e936b591bf81484a5ac438c8e4ae6454fb25516d58ce911e4888d7f230bdc5.js"
+      integrity="sha256-Zek2tZG/gUhKWsQ4yOSuZFT7JVFtWM6RHkiI1/IwvcU="
       crossorigin="anonymous"
     ></script>
 
@@ -287,7 +286,7 @@ Per aspera ad astra.
         <img src="/images/profile5.jpg" alt="profile picture" />
         <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
         <div class="description">
-          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+          <p>Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
         </div>
       </div>
     </div>
@@ -339,8 +338,8 @@ Per aspera ad astra.
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></div>
 </aside>
@@ -378,19 +377,19 @@ Per aspera ad astra.
 <li>
 <p>latch：轻量级的锁，用于锁定mysql应用程序中的一些对象，要求锁定的时间必须非常短，mysql中分为mutex（互斥锁）和rwlock（读写锁），是应用程序级别的，就是我们在程序中使用的mutex和rwmutex。通过命令show engine innodb mutex可以查看，一般mysql的开发人员会关注。</p>
 <p>通过命令<code>show engine innodb mutex</code>可以观察当前数据库中的latch信息。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">engine</span> innodb mutex;
-<span style="color:#f92672">+--------+-----------------------------+-------------+</span>
-<span style="color:#f92672">|</span> Type   <span style="color:#f92672">|</span> Name                        <span style="color:#f92672">|</span> Status      <span style="color:#f92672">|</span>
-<span style="color:#f92672">+--------+-----------------------------+-------------+</span>
-<span style="color:#f92672">|</span> InnoDB <span style="color:#f92672">|</span> rwlock: dict0dict.cc:<span style="color:#ae81ff">920</span>    <span style="color:#f92672">|</span> waits<span style="color:#f92672">=</span><span style="color:#ae81ff">106</span>   <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span> InnoDB <span style="color:#f92672">|</span> rwlock: log0log.cc:<span style="color:#ae81ff">582</span>      <span style="color:#f92672">|</span> waits<span style="color:#f92672">=</span><span style="color:#ae81ff">24</span>    <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span> InnoDB <span style="color:#f92672">|</span> rwlock: btr0sea.cc:<span style="color:#ae81ff">240</span>      <span style="color:#f92672">|</span> waits<span style="color:#f92672">=</span><span style="color:#ae81ff">1694</span>  <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span> InnoDB <span style="color:#f92672">|</span> rwlock: btr0sea.cc:<span style="color:#ae81ff">240</span>      <span style="color:#f92672">|</span> waits<span style="color:#f92672">=</span><span style="color:#ae81ff">1179</span>  <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span> InnoDB <span style="color:#f92672">|</span> rwlock: btr0sea.cc:<span style="color:#ae81ff">240</span>      <span style="color:#f92672">|</span> waits<span style="color:#f92672">=</span><span style="color:#ae81ff">22050</span> <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span> InnoDB <span style="color:#f92672">|</span> sum rwlock: buf0buf.cc:<span style="color:#ae81ff">1563</span> <span style="color:#f92672">|</span> waits<span style="color:#f92672">=</span><span style="color:#ae81ff">3929</span>  <span style="color:#f92672">|</span>
-<span style="color:#f92672">+--------+-----------------------------+-------------+</span>
-<span style="color:#ae81ff">6</span> rows <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">003</span> sec)
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">engine</span> innodb mutex;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+--------+-----------------------------+-------------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> Type   <span style="color:#f92672">|</span> Name                        <span style="color:#f92672">|</span> Status      <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+--------+-----------------------------+-------------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> InnoDB <span style="color:#f92672">|</span> rwlock: dict0dict.cc:<span style="color:#ae81ff">920</span>    <span style="color:#f92672">|</span> waits<span style="color:#f92672">=</span><span style="color:#ae81ff">106</span>   <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> InnoDB <span style="color:#f92672">|</span> rwlock: log0log.cc:<span style="color:#ae81ff">582</span>      <span style="color:#f92672">|</span> waits<span style="color:#f92672">=</span><span style="color:#ae81ff">24</span>    <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> InnoDB <span style="color:#f92672">|</span> rwlock: btr0sea.cc:<span style="color:#ae81ff">240</span>      <span style="color:#f92672">|</span> waits<span style="color:#f92672">=</span><span style="color:#ae81ff">1694</span>  <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> InnoDB <span style="color:#f92672">|</span> rwlock: btr0sea.cc:<span style="color:#ae81ff">240</span>      <span style="color:#f92672">|</span> waits<span style="color:#f92672">=</span><span style="color:#ae81ff">1179</span>  <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> InnoDB <span style="color:#f92672">|</span> rwlock: btr0sea.cc:<span style="color:#ae81ff">240</span>      <span style="color:#f92672">|</span> waits<span style="color:#f92672">=</span><span style="color:#ae81ff">22050</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> InnoDB <span style="color:#f92672">|</span> sum rwlock: buf0buf.cc:<span style="color:#ae81ff">1563</span> <span style="color:#f92672">|</span> waits<span style="color:#f92672">=</span><span style="color:#ae81ff">3929</span>  <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+--------+-----------------------------+-------------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">6</span> rows <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">003</span> sec)
+</span></span></code></pre></div></li>
 <li>
 <p>lock：用来锁定数据库中的对象，表、页、行，并且仅在事务提交或回滚之后才能释放（不同事务隔离级别的释放时机不同）。这也是我们本篇文章主要讨论的锁。</p>
 </li>
@@ -467,14 +466,14 @@ Per aspera ad astra.
 <li>
 <p><strong>Record Lock</strong>：记录锁，普通的行锁，可以锁住一行的索引记录。</p>
 <p>比如：</p>
-<pre><code>select *from table where id = 1 for update
+<pre tabindex="0"><code>select *from table where id = 1 for update
 </code></pre><p>以上语句将会给id=1的行加上行的record lock。需要注意<strong>id列必须是主键或者唯一索引，且是等式查询，以保证选定的只有一行</strong>，否则上述语句就会变成临键锁。如果不是等式查询，而是&gt;、&lt;、like、between and等，也会退化成临键锁。</p>
 <p>当然，当通过更新语句更新一行时，会自动给这行加上记录锁的X Lock。</p>
 </li>
 <li>
 <p><strong>Gap Lock</strong>：间隙锁，可以锁住索引之间的间隙，防止间隙内的插入操作，由于只锁定间隙，所以它是个<strong>左开右开</strong>的区间，即它只能阻塞两个相邻索引之间的插入操作。</p>
 <p>比如执行以下语句时：</p>
-<pre><code>SELECT * FROM table WHERE id BETWEN 1 AND 10 FOR UPDATE;
+<pre tabindex="0"><code>SELECT * FROM table WHERE id BETWEN 1 AND 10 FOR UPDATE;
 </code></pre><p>id在区间(1,10)将会被加上间隙锁，当向(1,10)中插入新记录时，就会被阻塞。</p>
 <p><strong>间隙锁，只能在RR隔离级别下才会产生。作用是为了阻止多个事务将记录插入到同一个范围内，造成幻读(Phantom Problem)的问题</strong>。间隙锁和间隙锁之间是不冲突的，多个间隙锁可以同时加到一个范围上。</p>
 <p>产生间隙锁的条件：</p>
@@ -543,14 +542,14 @@ Per aspera ad astra.
 <ul>
 <li>
 <p>被动检测：比如超时检测，当两个事务相互等待时，当一个事务的等待时间超过了阈值时，就要回滚其中一个事务。可以通过参数<code>innodb_lock_wait_timeout</code>参数指定超时时间。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">MySQL<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;innodb_lock_wait_timeout&#34;</span>;
-<span style="color:#f92672">+--------------------------+-------+</span>
-<span style="color:#f92672">|</span> Variable_name            <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
-<span style="color:#f92672">+--------------------------+-------+</span>
-<span style="color:#f92672">|</span> innodb_lock_wait_timeout <span style="color:#f92672">|</span> <span style="color:#ae81ff">50</span>    <span style="color:#f92672">|</span>
-<span style="color:#f92672">+--------------------------+-------+</span>
-<span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">001</span> sec)
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>MySQL<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;innodb_lock_wait_timeout&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+--------------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> Variable_name            <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+--------------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> innodb_lock_wait_timeout <span style="color:#f92672">|</span> <span style="color:#ae81ff">50</span>    <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+--------------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">001</span> sec)
+</span></span></code></pre></div></li>
 <li>
 <p>主动检测：wait-for graph(等待图)的方式进行死锁检测。首先，数据库会保存锁的信息链表，和事务的等待链表，根据这两个链表构造出一张有向图，其中点就是事务，边代表一个事务需要等待另一个事务，如果图中存在回路，则代表有死锁。</p>
 </li>
@@ -603,8 +602,8 @@ Per aspera ad astra.
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></body>
 </html>

@@ -18,12 +18,11 @@
   </title>
 
   
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.96.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta
     name="description"
     content="
-      
-Per aspera ad astra.
+      Per aspera ad astra.
 循此苦旅，终抵群星。
 
 
@@ -35,8 +34,8 @@ Per aspera ad astra.
   
   <link
     rel="stylesheet"
-    href="/css/main.min.7ca9a7b7632c545387f4ab9f7f943afeab89e7ed1c092ce9fb39263257779ce5.css"
-    integrity="sha256-fKmnt2MsVFOH9Kuff5Q6/quJ5&#43;0cCSzp&#43;zkmMld3nOU="
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -44,8 +43,8 @@ Per aspera ad astra.
   
   <link
     rel="stylesheet"
-    href="/css/markupHighlight.min.8f07fad4abedfd5eb1396c6fef85ba7ec00ec867a79fb545c9db18df87f6760a.css"
-    integrity="sha256-jwf61Kvt/V6xOWxv74W6fsAOyGenn7VFydsY34f2dgo="
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -70,8 +69,8 @@ Per aspera ad astra.
   
   <script
     type="text/javascript"
-    src="/js/anatole-header.min.413f798d8aa82610bef17a5ca1d7e962ec185be395f1aeb3f45d1891af568b65.js"
-    integrity="sha256-QT95jYqoJhC&#43;8XpcodfpYuwYW&#43;OV8a6z9F0Yka9Wi2U="
+    src="/js/anatole-header.min.d0408165d31a17f17bba83038bf54e86121f85021bdf936382e636f0f77a952f.js"
+    integrity="sha256-0ECBZdMaF/F7uoMDi/VOhhIfhQIb35NjguY28Pd6lS8="
     crossorigin="anonymous"
   ></script>
 
@@ -80,8 +79,8 @@ Per aspera ad astra.
     
     <script
       type="text/javascript"
-      src="/js/anatole-theme-switcher.min.fcf9526f15b3b4e08472de192969ab28a4cdcb32ac94f83e85a8b84e9b45acd2.js"
-      integrity="sha256-/PlSbxWztOCEct4ZKWmrKKTNyzKslPg&#43;hai4TptFrNI="
+      src="/js/anatole-theme-switcher.min.65e936b591bf81484a5ac438c8e4ae6454fb25516d58ce911e4888d7f230bdc5.js"
+      integrity="sha256-Zek2tZG/gUhKWsQ4yOSuZFT7JVFtWM6RHkiI1/IwvcU="
       crossorigin="anonymous"
     ></script>
 
@@ -287,7 +286,7 @@ MVCC MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的�
         <img src="/images/profile5.jpg" alt="profile picture" />
         <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
         <div class="description">
-          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+          <p>Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
         </div>
       </div>
     </div>
@@ -339,8 +338,8 @@ MVCC MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的�
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></div>
 </aside>
@@ -437,15 +436,15 @@ MVCC MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的�
 <p>MVCC可以说是一个基于乐观锁的实现。我们主要讨论的也是在行被加了X锁时可以在不阻塞的情况下依然读取到正确的数据。而如果是并发写的操作，那么由于写操作都是当前读，在RR隔离级别下就可能会出现写失败的问题。</p>
 <p>有一个典型的例子可以说明这个问题：</p>
 <p>如下，我们有如下的表，表中有四行数据他们的id字段和c字段都是一样的：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"><span style="color:#f92672">+----+----+</span>
-<span style="color:#f92672">|</span> id <span style="color:#f92672">|</span> c  <span style="color:#f92672">|</span>
-<span style="color:#f92672">+----+----+</span>
-<span style="color:#f92672">|</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span>  <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span>  <span style="color:#ae81ff">4</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">4</span> <span style="color:#f92672">|</span>
-<span style="color:#f92672">+----+----+</span>
-</code></pre></div><p>然后我们开启一个事务A，执行select语句后该事务真正开启：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span><span style="color:#f92672">+----+----+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> id <span style="color:#f92672">|</span> c  <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+----+----+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span>  <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span>  <span style="color:#ae81ff">4</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">4</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+----+----+</span>
+</span></span></code></pre></div><p>然后我们开启一个事务A，执行select语句后该事务真正开启：</p>
 <table>
 <thead>
 <tr>
@@ -479,15 +478,15 @@ MVCC MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的�
 <p>然后开启一个事务B，执行update操作把所有c值都变成5并立刻提交（必须立刻提交，如果不提交，则update的行都会被锁住，事务A中的update语句会被阻塞），然后我们在事务A中执行update语句，给所有的c值都变成0，此时A中的操作会不成功，显示修改了0个row：</p>
 <p><img src="/images/mvcc/problem.png" alt=""></p>
 <p>但当我们在事务A中再次执行select语句时，得到的结果却依然是：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"><span style="color:#f92672">+----+----+</span>
-<span style="color:#f92672">|</span> id <span style="color:#f92672">|</span> c  <span style="color:#f92672">|</span>
-<span style="color:#f92672">+----+----+</span>
-<span style="color:#f92672">|</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span>  <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span>  <span style="color:#ae81ff">4</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">4</span> <span style="color:#f92672">|</span>
-<span style="color:#f92672">+----+----+</span>
-</code></pre></div><p>发现事务A中出现了吊诡的一幕，明明通过select语句能看到where条件是满足的，但却无法完成修改。原因就是在事务B中所有行都被修改了，而事务A中的update 操作是当前读，只能读取最新的数据，然后再写，而最新的数据又是不满足条件的，所以就会造成修改了0个row的问题，RR级别又会保证可重复读，所以无论读多少次，都依然看起来是满足条件的。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span><span style="color:#f92672">+----+----+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> id <span style="color:#f92672">|</span> c  <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+----+----+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span>  <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span>  <span style="color:#ae81ff">4</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">4</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+----+----+</span>
+</span></span></code></pre></div><p>发现事务A中出现了吊诡的一幕，明明通过select语句能看到where条件是满足的，但却无法完成修改。原因就是在事务B中所有行都被修改了，而事务A中的update 操作是当前读，只能读取最新的数据，然后再写，而最新的数据又是不满足条件的，所以就会造成修改了0个row的问题，RR级别又会保证可重复读，所以无论读多少次，都依然看起来是满足条件的。</p>
 <p>解决方式也很简单，可以当失败时再重新起一个事务执行原本的操作（失败的判断依据是affected_rows是不是等于预期的值，以防止出现这种情况）。</p>
 </div>
     <div class="post-footer">
@@ -534,8 +533,8 @@ MVCC MVCC是一种概念，很多数据库都有自己的实现，而InnoDB的�
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></body>
 </html>

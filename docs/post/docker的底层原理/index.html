@@ -18,12 +18,11 @@
   </title>
 
   
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.96.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta
     name="description"
     content="
-      
-Per aspera ad astra.
+      Per aspera ad astra.
 循此苦旅，终抵群星。
 
 
@@ -35,8 +34,8 @@ Per aspera ad astra.
   
   <link
     rel="stylesheet"
-    href="/css/main.min.7ca9a7b7632c545387f4ab9f7f943afeab89e7ed1c092ce9fb39263257779ce5.css"
-    integrity="sha256-fKmnt2MsVFOH9Kuff5Q6/quJ5&#43;0cCSzp&#43;zkmMld3nOU="
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -44,8 +43,8 @@ Per aspera ad astra.
   
   <link
     rel="stylesheet"
-    href="/css/markupHighlight.min.8f07fad4abedfd5eb1396c6fef85ba7ec00ec867a79fb545c9db18df87f6760a.css"
-    integrity="sha256-jwf61Kvt/V6xOWxv74W6fsAOyGenn7VFydsY34f2dgo="
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -70,8 +69,8 @@ Per aspera ad astra.
   
   <script
     type="text/javascript"
-    src="/js/anatole-header.min.413f798d8aa82610bef17a5ca1d7e962ec185be395f1aeb3f45d1891af568b65.js"
-    integrity="sha256-QT95jYqoJhC&#43;8XpcodfpYuwYW&#43;OV8a6z9F0Yka9Wi2U="
+    src="/js/anatole-header.min.d0408165d31a17f17bba83038bf54e86121f85021bdf936382e636f0f77a952f.js"
+    integrity="sha256-0ECBZdMaF/F7uoMDi/VOhhIfhQIb35NjguY28Pd6lS8="
     crossorigin="anonymous"
   ></script>
 
@@ -80,8 +79,8 @@ Per aspera ad astra.
     
     <script
       type="text/javascript"
-      src="/js/anatole-theme-switcher.min.fcf9526f15b3b4e08472de192969ab28a4cdcb32ac94f83e85a8b84e9b45acd2.js"
-      integrity="sha256-/PlSbxWztOCEct4ZKWmrKKTNyzKslPg&#43;hai4TptFrNI="
+      src="/js/anatole-theme-switcher.min.65e936b591bf81484a5ac438c8e4ae6454fb25516d58ce911e4888d7f230bdc5.js"
+      integrity="sha256-Zek2tZG/gUhKWsQ4yOSuZFT7JVFtWM6RHkiI1/IwvcU="
       crossorigin="anonymous"
     ></script>
 
@@ -296,7 +295,7 @@ Per aspera ad astra.
         <img src="/images/profile5.jpg" alt="profile picture" />
         <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
         <div class="description">
-          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+          <p>Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
         </div>
       </div>
     </div>
@@ -348,8 +347,8 @@ Per aspera ad astra.
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></div>
 </aside>
@@ -389,27 +388,27 @@ Per aspera ad astra.
 <p>那么容器技术到底是怎么实现的呢？</p>
 <h1 id="通过namespace让进程隔离">通过Namespace让进程&quot;隔离&quot;</h1>
 <p>Linux系统在使用clone()或者fork()函数创建一个进程时，可以给它指定很多参数，比如<code>CLONE_NEWPID</code>参数，就可以在进程创建起来后，让这个进程&quot;看到&quot;一个全新的进程空间：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> pid <span style="color:#f92672">=</span> clone(main_function, stack_size, CLONE_NEWPID <span style="color:#f92672">|</span> SIGCHLD, NULL); 
-</code></pre></div><p>在这个进程空间中，它自己的PID为1，而且看不见物理机上的其他进程PID，这实际上是一个障眼法，因为这个进程在物理机上仍然有它真实的PID，比如100。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> pid <span style="color:#f92672">=</span> clone(main_function, stack_size, CLONE_NEWPID <span style="color:#f92672">|</span> SIGCHLD, NULL); 
+</span></span></code></pre></div><p>在这个进程空间中，它自己的PID为1，而且看不见物理机上的其他进程PID，这实际上是一个障眼法，因为这个进程在物理机上仍然有它真实的PID，比如100。</p>
 <p>除了PID Namespace的参数之外，Linux还提供了Mount、UTS、IPC、Network 和 User 这些 <strong>Namespace</strong>，用来对各种不同的进程上下文设置“障眼法”。比如，Mount Namespace，用于让被隔离进程只看到当前 Namespace 里的挂载点信息；Network Namespace，用于让被隔离进程看到当前 Namespace 里的网络栈。</p>
 <p>通过这些大量的Namespace技术，就可以让一个进程只能看到自己Namespace里限定的文件系统、网络资源等信息，让它以为自己是独立的。所以说<strong>容器，其实就是操作系统在启动进程时通过设置一些参数实现了隔离不相关资源后的一个特殊进程</strong>。</p>
 <h1 id="通过cgroups给进程进行约束">通过Cgroups给进程进行&quot;约束&quot;</h1>
 <p>然后，只通过Namespace技术只能让一个进程以为自己被隔离了，他还是能够和宿主机上的其他进程共享一些宿主机上的基础资源，比如CPU和内存。在<strong>Linux内核中，还是有很多资源是不能被Namespace化的，比如时间</strong>，如果一个进程使用<code>settimeofday(2)</code>系统调用修改了时间，那么整个宿主机的时间都会被修改。就是说我们在一个容器里，虽然看到的是这个容器是完全隔离的，但是其实是不能想做什么就做什么的，我们依然不能像在一台虚拟机中一样，就把它当作一个独立的机器。<strong>除了“隔离”，我们还要解决给容器设“限制”的问题</strong>。</p>
 <p><strong>Cgroups就是 Linux 内核中用来为进程设置资源限制的一个重要功能</strong>。Linux Cgroups的全称是 Linux Control Group。它最主要的作用，就是限制一个进程组能够使用的资源上限，包括 CPU、内存、磁盘、网络带宽等等。</p>
 <p>在Linux中，Cgroups给用户暴露出来的操作接口是文件系统，即它以文件和目录的方式组织在操作系统的 /sys/fs/cgroup 路径下。我们通过命令<code>mount -t cgroup</code>可以进行查看：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># mount -t cgroup</span>
-cgroup on /sys/fs/cgroup/systemd type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,xattr,name<span style="color:#f92672">=</span>systemd<span style="color:#f92672">)</span>
-cgroup on /sys/fs/cgroup/perf_event type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,perf_event<span style="color:#f92672">)</span>
-cgroup on /sys/fs/cgroup/cpu,cpuacct type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,cpu,cpuacct<span style="color:#f92672">)</span>
-cgroup on /sys/fs/cgroup/devices type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,devices<span style="color:#f92672">)</span>
-cgroup on /sys/fs/cgroup/cpuset type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,cpuset<span style="color:#f92672">)</span>
-cgroup on /sys/fs/cgroup/pids type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,pids<span style="color:#f92672">)</span>
-cgroup on /sys/fs/cgroup/memory type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,memory<span style="color:#f92672">)</span>
-cgroup on /sys/fs/cgroup/blkio type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,blkio<span style="color:#f92672">)</span>
-cgroup on /sys/fs/cgroup/net_cls,net_prio type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,net_cls,net_prio<span style="color:#f92672">)</span>
-cgroup on /sys/fs/cgroup/rdma type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,rdma<span style="color:#f92672">)</span>
-cgroup on /sys/fs/cgroup/freezer type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,freezer<span style="color:#f92672">)</span>
-</code></pre></div><p>可以看到输出了一系列的文件系统目录，里面有cpuset、cpu、memory这样字样的目录。这些都是我这台机器当前可以被Cgroups进行限制的资源种类。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># mount -t cgroup</span>
+</span></span><span style="display:flex;"><span>cgroup on /sys/fs/cgroup/systemd type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,xattr,name<span style="color:#f92672">=</span>systemd<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>cgroup on /sys/fs/cgroup/perf_event type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,perf_event<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>cgroup on /sys/fs/cgroup/cpu,cpuacct type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,cpu,cpuacct<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>cgroup on /sys/fs/cgroup/devices type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,devices<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>cgroup on /sys/fs/cgroup/cpuset type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,cpuset<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>cgroup on /sys/fs/cgroup/pids type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,pids<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>cgroup on /sys/fs/cgroup/memory type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,memory<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>cgroup on /sys/fs/cgroup/blkio type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,blkio<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>cgroup on /sys/fs/cgroup/net_cls,net_prio type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,net_cls,net_prio<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>cgroup on /sys/fs/cgroup/rdma type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,rdma<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>cgroup on /sys/fs/cgroup/freezer type cgroup <span style="color:#f92672">(</span>rw,nosuid,nodev,noexec,relatime,freezer<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>可以看到输出了一系列的文件系统目录，里面有cpuset、cpu、memory这样字样的目录。这些都是我这台机器当前可以被Cgroups进行限制的资源种类。</p>
 <p>所以如果我们要个一个进程设置限制，只需要修改这些Cgroups文件组中各个资源的文件内容即可。比如，当我们创建一个进程时，通过指定各个Namespace参数让它”隔离“，然后再在Cgroups控制组文件中把这个进程的PID填写到对应控制组的 tasks 文件中就可以了。</p>
 <p>至此，我们已经完成了在创建一个进程时，让它实现隔离，并且对其可使用的资源进行限制。而这就是Docker容器技术的底层实现原理。</p>
 </div>
@@ -457,8 +456,8 @@ cgroup on /sys/fs/cgroup/freezer type cgroup <span style="color:#f92672">(</span
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></body>
 </html>

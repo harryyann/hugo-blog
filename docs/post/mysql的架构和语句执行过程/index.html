@@ -18,12 +18,11 @@
   </title>
 
   
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.96.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta
     name="description"
     content="
-      
-Per aspera ad astra.
+      Per aspera ad astra.
 循此苦旅，终抵群星。
 
 
@@ -35,8 +34,8 @@ Per aspera ad astra.
   
   <link
     rel="stylesheet"
-    href="/css/main.min.7ca9a7b7632c545387f4ab9f7f943afeab89e7ed1c092ce9fb39263257779ce5.css"
-    integrity="sha256-fKmnt2MsVFOH9Kuff5Q6/quJ5&#43;0cCSzp&#43;zkmMld3nOU="
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -44,8 +43,8 @@ Per aspera ad astra.
   
   <link
     rel="stylesheet"
-    href="/css/markupHighlight.min.8f07fad4abedfd5eb1396c6fef85ba7ec00ec867a79fb545c9db18df87f6760a.css"
-    integrity="sha256-jwf61Kvt/V6xOWxv74W6fsAOyGenn7VFydsY34f2dgo="
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -70,8 +69,8 @@ Per aspera ad astra.
   
   <script
     type="text/javascript"
-    src="/js/anatole-header.min.413f798d8aa82610bef17a5ca1d7e962ec185be395f1aeb3f45d1891af568b65.js"
-    integrity="sha256-QT95jYqoJhC&#43;8XpcodfpYuwYW&#43;OV8a6z9F0Yka9Wi2U="
+    src="/js/anatole-header.min.d0408165d31a17f17bba83038bf54e86121f85021bdf936382e636f0f77a952f.js"
+    integrity="sha256-0ECBZdMaF/F7uoMDi/VOhhIfhQIb35NjguY28Pd6lS8="
     crossorigin="anonymous"
   ></script>
 
@@ -80,8 +79,8 @@ Per aspera ad astra.
     
     <script
       type="text/javascript"
-      src="/js/anatole-theme-switcher.min.fcf9526f15b3b4e08472de192969ab28a4cdcb32ac94f83e85a8b84e9b45acd2.js"
-      integrity="sha256-/PlSbxWztOCEct4ZKWmrKKTNyzKslPg&#43;hai4TptFrNI="
+      src="/js/anatole-theme-switcher.min.65e936b591bf81484a5ac438c8e4ae6454fb25516d58ce911e4888d7f230bdc5.js"
+      integrity="sha256-Zek2tZG/gUhKWsQ4yOSuZFT7JVFtWM6RHkiI1/IwvcU="
       crossorigin="anonymous"
     ></script>
 
@@ -91,8 +90,7 @@ Per aspera ad astra.
   
   <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySQL的架构和语句执行过程"/>
-<meta name="twitter:description" content="MySQL的整体架构图 &#34;
-如上图所示，整体上看MySQL分成上下两层，上面那层是Server层，下面是存储引擎层。
+<meta name="twitter:description" content="MySQL的整体架构图 如上图所示，整体上看MySQL分成上下两层，上面那层是Server层，下面是存储引擎层。
 Server层包含了连接器、查询缓存、解析器、优化器、执行器(有的资料中说有)等组件，，主要负责的是跨存储引擎的功能，如存储过程、触发器、视图等，内置函数也是在Server层提供的。
 存储引擎层则是MyISAM、InnoDB、Memory等各种存储引擎，以插件式集成，负责数据的读写。
 连接器 用于和客户端建立连接，并维持和管理连接。并在连接建立时查询用户的权限表获取到该用户的所有权限，建立连接的过程大概如下：
@@ -117,7 +115,7 @@ Server层包含了连接器、查询缓存、解析器、优化器、执行器(�
         "alternativeHeadline": "",
         "description": "
       
-        MySQL的整体架构图 \u0022\n如上图所示，整体上看MySQL分成上下两层，上面那层是Server层，下面是存储引擎层。\nServer层包含了连接器、查询缓存、解析器、优化器、执行器(有的资料中说有)等组件，，主要负责的是跨存储引擎的功能，如存储过程、触发器、视图等，内置函数也是在Server层提供的。\n存储引擎层则是MyISAM、InnoDB、Memory等各种存储引擎，以插件式集成，负责数据的读写。\n连接器 用于和客户端建立连接，并维持和管理连接。并在连接建立时查询用户的权限表获取到该用户的所有权限，建立连接的过程大概如下：\n 首先进行TCP握手，建立TCP连接 然后进行身份认证，这一步会查询MySQL的权限表，通过后会从权限表中拿到用户的所有权限，并保存在这个连接中，后续的所有权限判断，都是基于这次查询得到的权限数据，不会再去查权限表了 通过用户的身份认证之后，连接就建立起来了  通过命令show processlist可以观察当前数据库的所有连接：
+        MySQL的整体架构图 如上图所示，整体上看MySQL分成上下两层，上面那层是Server层，下面是存储引擎层。\nServer层包含了连接器、查询缓存、解析器、优化器、执行器(有的资料中说有)等组件，，主要负责的是跨存储引擎的功能，如存储过程、触发器、视图等，内置函数也是在Server层提供的。\n存储引擎层则是MyISAM、InnoDB、Memory等各种存储引擎，以插件式集成，负责数据的读写。\n连接器 用于和客户端建立连接，并维持和管理连接。并在连接建立时查询用户的权限表获取到该用户的所有权限，建立连接的过程大概如下：\n 首先进行TCP握手，建立TCP连接 然后进行身份认证，这一步会查询MySQL的权限表，通过后会从权限表中拿到用户的所有权限，并保存在这个连接中，后续的所有权限判断，都是基于这次查询得到的权限数据，不会再去查权限表了 通过用户的身份认证之后，连接就建立起来了  通过命令show processlist可以观察当前数据库的所有连接：
 
 
       
@@ -167,7 +165,7 @@ Server层包含了连接器、查询缓存、解析器、优化器、执行器(�
 
     ,
         "url" : "https:\/\/yanghairui.life\/post\/mysql%E7%9A%84%E6%9E%B6%E6%9E%84%E5%92%8C%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B\/",
-        "wordCount" : "271",
+        "wordCount" : "270",
         "genre" : [ 
       
       "数据库"
@@ -290,7 +288,7 @@ Server层包含了连接器、查询缓存、解析器、优化器、执行器(�
         <img src="/images/profile5.jpg" alt="profile picture" />
         <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
         <div class="description">
-          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+          <p>Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
         </div>
       </div>
     </div>
@@ -342,8 +340,8 @@ Server层包含了连接器、查询缓存、解析器、优化器、执行器(�
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></div>
 </aside>
@@ -376,7 +374,7 @@ Server层包含了连接器、查询缓存、解析器、优化器、执行器(�
 
         
       </div><h1 id="mysql的整体架构图">MySQL的整体架构图</h1>
-<p><img src="/images/mysql_structure/structure.png" alt="来自<高性能MySQL>"></p>
+<p><img src="/images/mysql_structure/structure.png" alt="来自&lt;高性能MySQL&gt;"></p>
 <p>如上图所示，整体上看MySQL分成上下两层，上面那层是Server层，下面是存储引擎层。</p>
 <p>Server层包含了<strong>连接器、查询缓存、解析器、优化器、执行器</strong>(有的资料中说有)等组件，，主要负责的是跨存储引擎的功能，如存储过程、触发器、视图等，内置函数也是在Server层提供的。</p>
 <p>存储引擎层则是MyISAM、InnoDB、Memory等各种存储引擎，以插件式集成，负责数据的读写。</p>
@@ -388,29 +386,29 @@ Server层包含了连接器、查询缓存、解析器、优化器、执行器(�
 <li>通过用户的身份认证之后，连接就建立起来了</li>
 </ol>
 <p>通过命令<code>show processlist</code>可以观察当前数据库的所有连接：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> processlist;
-<span style="color:#f92672">+----+-------------+-----------------------------------------+-----------+-------------+------+-----------------------------------------------------------------------+------------------+----------+</span>
-<span style="color:#f92672">|</span> Id <span style="color:#f92672">|</span> <span style="color:#66d9ef">User</span>        <span style="color:#f92672">|</span> Host                                    <span style="color:#f92672">|</span> db        <span style="color:#f92672">|</span> Command     <span style="color:#f92672">|</span> <span style="color:#66d9ef">Time</span> <span style="color:#f92672">|</span> State                                                                 <span style="color:#f92672">|</span> Info             <span style="color:#f92672">|</span> Progress <span style="color:#f92672">|</span>
-<span style="color:#f92672">+----+-------------+-----------------------------------------+-----------+-------------+------+-----------------------------------------------------------------------+------------------+----------+</span>
-<span style="color:#f92672">|</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span> system <span style="color:#66d9ef">user</span> <span style="color:#f92672">|</span>                                         <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> Daemon      <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> InnoDB <span style="color:#66d9ef">purge</span> coordinator                                              <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>             <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span> system <span style="color:#66d9ef">user</span> <span style="color:#f92672">|</span>                                         <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> Daemon      <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> InnoDB <span style="color:#66d9ef">purge</span> worker                                                   <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>             <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span>  <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span> system <span style="color:#66d9ef">user</span> <span style="color:#f92672">|</span>                                         <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> Daemon      <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> InnoDB <span style="color:#66d9ef">purge</span> worker                                                   <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>             <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span>  <span style="color:#ae81ff">4</span> <span style="color:#f92672">|</span> system <span style="color:#66d9ef">user</span> <span style="color:#f92672">|</span>                                         <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> Daemon      <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> InnoDB <span style="color:#66d9ef">purge</span> worker                                                   <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>             <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span>  <span style="color:#ae81ff">5</span> <span style="color:#f92672">|</span> system <span style="color:#66d9ef">user</span> <span style="color:#f92672">|</span>                                         <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> Daemon      <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> InnoDB shutdown handler                                               <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>             <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span> <span style="color:#ae81ff">82</span> <span style="color:#f92672">|</span> root        <span style="color:#f92672">|</span> localhost                               <span style="color:#f92672">|</span> employees <span style="color:#f92672">|</span> Query       <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> Init                                                                  <span style="color:#f92672">|</span> <span style="color:#66d9ef">show</span> processlist <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span> <span style="color:#ae81ff">83</span> <span style="color:#f92672">|</span> replica     <span style="color:#f92672">|</span> test:<span style="color:#ae81ff">48936</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> Binlog Dump <span style="color:#f92672">|</span> <span style="color:#ae81ff">2265</span> <span style="color:#f92672">|</span> Master has sent <span style="color:#66d9ef">all</span> binlog <span style="color:#66d9ef">to</span> slave; waiting <span style="color:#66d9ef">for</span> binlog <span style="color:#66d9ef">to</span> be updated <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>             <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
-<span style="color:#f92672">+----+-------------+-----------------------------------------+-----------+-------------+------+-----------------------------------------------------------------------+------------------+----------+</span>
-<span style="color:#ae81ff">7</span> rows <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> sec)
-</code></pre></div><p>可以看到当前有几个daemon的daemonset线程，还有个本地的Query查询，还有一个复制的线程在工作。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> processlist;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+----+-------------+-----------------------------------------+-----------+-------------+------+-----------------------------------------------------------------------+------------------+----------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> Id <span style="color:#f92672">|</span> <span style="color:#66d9ef">User</span>        <span style="color:#f92672">|</span> Host                                    <span style="color:#f92672">|</span> db        <span style="color:#f92672">|</span> Command     <span style="color:#f92672">|</span> <span style="color:#66d9ef">Time</span> <span style="color:#f92672">|</span> State                                                                 <span style="color:#f92672">|</span> Info             <span style="color:#f92672">|</span> Progress <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+----+-------------+-----------------------------------------+-----------+-------------+------+-----------------------------------------------------------------------+------------------+----------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span> system <span style="color:#66d9ef">user</span> <span style="color:#f92672">|</span>                                         <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> Daemon      <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> InnoDB <span style="color:#66d9ef">purge</span> coordinator                                              <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>             <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span> system <span style="color:#66d9ef">user</span> <span style="color:#f92672">|</span>                                         <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> Daemon      <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> InnoDB <span style="color:#66d9ef">purge</span> worker                                                   <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>             <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span>  <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span> system <span style="color:#66d9ef">user</span> <span style="color:#f92672">|</span>                                         <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> Daemon      <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> InnoDB <span style="color:#66d9ef">purge</span> worker                                                   <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>             <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span>  <span style="color:#ae81ff">4</span> <span style="color:#f92672">|</span> system <span style="color:#66d9ef">user</span> <span style="color:#f92672">|</span>                                         <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> Daemon      <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> InnoDB <span style="color:#66d9ef">purge</span> worker                                                   <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>             <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span>  <span style="color:#ae81ff">5</span> <span style="color:#f92672">|</span> system <span style="color:#66d9ef">user</span> <span style="color:#f92672">|</span>                                         <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> Daemon      <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> InnoDB shutdown handler                                               <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>             <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> <span style="color:#ae81ff">82</span> <span style="color:#f92672">|</span> root        <span style="color:#f92672">|</span> localhost                               <span style="color:#f92672">|</span> employees <span style="color:#f92672">|</span> Query       <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> Init                                                                  <span style="color:#f92672">|</span> <span style="color:#66d9ef">show</span> processlist <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> <span style="color:#ae81ff">83</span> <span style="color:#f92672">|</span> replica     <span style="color:#f92672">|</span> test:<span style="color:#ae81ff">48936</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> Binlog Dump <span style="color:#f92672">|</span> <span style="color:#ae81ff">2265</span> <span style="color:#f92672">|</span> Master has sent <span style="color:#66d9ef">all</span> binlog <span style="color:#66d9ef">to</span> slave; waiting <span style="color:#66d9ef">for</span> binlog <span style="color:#66d9ef">to</span> be updated <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>             <span style="color:#f92672">|</span>    <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+----+-------------+-----------------------------------------+-----------+-------------+------+-----------------------------------------------------------------------+------------------+----------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">7</span> rows <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> sec)
+</span></span></code></pre></div><p>可以看到当前有几个daemon的daemonset线程，还有个本地的Query查询，还有一个复制的线程在工作。</p>
 <p>当客户端太久没有操作，连接器会自动断开，超时时间由参数<code>wait_timeout</code>控制，默认是8小时，28800秒。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;wait_timeout&#34;</span>;
-<span style="color:#f92672">+---------------+-------+</span>
-<span style="color:#f92672">|</span> Variable_name <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
-<span style="color:#f92672">+---------------+-------+</span>
-<span style="color:#f92672">|</span> wait_timeout  <span style="color:#f92672">|</span> <span style="color:#ae81ff">28800</span> <span style="color:#f92672">|</span>
-<span style="color:#f92672">+---------------+-------+</span>
-<span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">001</span> sec
-</code></pre></div><p>使用MySQL建立连接时要注意的问题：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;wait_timeout&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+---------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> Variable_name <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+---------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> wait_timeout  <span style="color:#f92672">|</span> <span style="color:#ae81ff">28800</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+---------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">001</span> sec
+</span></span></code></pre></div><p>使用MySQL建立连接时要注意的问题：</p>
 <p><strong>大量的短连接可以改成长连接</strong></p>
 <p>如果每次都进行很少的操作就断开连接，下次查询时再重新建立连接的话，多了很多不必要的资源浪费，尽量使用长连接，并在多个查询中复用这个连接。或者使用连接池，要访问MySQL就去连接池里拿一个连接回来。</p>
 <p><strong>大量的长连接会造成问题</strong></p>
@@ -424,8 +422,8 @@ Server层包含了连接器、查询缓存、解析器、优化器、执行器(�
 <li>
 <p><strong>只要有一个表有更新，那么这个表涉及的查询缓存都会被清空</strong>，所以对于更新频繁的表，查询缓存命中率非常的低，除非是那种几乎不会变，但是又经常要被查询的表才有用。</p>
 <p>这种情况其实可以设置<code>query_cache_type=DEMAND</code>，这样对于所有查询语句，默认都不生成查询缓存，如果有确定需要使用查询缓存的语句，可以通过<code>SQL_CACHE</code>显式的指定就可以了，如：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> SQL_CACHE <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> T <span style="color:#66d9ef">where</span> ID<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span><span style="color:#960050;background-color:#1e0010">；</span><span style="color:#f92672">//</span> <span style="color:#960050;background-color:#1e0010">生成查询缓存</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> SQL_CACHE <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> T <span style="color:#66d9ef">where</span> ID<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span><span style="color:#960050;background-color:#1e0010">；</span><span style="color:#f92672">//</span> <span style="color:#960050;background-color:#1e0010">生成查询缓存</span>
+</span></span></code></pre></div></li>
 <li>
 <p>查询语句不同，即使结果集相同，也不会命中查询缓存，反而会在查询缓存中保存两份相同的结果集。</p>
 </li>
@@ -508,8 +506,8 @@ Server层包含了连接器、查询缓存、解析器、优化器、执行器(�
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></body>
 </html>

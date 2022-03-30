@@ -18,12 +18,11 @@
   </title>
 
   
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.96.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta
     name="description"
     content="
-      
-Per aspera ad astra.
+      Per aspera ad astra.
 循此苦旅，终抵群星。
 
 
@@ -35,8 +34,8 @@ Per aspera ad astra.
   
   <link
     rel="stylesheet"
-    href="/css/main.min.7ca9a7b7632c545387f4ab9f7f943afeab89e7ed1c092ce9fb39263257779ce5.css"
-    integrity="sha256-fKmnt2MsVFOH9Kuff5Q6/quJ5&#43;0cCSzp&#43;zkmMld3nOU="
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -44,8 +43,8 @@ Per aspera ad astra.
   
   <link
     rel="stylesheet"
-    href="/css/markupHighlight.min.8f07fad4abedfd5eb1396c6fef85ba7ec00ec867a79fb545c9db18df87f6760a.css"
-    integrity="sha256-jwf61Kvt/V6xOWxv74W6fsAOyGenn7VFydsY34f2dgo="
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -70,8 +69,8 @@ Per aspera ad astra.
   
   <script
     type="text/javascript"
-    src="/js/anatole-header.min.413f798d8aa82610bef17a5ca1d7e962ec185be395f1aeb3f45d1891af568b65.js"
-    integrity="sha256-QT95jYqoJhC&#43;8XpcodfpYuwYW&#43;OV8a6z9F0Yka9Wi2U="
+    src="/js/anatole-header.min.d0408165d31a17f17bba83038bf54e86121f85021bdf936382e636f0f77a952f.js"
+    integrity="sha256-0ECBZdMaF/F7uoMDi/VOhhIfhQIb35NjguY28Pd6lS8="
     crossorigin="anonymous"
   ></script>
 
@@ -80,8 +79,8 @@ Per aspera ad astra.
     
     <script
       type="text/javascript"
-      src="/js/anatole-theme-switcher.min.fcf9526f15b3b4e08472de192969ab28a4cdcb32ac94f83e85a8b84e9b45acd2.js"
-      integrity="sha256-/PlSbxWztOCEct4ZKWmrKKTNyzKslPg&#43;hai4TptFrNI="
+      src="/js/anatole-theme-switcher.min.65e936b591bf81484a5ac438c8e4ae6454fb25516d58ce911e4888d7f230bdc5.js"
+      integrity="sha256-Zek2tZG/gUhKWsQ4yOSuZFT7JVFtWM6RHkiI1/IwvcU="
       crossorigin="anonymous"
     ></script>
 
@@ -288,7 +287,7 @@ IO线程 innodb中大量使用了AIO（异步IO）来处理写请求，以提高
         <img src="/images/profile5.jpg" alt="profile picture" />
         <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
         <div class="description">
-          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+          <p>Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
         </div>
       </div>
     </div>
@@ -340,8 +339,8 @@ IO线程 innodb中大量使用了AIO（异步IO）来处理写请求，以提高
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></div>
 </aside>
@@ -383,28 +382,28 @@ IO线程 innodb中大量使用了AIO（异步IO）来处理写请求，以提高
 <h4 id="io线程">IO线程</h4>
 <p>innodb中大量使用了AIO（异步IO）来处理写请求，以提高性能，IO线程用于处理这些IO操作的回调。</p>
 <p>通过show engine innodb status命令可以查看到当前各个IO线程的状态，以下可以看到各个线程的功能和当前状态：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">engine</span> innodb status<span style="color:#960050;background-color:#1e0010">\</span>G
-......
-FILE I<span style="color:#f92672">/</span>O
-<span style="color:#f92672">------</span><span style="color:#75715e">--
-</span><span style="color:#75715e">I/O thread 0 state: waiting for completed aio requests (insert buffer thread)
-</span><span style="color:#75715e"></span>I<span style="color:#f92672">/</span>O thread <span style="color:#ae81ff">1</span> state: waiting <span style="color:#66d9ef">for</span> completed aio <span style="color:#a6e22e">requests</span> (log thread)
-I<span style="color:#f92672">/</span>O thread <span style="color:#ae81ff">2</span> state: waiting <span style="color:#66d9ef">for</span> completed aio <span style="color:#a6e22e">requests</span> (<span style="color:#66d9ef">read</span> thread)
-I<span style="color:#f92672">/</span>O thread <span style="color:#ae81ff">3</span> state: waiting <span style="color:#66d9ef">for</span> completed aio <span style="color:#a6e22e">requests</span> (<span style="color:#66d9ef">read</span> thread)
-I<span style="color:#f92672">/</span>O thread <span style="color:#ae81ff">4</span> state: waiting <span style="color:#66d9ef">for</span> completed aio <span style="color:#a6e22e">requests</span> (<span style="color:#66d9ef">read</span> thread)
-I<span style="color:#f92672">/</span>O thread <span style="color:#ae81ff">5</span> state: waiting <span style="color:#66d9ef">for</span> completed aio <span style="color:#a6e22e">requests</span> (<span style="color:#66d9ef">read</span> thread)
-I<span style="color:#f92672">/</span>O thread <span style="color:#ae81ff">6</span> state: waiting <span style="color:#66d9ef">for</span> completed aio <span style="color:#a6e22e">requests</span> (<span style="color:#66d9ef">write</span> thread)
-I<span style="color:#f92672">/</span>O thread <span style="color:#ae81ff">7</span> state: waiting <span style="color:#66d9ef">for</span> completed aio <span style="color:#a6e22e">requests</span> (<span style="color:#66d9ef">write</span> thread)
-I<span style="color:#f92672">/</span>O thread <span style="color:#ae81ff">8</span> state: waiting <span style="color:#66d9ef">for</span> completed aio <span style="color:#a6e22e">requests</span> (<span style="color:#66d9ef">write</span> thread)
-I<span style="color:#f92672">/</span>O thread <span style="color:#ae81ff">9</span> state: waiting <span style="color:#66d9ef">for</span> completed aio <span style="color:#a6e22e">requests</span> (<span style="color:#66d9ef">write</span> thread)
-Pending normal aio <span style="color:#66d9ef">reads</span>: [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>] , aio writes: [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>] ,
-ibuf aio <span style="color:#66d9ef">reads</span>:, log i<span style="color:#f92672">/</span>o<span style="color:#e6db74">&#39;s:, sync i/o&#39;</span>s:
-Pending <span style="color:#a6e22e">flushes</span> (fsync) log: <span style="color:#ae81ff">0</span>; buffer pool: <span style="color:#ae81ff">0</span>
-<span style="color:#ae81ff">1433</span> OS file <span style="color:#66d9ef">reads</span>, <span style="color:#ae81ff">15194</span> OS file writes, <span style="color:#ae81ff">1197</span> OS fsyncs
-<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> <span style="color:#66d9ef">reads</span><span style="color:#f92672">/</span>s, <span style="color:#ae81ff">0</span> avg bytes<span style="color:#f92672">/</span><span style="color:#66d9ef">read</span>, <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> writes<span style="color:#f92672">/</span>s, <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> fsyncs<span style="color:#f92672">/</span>s
-<span style="color:#f92672">-----------------------------------</span><span style="color:#75715e">--
-</span><span style="color:#75715e">......
-</span></code></pre></div><p>可以看到，IO线程一共有四种：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">engine</span> innodb status<span style="color:#960050;background-color:#1e0010">\</span>G
+</span></span><span style="display:flex;"><span>......
+</span></span><span style="display:flex;"><span>FILE I<span style="color:#f92672">/</span>O
+</span></span><span style="display:flex;"><span><span style="color:#f92672">------</span><span style="color:#75715e">--
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">I/O thread 0 state: waiting for completed aio requests (insert buffer thread)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>I<span style="color:#f92672">/</span>O thread <span style="color:#ae81ff">1</span> state: waiting <span style="color:#66d9ef">for</span> completed aio <span style="color:#a6e22e">requests</span> (log thread)
+</span></span><span style="display:flex;"><span>I<span style="color:#f92672">/</span>O thread <span style="color:#ae81ff">2</span> state: waiting <span style="color:#66d9ef">for</span> completed aio <span style="color:#a6e22e">requests</span> (<span style="color:#66d9ef">read</span> thread)
+</span></span><span style="display:flex;"><span>I<span style="color:#f92672">/</span>O thread <span style="color:#ae81ff">3</span> state: waiting <span style="color:#66d9ef">for</span> completed aio <span style="color:#a6e22e">requests</span> (<span style="color:#66d9ef">read</span> thread)
+</span></span><span style="display:flex;"><span>I<span style="color:#f92672">/</span>O thread <span style="color:#ae81ff">4</span> state: waiting <span style="color:#66d9ef">for</span> completed aio <span style="color:#a6e22e">requests</span> (<span style="color:#66d9ef">read</span> thread)
+</span></span><span style="display:flex;"><span>I<span style="color:#f92672">/</span>O thread <span style="color:#ae81ff">5</span> state: waiting <span style="color:#66d9ef">for</span> completed aio <span style="color:#a6e22e">requests</span> (<span style="color:#66d9ef">read</span> thread)
+</span></span><span style="display:flex;"><span>I<span style="color:#f92672">/</span>O thread <span style="color:#ae81ff">6</span> state: waiting <span style="color:#66d9ef">for</span> completed aio <span style="color:#a6e22e">requests</span> (<span style="color:#66d9ef">write</span> thread)
+</span></span><span style="display:flex;"><span>I<span style="color:#f92672">/</span>O thread <span style="color:#ae81ff">7</span> state: waiting <span style="color:#66d9ef">for</span> completed aio <span style="color:#a6e22e">requests</span> (<span style="color:#66d9ef">write</span> thread)
+</span></span><span style="display:flex;"><span>I<span style="color:#f92672">/</span>O thread <span style="color:#ae81ff">8</span> state: waiting <span style="color:#66d9ef">for</span> completed aio <span style="color:#a6e22e">requests</span> (<span style="color:#66d9ef">write</span> thread)
+</span></span><span style="display:flex;"><span>I<span style="color:#f92672">/</span>O thread <span style="color:#ae81ff">9</span> state: waiting <span style="color:#66d9ef">for</span> completed aio <span style="color:#a6e22e">requests</span> (<span style="color:#66d9ef">write</span> thread)
+</span></span><span style="display:flex;"><span>Pending normal aio <span style="color:#66d9ef">reads</span>: [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>] , aio writes: [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>] ,
+</span></span><span style="display:flex;"><span>ibuf aio <span style="color:#66d9ef">reads</span>:, log i<span style="color:#f92672">/</span>o<span style="color:#e6db74">&#39;s:, sync i/o&#39;</span>s:
+</span></span><span style="display:flex;"><span>Pending <span style="color:#a6e22e">flushes</span> (fsync) log: <span style="color:#ae81ff">0</span>; buffer pool: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1433</span> OS file <span style="color:#66d9ef">reads</span>, <span style="color:#ae81ff">15194</span> OS file writes, <span style="color:#ae81ff">1197</span> OS fsyncs
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> <span style="color:#66d9ef">reads</span><span style="color:#f92672">/</span>s, <span style="color:#ae81ff">0</span> avg bytes<span style="color:#f92672">/</span><span style="color:#66d9ef">read</span>, <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> writes<span style="color:#f92672">/</span>s, <span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> fsyncs<span style="color:#f92672">/</span>s
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-----------------------------------</span><span style="color:#75715e">--
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">......
+</span></span></span></code></pre></div><p>可以看到，IO线程一共有四种：</p>
 <ul>
 <li>write线程：4个，负责写操作，把脏页刷到磁盘</li>
 <li>read线程：4个，负责读操作，把数据从磁盘加载到buffer pool</li>
@@ -414,38 +413,38 @@ Pending <span style="color:#a6e22e">flushes</span> (fsync) log: <span style="col
 <h4 id="purge线程">Purge线程</h4>
 <p>事务提交后，这个事务的undo log可能需要进行回收（能不能回收要看还有没有事务需要用到相关undo log的版本链，实际上只有update undo log需要被回收，insert undo log在事务结束后就可以删除了）。</p>
 <p>在InnoDB1.1版本可以通过在配置文件上加上这行开启，并且值只能设为1：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">[mysqld]
-innodb_purge_threads<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
-</code></pre></div><p>1.2版本以后可以支持多个purge thread，加快undo log的回收：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#39;innodb_purge_threads&#39;</span>;
-<span style="color:#f92672">+----------------------+-------+</span>
-<span style="color:#f92672">|</span> Variable_name        <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
-<span style="color:#f92672">+----------------------+-------+</span>
-<span style="color:#f92672">|</span> innodb_purge_threads <span style="color:#f92672">|</span> <span style="color:#ae81ff">4</span>     <span style="color:#f92672">|</span>
-<span style="color:#f92672">+----------------------+-------+</span>
-<span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">001</span> sec)
-</code></pre></div><h4 id="page-cleaner线程">Page Cleaner线程</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>[mysqld]
+</span></span><span style="display:flex;"><span>innodb_purge_threads<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p>1.2版本以后可以支持多个purge thread，加快undo log的回收：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#39;innodb_purge_threads&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+----------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> Variable_name        <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+----------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> innodb_purge_threads <span style="color:#f92672">|</span> <span style="color:#ae81ff">4</span>     <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+----------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">001</span> sec)
+</span></span></code></pre></div><h4 id="page-cleaner线程">Page Cleaner线程</h4>
 <p>在innodb1.2版本引入，用于将脏页刷新的操作都放到这个线程完成，调用IO线程的write线程完成刷盘处理，减轻master线程对于用户查询的阻塞。</p>
 <h2 id="innodb的缓冲池">InnoDB的缓冲池</h2>
 <p>由于内存和磁盘读写的访问速度鸿沟，Innodb使用缓冲池buffer pool来进行数据存取的优化。需要和MySQL的查询缓存区分开，那个是Server层的，这个是InnoDB的，关于MySQL的架构和查询缓存的内容可以查看这篇文章：<a href="https://yanghairui.life/posts/mysql%E7%9A%84%E6%9E%B6%E6%9E%84%E5%92%8C%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B/">MySQL的架构</a>。</p>
 <p>buffer pool的主要作用，就是作为磁盘的缓冲。当读数据时，如果数据所在的页在缓冲池，则直接从缓冲池读取并返回；当写入数据时，如果该数据所在的页在缓冲池，则先修改缓冲池中的数据页并返回，后续在一定时机统一将缓冲池中的数据页统一刷到磁盘。</p>
 <p>通过参数<code>innodb_buffer_pool_size</code>可以设置buffer pool的大小：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;innodb_buffer_pool_size&#34;</span>;
-<span style="color:#f92672">+-------------------------+-----------+</span>
-<span style="color:#f92672">|</span> Variable_name           <span style="color:#f92672">|</span> Value     <span style="color:#f92672">|</span>
-<span style="color:#f92672">+-------------------------+-----------+</span>
-<span style="color:#f92672">|</span> innodb_buffer_pool_size <span style="color:#f92672">|</span> <span style="color:#ae81ff">134217728</span> <span style="color:#f92672">|</span>
-<span style="color:#f92672">+-------------------------+-----------+</span>
-<span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">001</span> sec)
-</code></pre></div><p>从Innodb1.0开始，可以设置多个缓冲池，然后各个数据页可以均匀分配到多个缓冲池中，提高并发效率。通过参数<code>Innodb_buffer_pool_instances</code>可以设置</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;innodb_buffer_pool_instances&#34;</span>;
-<span style="color:#f92672">+------------------------------+-------+</span>
-<span style="color:#f92672">|</span> Variable_name                <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
-<span style="color:#f92672">+------------------------------+-------+</span>
-<span style="color:#f92672">|</span> innodb_buffer_pool_instances <span style="color:#f92672">|</span> <span style="color:#ae81ff">1</span>     <span style="color:#f92672">|</span>
-<span style="color:#f92672">+------------------------------+-------+</span>
-<span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">001</span> sec)
-</code></pre></div><p><strong>buffer pool的组成</strong>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;innodb_buffer_pool_size&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+-------------------------+-----------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> Variable_name           <span style="color:#f92672">|</span> Value     <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+-------------------------+-----------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> innodb_buffer_pool_size <span style="color:#f92672">|</span> <span style="color:#ae81ff">134217728</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+-------------------------+-----------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">001</span> sec)
+</span></span></code></pre></div><p>从Innodb1.0开始，可以设置多个缓冲池，然后各个数据页可以均匀分配到多个缓冲池中，提高并发效率。通过参数<code>Innodb_buffer_pool_instances</code>可以设置</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;innodb_buffer_pool_instances&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+------------------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> Variable_name                <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+------------------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> innodb_buffer_pool_instances <span style="color:#f92672">|</span> <span style="color:#ae81ff">1</span>     <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+------------------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">001</span> sec)
+</span></span></code></pre></div><p><strong>buffer pool的组成</strong>：</p>
 <p><img src="/images/innodb/buffer_pool.png" alt=""></p>
 <p>如上图，buffer pool主要包含以下几块：</p>
 <ul>
@@ -462,28 +461,28 @@ innodb_purge_threads<span style="color:#f92672">=</span><span style="color:#ae81
 <h3 id="数据页和索引页的管理lru算法">数据页和索引页的管理：LRU算法</h3>
 <p>这部分存储的就是磁盘中的实际表数据，InnoDB的表是通过聚簇索引以B+树形式存储的（索引的相关内容可以查看<a href="https://yanghairui.life/posts/mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">MySQL的索引</a>这篇文章）。所以buffer pool中存的数据页和索引页也是一个个的B+树，InnoDB的一个页的大小默认是16kb，数据页和索引页在buffer pool中通过<strong>LRU</strong>算法（最近最少访问）进行管理。即通过一个链表把数据页和索引页串起来，最近使用的页就插入到LRU链表的前端，当数据页和索引页占用的空间大小超过了缓冲池大小时，LRU链表的尾部的数据页会被淘汰掉。</p>
 <p>InnoDB对传统的LRU算法进行了优化，新页会被查到LRU链表的中间的midpoint位置（5/8处），而不是最前端。midpoint的位置可以通过参数innodb_old_blocks_pct设置，默认是37，即后面37%的位置。如果预估热点数据可能很多，也可以尽量调小这个值。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;innodb_old_blocks_pct&#34;</span>;
-<span style="color:#f92672">+-----------------------+-------+</span>
-<span style="color:#f92672">|</span> Variable_name         <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
-<span style="color:#f92672">+-----------------------+-------+</span>
-<span style="color:#f92672">|</span> innodb_old_blocks_pct <span style="color:#f92672">|</span> <span style="color:#ae81ff">37</span>    <span style="color:#f92672">|</span>
-<span style="color:#f92672">+-----------------------+-------+</span>
-<span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">001</span> sec)
-</code></pre></div><p>还有另一个可调整的参数用于LRU优化，<code>innodb_old_blocks_time</code>，用于表示页读取到mid位置后需要等待多久才会被加入到LRU列表的热端，默认是1000，可以通过命令<code>set global innodb_old_blocks_time=0;</code>设置不移到前面，以防止真正的热点数据后续还是会被刷出。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;innodb_old_blocks_time&#34;</span>;
-<span style="color:#f92672">+------------------------+-------+</span>
-<span style="color:#f92672">|</span> Variable_name          <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
-<span style="color:#f92672">+------------------------+-------+</span>
-<span style="color:#f92672">|</span> innodb_old_blocks_time <span style="color:#f92672">|</span> <span style="color:#ae81ff">1000</span>  <span style="color:#f92672">|</span>
-<span style="color:#f92672">+------------------------+-------+</span>
-<span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">001</span> sec)
-</code></pre></div><p>为什么要对LRU进行优化呢？比如当批量查询数据时，需要访问表中的许多页甚至全部页，而这些页可能只用这一次，这大量的页如果占据了LRU链表当前最前端的页，就会导致原本被频繁访问的LRU的头部的页被刷出，后续再访问这些真正热点的页时就得访问磁盘。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;innodb_old_blocks_pct&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+-----------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> Variable_name         <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+-----------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> innodb_old_blocks_pct <span style="color:#f92672">|</span> <span style="color:#ae81ff">37</span>    <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+-----------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">001</span> sec)
+</span></span></code></pre></div><p>还有另一个可调整的参数用于LRU优化，<code>innodb_old_blocks_time</code>，用于表示页读取到mid位置后需要等待多久才会被加入到LRU列表的热端，默认是1000，可以通过命令<code>set global innodb_old_blocks_time=0;</code>设置不移到前面，以防止真正的热点数据后续还是会被刷出。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;innodb_old_blocks_time&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+------------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> Variable_name          <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+------------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> innodb_old_blocks_time <span style="color:#f92672">|</span> <span style="color:#ae81ff">1000</span>  <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+------------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">001</span> sec)
+</span></span></code></pre></div><p>为什么要对LRU进行优化呢？比如当批量查询数据时，需要访问表中的许多页甚至全部页，而这些页可能只用这一次，这大量的页如果占据了LRU链表当前最前端的页，就会导致原本被频繁访问的LRU的头部的页被刷出，后续再访问这些真正热点的页时就得访问磁盘。</p>
 <p>除此之外，innodb1.0版本开始支持压缩页的功能，原本16kb的页可以压缩到几kb，非16kb的页是通过unzip_LRU列表进行管理的，命令<code>show engine innodb status\G</code>可以看到。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">LRU len: <span style="color:#ae81ff">5669</span>, unzip_LRU len: <span style="color:#ae81ff">0</span>
-</code></pre></div><h3 id="脏页的刷盘处理">脏页的刷盘处理</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>LRU len: <span style="color:#ae81ff">5669</span>, unzip_LRU len: <span style="color:#ae81ff">0</span>
+</span></span></code></pre></div><h3 id="脏页的刷盘处理">脏页的刷盘处理</h3>
 <p>Buffer pool中LRU链表上的数据页和索引页，如果被修改了的话，这个页就被称为脏页，即buffer pool中的数据，和磁盘上存储的数据产生了不一致。脏页会被InnoDB保存到<strong>Flush链表</strong>，然后在一定时机通过<strong>checkpoint</strong>机制将脏页刷到磁盘。通过show engine innodb status\G可以看到当前的脏页数量。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">Modified db pages  <span style="color:#ae81ff">0</span>
-</code></pre></div><p><strong>Flush列表</strong>：即脏页列表，LRU链表中被修改的页会拷贝一份到FLush列表，即脏页同时存在于LRU列表和Flush列表中，两个列表的功能不一样，互不影响。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>Modified db pages  <span style="color:#ae81ff">0</span>
+</span></span></code></pre></div><p><strong>Flush列表</strong>：即脏页列表，LRU链表中被修改的页会拷贝一份到FLush列表，即脏页同时存在于LRU列表和Flush列表中，两个列表的功能不一样，互不影响。</p>
 <h4 id="checkpoint刷盘机制">checkpoint刷盘机制</h4>
 <p>除了Page Cleaner或者Master线程会以1s或者10s一次定期的将Flush列表中的脏页刷盘，还有几种情况下会触发checkpoint机制进行脏页刷盘，比如redo log满了，LRU链表满了等。</p>
 <ul>
@@ -520,14 +519,14 @@ innodb_purge_threads<span style="color:#f92672">=</span><span style="color:#ae81
 <li>固态硬盘有较高的IOPS（每秒输入输出量），可能并不需要这个。</li>
 </ol>
 <p>针对以上问题，从1.2版本开始提供参数<code>innodb_flush_neighbors</code>，可以选择开启或者不开启这个特性，默认是开启状态</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;innodb_flush_neighbors&#34;</span>;
-<span style="color:#f92672">+------------------------+-------+</span>
-<span style="color:#f92672">|</span> Variable_name          <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
-<span style="color:#f92672">+------------------------+-------+</span>
-<span style="color:#f92672">|</span> innodb_flush_neighbors <span style="color:#f92672">|</span> <span style="color:#ae81ff">1</span>     <span style="color:#f92672">|</span>
-<span style="color:#f92672">+------------------------+-------+</span>
-<span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">001</span> sec)
-</code></pre></div><h3 id="redo-log-buffer">Redo log buffer</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;innodb_flush_neighbors&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+------------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> Variable_name          <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+------------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> innodb_flush_neighbors <span style="color:#f92672">|</span> <span style="color:#ae81ff">1</span>     <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+------------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">001</span> sec)
+</span></span></code></pre></div><h3 id="redo-log-buffer">Redo log buffer</h3>
 <p>Buffer pool中除了有数据页和索引页之外，还有redo log的buffer，在事务中每次写入redo log实际上也是先写入redo log buffer，然后根据redo log的刷盘策略将redo log刷到磁盘。通过参数<code>innodb_flush_log_at_trx_commit</code>设置，它有0、1、2三个可选参数：</p>
 <ul>
 <li>0：延迟写：每次事务提交先写道redo log buffer，然后每隔1s将redo log写入os buffer，并立刻调用fsync()刷到磁盘，这样如果系统崩溃的话最多会丢失1s的数据。</li>
@@ -539,14 +538,14 @@ innodb_purge_threads<span style="color:#f92672">=</span><span style="color:#ae81
 <p>注意到buffer pool组成的图里面，还有一个额外内存池，这个内存池就是InnoDB对它运行过程中本身的一些数据结构对象进行存储的。</p>
 <h3 id="insert-bufferchange-buffer">Insert buffer/Change buffer</h3>
 <p>insert buffer是为了优化二级索引（非唯一）刷盘时的插入效率，它也存在buffer pool，并且会持久化。通过<code>show engine innodb status</code>可以查看到相关信息：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"><span style="color:#66d9ef">INSERT</span> BUFFER <span style="color:#66d9ef">AND</span> ADAPTIVE HASH <span style="color:#66d9ef">INDEX</span>
-<span style="color:#f92672">-----------------------------------</span><span style="color:#75715e">--
-</span><span style="color:#75715e">Ibuf: size 1, free list len 0, seg size 2, 0 merges
-</span><span style="color:#75715e"></span>merged operations:
-<span style="color:#66d9ef">insert</span> <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">delete</span> mark <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">delete</span> <span style="color:#ae81ff">0</span>
-discarded operations:
-<span style="color:#66d9ef">insert</span> <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">delete</span> mark <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">delete</span> <span style="color:#ae81ff">0</span>
-</code></pre></div><h4 id="刷盘时二级索引的插入问题">刷盘时二级索引的插入问题</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span><span style="color:#66d9ef">INSERT</span> BUFFER <span style="color:#66d9ef">AND</span> ADAPTIVE HASH <span style="color:#66d9ef">INDEX</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-----------------------------------</span><span style="color:#75715e">--
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">Ibuf: size 1, free list len 0, seg size 2, 0 merges
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>merged operations:
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">delete</span> mark <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">delete</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>discarded operations:
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">delete</span> mark <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">delete</span> <span style="color:#ae81ff">0</span>
+</span></span></code></pre></div><h4 id="刷盘时二级索引的插入问题">刷盘时二级索引的插入问题</h4>
 <p>当插入一个新行时，如果这个行要插入的页不在buffer pool，就需要先把这个页从磁盘取出来。对于主键索引，由于它一般都是递增的，所以直接从磁盘取出最后一个页，把新插入的行往B+树的最后按顺序加即可。而对于二级索引来说，新加的这行的索引字段往往不是最后面的，不能顺序插入，就需要随机IO磁盘，拿到这行数据应该插入的页，然后保存这个页到buffer pool，然后插入到buffer pool中这个页的B+树上，这里就有随机的磁盘IO了，导致效率较低。插入缓存就是为了解决这个问题，<strong>提高二级索引的插入效率</strong>，它既存在buffer pool中，也存在磁盘上，重启后，也可以从磁盘中加载回来还能用。</p>
 <h4 id="change-buffer的使用要求">Change buffer的使用要求</h4>
 <ol>
@@ -590,7 +589,7 @@ discarded operations:
 <h3 id="部分写失效的问题">部分写失效的问题</h3>
 <p>buffer pool中的脏页在触发checkpoint刷新到磁盘时，都是<strong>以页为单位</strong>刷的，一个页是16kb，而<strong>文件系统是以4kb为单位</strong>写入的，<strong>机械磁盘是以扇区（512字节）为单位</strong>写入的，这就导致16kb的脏页被刷到磁盘上<strong>不是一个原子操作</strong>。可能会发生宕机时，一个页只有4kb写入了磁盘，剩下的没写入。</p>
 <p><strong>redo log的写入单位和磁盘的扇区大小一样</strong>是512字节，所以redo log的写入是原子的，不会产生坏页。脏页刷盘时如果一个页没刷完，理论上是可以通过redo log的checkpoint点来继续刷的，但是由于<strong>redo log是物理逻辑日志，不是纯物理日志</strong>，不能用redo log进行恢复。</p>
-<pre><code>物理日志: 记录的是一个页中发生改变的字节，这样重复多次执行也不会导致数据不一致，它是幂等的，但是日志量会比较大
+<pre tabindex="0"><code>物理日志: 记录的是一个页中发生改变的字节，这样重复多次执行也不会导致数据不一致，它是幂等的，但是日志量会比较大
 逻辑日志：像binlog，记录的就是一条条操作语句，它不是幂等的，但是日志量比物理日志小的多
 物理逻辑日志：redo log,对应的页是物理的，但是页内部的操作是逻辑的，物理逻辑日志不是完全幂等的，
 如果页本身发生了损坏，那用redo log是恢复不了的
@@ -614,7 +613,7 @@ discarded operations:
 </ol>
 <p>可以看到，就是因为redo log写磁盘一定会成功，无法通过redo log判断刷脏页时是否</p>
 <p>通过命令<code>show global status like &quot;innodb_dblwr%&quot;\G</code>可以观察double write的运行情况：如下一共写了14383个页，写的次数是155。</p>
-<pre><code>Mysql&gt; show global status like &quot;innodb_dblwr%&quot;;
+<pre tabindex="0"><code>Mysql&gt; show global status like &#34;innodb_dblwr%&#34;;
 +----------------------------+-------+
 | Variable_name              | Value |
 +----------------------------+-------+
@@ -667,8 +666,8 @@ discarded operations:
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></body>
 </html>

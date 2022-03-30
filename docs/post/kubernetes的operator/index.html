@@ -18,12 +18,11 @@
   </title>
 
   
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.96.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta
     name="description"
     content="
-      
-Per aspera ad astra.
+      Per aspera ad astra.
 循此苦旅，终抵群星。
 
 
@@ -35,8 +34,8 @@ Per aspera ad astra.
   
   <link
     rel="stylesheet"
-    href="/css/main.min.7ca9a7b7632c545387f4ab9f7f943afeab89e7ed1c092ce9fb39263257779ce5.css"
-    integrity="sha256-fKmnt2MsVFOH9Kuff5Q6/quJ5&#43;0cCSzp&#43;zkmMld3nOU="
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -44,8 +43,8 @@ Per aspera ad astra.
   
   <link
     rel="stylesheet"
-    href="/css/markupHighlight.min.8f07fad4abedfd5eb1396c6fef85ba7ec00ec867a79fb545c9db18df87f6760a.css"
-    integrity="sha256-jwf61Kvt/V6xOWxv74W6fsAOyGenn7VFydsY34f2dgo="
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -70,8 +69,8 @@ Per aspera ad astra.
   
   <script
     type="text/javascript"
-    src="/js/anatole-header.min.413f798d8aa82610bef17a5ca1d7e962ec185be395f1aeb3f45d1891af568b65.js"
-    integrity="sha256-QT95jYqoJhC&#43;8XpcodfpYuwYW&#43;OV8a6z9F0Yka9Wi2U="
+    src="/js/anatole-header.min.d0408165d31a17f17bba83038bf54e86121f85021bdf936382e636f0f77a952f.js"
+    integrity="sha256-0ECBZdMaF/F7uoMDi/VOhhIfhQIb35NjguY28Pd6lS8="
     crossorigin="anonymous"
   ></script>
 
@@ -80,8 +79,8 @@ Per aspera ad astra.
     
     <script
       type="text/javascript"
-      src="/js/anatole-theme-switcher.min.fcf9526f15b3b4e08472de192969ab28a4cdcb32ac94f83e85a8b84e9b45acd2.js"
-      integrity="sha256-/PlSbxWztOCEct4ZKWmrKKTNyzKslPg&#43;hai4TptFrNI="
+      src="/js/anatole-theme-switcher.min.65e936b591bf81484a5ac438c8e4ae6454fb25516d58ce911e4888d7f230bdc5.js"
+      integrity="sha256-Zek2tZG/gUhKWsQ4yOSuZFT7JVFtWM6RHkiI1/IwvcU="
       crossorigin="anonymous"
     ></script>
 
@@ -292,7 +291,7 @@ Per aspera ad astra.
         <img src="/images/profile5.jpg" alt="profile picture" />
         <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
         <div class="description">
-          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+          <p>Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
         </div>
       </div>
     </div>
@@ -344,8 +343,8 @@ Per aspera ad astra.
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></div>
 </aside>
@@ -380,20 +379,20 @@ Per aspera ad astra.
       </div><h1 id="crd和自定义控制器">CRD和自定义控制器</h1>
 <p>在<a href="https://yanghairui.life/post/k8s%E6%A0%B8%E5%BF%83%E5%BA%93client-go%E7%9A%84informer%E6%9C%BA%E5%88%B6/">k8s的Informer机制</a>这篇文章中我们了解了K8s的Informer机制，以及对于k8s原生资源的Informer对象的使用方式。Informer机制归根到底就是利用了kube-apiserver的ListAndWatch机制，去监听集群中特定的API对象的变更，进而去实现一些控制。而且k8s的API对象是支持拓展的，允许用户在 Kubernetes 中添加一个跟 Pod、Node 类似的、新的 API 资源类型，然后编写一个针对自定义API对象的控制器，通过Informer机制去监听这个新的API对象在集群中的变更，然后实现一些控制。这中自定义的API对象就是<strong>CRD(Custom Resource Definition)</strong>。</p>
 <p>K8s中创建一个CRD十分简单，只需要创建一个CustomResourceDefinition类型的对象即可，下面是一个例子：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># crd.yaml</span>
----
-<span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">apiextensions.k8s.io/v1beta1</span>
-<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">CustomResourceDefinition</span>
-<span style="color:#f92672">metadata</span>: 
-  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">networks.samplecrd.k8s.io</span>
-<span style="color:#f92672">spec</span>: 
-  <span style="color:#f92672">group</span>: <span style="color:#ae81ff">samplecrd.k8s.io </span>
-  <span style="color:#f92672">version</span>: <span style="color:#ae81ff">v1 </span>
-  <span style="color:#f92672">names</span>: 
-    <span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Network </span>
-    <span style="color:#f92672">plural</span>: <span style="color:#ae81ff">networks </span>
-  <span style="color:#f92672">scope</span>: <span style="color:#ae81ff">Namespaced</span>
-</code></pre></div><p>关于CRD的创建这里不多赘述，关于细节可以查看k8s的<a href="https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/">官方文档</a>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># crd.yaml</span>
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">apiextensions.k8s.io/v1beta1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">CustomResourceDefinition</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>: 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">networks.samplecrd.k8s.io</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spec</span>: 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">group</span>: <span style="color:#ae81ff">samplecrd.k8s.io </span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">version</span>: <span style="color:#ae81ff">v1 </span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">names</span>: 
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Network </span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">plural</span>: <span style="color:#ae81ff">networks </span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">scope</span>: <span style="color:#ae81ff">Namespaced</span>
+</span></span></code></pre></div><p>关于CRD的创建这里不多赘述，关于细节可以查看k8s的<a href="https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/">官方文档</a>。</p>
 <p>创建好CRD之后，我们就可以创建这种CRD类型的API对象了，但是这时我们创建的CRD只能说是一种存储在etcd里面的一些数据，除了能看一点用处都没有，要通过这种新API对象实现一些功能，就需要编写一个控制器。k8s集群里的原生API对象，如Pod、Deployment等都有自己的控制器，这些控制器都被集成在了kube-controller-manager这个控制面组件上。我们要编写的自定义控制器，可以以Pod的形式运行在集群上，然后在pod中和kube-apiserver进行ListAndWatch自定义的API对象，实现一些控制逻辑。</p>
 <p>一个自定义控制器的实现方式可以如下图所示：</p>
 <p><img src="/images/operator/controller.webp" alt=""></p>
@@ -420,24 +419,24 @@ Per aspera ad astra.
 <h2 id="设计operator">设计Operator</h2>
 <p>这里我们设计一个CRD叫做MyPod，通过创建一个MyPod对象，Operator会帮我们在集群中创建一个pod出来（虽然有点脱裤子放屁，这里只是通过这个例子帮助理解哈╮(๑•́ ₃•̀๑)╭）。</p>
 <p>我们的API对象大概长这样：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">harryyann.github.io</span>
-<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">MyPod</span>
-<span style="color:#f92672">metadata</span>:
-  <span style="color:#f92672">annotations</span>:
-  <span style="color:#f92672">labels</span>:
-  <span style="color:#f92672">name</span>: 
-  <span style="color:#f92672">namespace</span>:
-<span style="color:#f92672">spec</span>:
-    <span style="color:#f92672">podAnnotations</span>:
-    <span style="color:#f92672">podLabels</span>:
-    <span style="color:#f92672">podSpec</span>:
-        <span style="color:#75715e"># 这里是原封不动的podSpec</span>
-<span style="color:#f92672">status</span>:
-    <span style="color:#f92672">podPhase</span>:
-    <span style="color:#f92672">podIp</span>:
-    <span style="color:#f92672">nodeIp</span>:
-    <span style="color:#f92672">createdTime</span>:
-</code></pre></div><p>metadata里面填的是MyPod对象的基础信息，spec里是期望状态，就是pod的annotation、label和podSpec。status保存和MyPod对象关联的pod的一些信息，如果phase、podIp、nodeIp等。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">harryyann.github.io</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">MyPod</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">annotations</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">labels</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">namespace</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spec</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">podAnnotations</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">podLabels</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">podSpec</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 这里是原封不动的podSpec</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">status</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">podPhase</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">podIp</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">nodeIp</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">createdTime</span>:
+</span></span></code></pre></div><p>metadata里面填的是MyPod对象的基础信息，spec里是期望状态，就是pod的annotation、label和podSpec。status保存和MyPod对象关联的pod的一些信息，如果phase、podIp、nodeIp等。</p>
 <p>要实现这个需求，我们要做的事情有三个：</p>
 <ul>
 <li>创建一个MyPod的CRD出来。</li>
@@ -446,29 +445,29 @@ Per aspera ad astra.
 </ul>
 <h2 id="安装kubebuilder">安装kubebuilder</h2>
 <p>在<a href="https://github.com/kubernetes-sigs/kubebuilder/releases">这个地址</a>下载好需要的二进制文件，把kubebuilder放到PATH目录下，检查一下kubebuilder是否可用：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># kubebuilder version</span>
-Version: main.version<span style="color:#f92672">{</span>KubeBuilderVersion:<span style="color:#e6db74">&#34;3.3.0&#34;</span>, KubernetesVendor:<span style="color:#e6db74">&#34;1.23.1&#34;</span>, GitCommit:<span style="color:#e6db74">&#34;47859bf2ebf96a64db69a2f7074ffdec7f15c1ec&#34;</span>, BuildDate:<span style="color:#e6db74">&#34;2022-01-18T17:03:29Z&#34;</span>, GoOs:<span style="color:#e6db74">&#34;linux&#34;</span>, GoArch:<span style="color:#e6db74">&#34;amd64&#34;</span><span style="color:#f92672">}</span>
-</code></pre></div><p>可以正确显示版本就说明安装成功了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># kubebuilder version</span>
+</span></span><span style="display:flex;"><span>Version: main.version<span style="color:#f92672">{</span>KubeBuilderVersion:<span style="color:#e6db74">&#34;3.3.0&#34;</span>, KubernetesVendor:<span style="color:#e6db74">&#34;1.23.1&#34;</span>, GitCommit:<span style="color:#e6db74">&#34;47859bf2ebf96a64db69a2f7074ffdec7f15c1ec&#34;</span>, BuildDate:<span style="color:#e6db74">&#34;2022-01-18T17:03:29Z&#34;</span>, GoOs:<span style="color:#e6db74">&#34;linux&#34;</span>, GoArch:<span style="color:#e6db74">&#34;amd64&#34;</span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>可以正确显示版本就说明安装成功了。</p>
 <h2 id="初始化项目">初始化项目</h2>
 <ol>
 <li>
 <p>首先创建一个空目录，然后进入这个目录：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># mkdir mypod-operator</span>
-<span style="color:#75715e"># cd mypod-operator</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># mkdir mypod-operator</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># cd mypod-operator</span>
+</span></span></code></pre></div></li>
 <li>
 <p>执行kubebuilder init命令初始化项目：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># kubebuilder init --domain harryyann.github.io --repo github.com/harryyann/mypod-operator</span>
-</code></pre></div><p>我这里指定了<code>--domain</code>和<code>--repo</code>两个参数，domain是我们项目的域名，他会成为我们创建的API对象的组名，repo则是仓库地址，他会成为<code>go mod init</code>时指定的项目名。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># kubebuilder init --domain harryyann.github.io --repo github.com/harryyann/mypod-operator</span>
+</span></span></code></pre></div><p>我这里指定了<code>--domain</code>和<code>--repo</code>两个参数，domain是我们项目的域名，他会成为我们创建的API对象的组名，repo则是仓库地址，他会成为<code>go mod init</code>时指定的项目名。</p>
 </li>
 <li>
 <p>然后我们创建API：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># kubebuilder create api --namespaced --version v1 --kind MyPod --plural mypods</span>
-</code></pre></div><p>这里我们会创建API对象的代码，<code>--namespaced</code>参数指定这个API对象是命名空间级的，&ndash;version指定了API版本，<code>--kind</code>指定了API对象的类型，即yaml文件的kind字段， <code>--plural</code>指定了API对象的复数形式。这里还可以指定<code>--group</code>组信息，如果不指定会使用<code>--domain</code>作为组名，指定了就会和domain进行拼接作为组名。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># kubebuilder create api --namespaced --version v1 --kind MyPod --plural mypods</span>
+</span></span></code></pre></div><p>这里我们会创建API对象的代码，<code>--namespaced</code>参数指定这个API对象是命名空间级的，&ndash;version指定了API版本，<code>--kind</code>指定了API对象的类型，即yaml文件的kind字段， <code>--plural</code>指定了API对象的复数形式。这里还可以指定<code>--group</code>组信息，如果不指定会使用<code>--domain</code>作为组名，指定了就会和domain进行拼接作为组名。</p>
 </li>
 </ol>
 <p>在执行完成以上命令后，我们当前的目录结构就是这样的：</p>
-<pre><code>├── Dockerfile
+<pre tabindex="0"><code>├── Dockerfile
 ├── Makefile
 ├── PROJECT
 ├── api/
@@ -496,186 +495,186 @@ Version: main.version<span style="color:#f92672">{</span>KubeBuilderVersion:<spa
 </ul>
 <h2 id="修改api对象的字段">修改API对象的字段</h2>
 <p>生成了整个框架之后，定义一下我们的自定义资源的字段，位于api/v1/mypod_types.go中，在这里定义一下spec字段，和status字段。MyPodSpec中默认会带有一个Foo的string类型字段，把他删掉。然后添加我们真正需要的字段，如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// MyPodSpec defines the desired state of MyPod
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">MyPodSpec</span> <span style="color:#66d9ef">struct</span> {
-   <span style="color:#75715e">// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-</span><span style="color:#75715e"></span>   <span style="color:#75715e">// Important: Run &#34;make&#34; to regenerate code after modifying this file
-</span><span style="color:#75715e"></span>
-   <span style="color:#a6e22e">PodAnnotations</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;podAnnotations,omitempty&#34;`</span>
-   <span style="color:#a6e22e">PodLabels</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;podLabels,omitempty&#34;`</span>
-   <span style="color:#a6e22e">PodSpec</span>  <span style="color:#a6e22e">v1</span>.<span style="color:#a6e22e">PodSpec</span>   <span style="color:#e6db74">`json:&#34;podSpec&#34;`</span>
-}
-
-
-<span style="color:#75715e">// MyPodStatus defines the observed state of MyPod
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">MyPodStatus</span> <span style="color:#66d9ef">struct</span> {
-   <span style="color:#75715e">// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-</span><span style="color:#75715e"></span>   <span style="color:#75715e">// Important: Run &#34;make&#34; to regenerate code after modifying this file
-</span><span style="color:#75715e"></span>   <span style="color:#a6e22e">PodPhase</span> <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;podPhase,omitempty&#34;`</span>
-   <span style="color:#a6e22e">PodIp</span> <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;podIp,omitEmpty&#34;`</span>
-   <span style="color:#a6e22e">NodeIp</span> <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;nodeIp,omitEmpty&#34;`</span>
-   <span style="color:#a6e22e">CreatedTimestamp</span> <span style="color:#66d9ef">int64</span> <span style="color:#e6db74">`json:&#34;createdTimestamp,omitEmpty&#34;`</span>
-}
-</code></pre></div><p>我们还可以添加这样的注释，让我们可以在通过kubectl查看时展示更多内容：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">//+kubebuilder:printcolumn:JSONPath=&#34;.status.phase&#34;,name=Phase,type=string
-</span><span style="color:#75715e">//+kubebuilder:printcolumn:JSONPath=&#34;.status.podIp&#34;,name=PodIp,type=string
-</span><span style="color:#75715e"></span>
-<span style="color:#75715e">//+kubebuilder:object:root=true
-</span><span style="color:#75715e">//+kubebuilder:subresource:status
-</span></code></pre></div><p>改完字段后，我们用命令<code>make manifests generate</code>，针对修改过的资源，生成需要的yaml文件</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#e6db74">`make manifests generate`</span>
-</code></pre></div><p>然后我们会发现config/crd目录下多了一个bases目录，里面有CRD的定义，我们可以用这个文件创建出CRD。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// MyPodSpec defines the desired state of MyPod
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">MyPodSpec</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>   <span style="color:#75715e">// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>   <span style="color:#75715e">// Important: Run &#34;make&#34; to regenerate code after modifying this file
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">PodAnnotations</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;podAnnotations,omitempty&#34;`</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">PodLabels</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;podLabels,omitempty&#34;`</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">PodSpec</span>  <span style="color:#a6e22e">v1</span>.<span style="color:#a6e22e">PodSpec</span>   <span style="color:#e6db74">`json:&#34;podSpec&#34;`</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// MyPodStatus defines the observed state of MyPod
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">MyPodStatus</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>   <span style="color:#75715e">// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>   <span style="color:#75715e">// Important: Run &#34;make&#34; to regenerate code after modifying this file
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>   <span style="color:#a6e22e">PodPhase</span> <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;podPhase,omitempty&#34;`</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">PodIp</span> <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;podIp,omitEmpty&#34;`</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">NodeIp</span> <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;nodeIp,omitEmpty&#34;`</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">CreatedTimestamp</span> <span style="color:#66d9ef">int64</span> <span style="color:#e6db74">`json:&#34;createdTimestamp,omitEmpty&#34;`</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>我们还可以添加这样的注释，让我们可以在通过kubectl查看时展示更多内容：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">//+kubebuilder:printcolumn:JSONPath=&#34;.status.phase&#34;,name=Phase,type=string
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//+kubebuilder:printcolumn:JSONPath=&#34;.status.podIp&#34;,name=PodIp,type=string
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//+kubebuilder:object:root=true
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//+kubebuilder:subresource:status
+</span></span></span></code></pre></div><p>改完字段后，我们用命令<code>make manifests generate</code>，针对修改过的资源，生成需要的yaml文件</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#e6db74">`make manifests generate`</span>
+</span></span></code></pre></div><p>然后我们会发现config/crd目录下多了一个bases目录，里面有CRD的定义，我们可以用这个文件创建出CRD。</p>
 <h2 id="在集群中运行一下operator">在集群中运行一下operator</h2>
 <p>我们先不添加Reconcile的代码在集群中跑一下，我跑的过程遇到了一些坑，具体就不说了，总之我做了下面这些修改后，才顺利跑起来：</p>
 <ol>
 <li>
 <p>首先要修改main.go的代码，修改kubeconfig的获取方式，因为我们的operator是在pod里跑的，所以改为InClusterConfig的方式获取kubeconfig，否则pod运行时会因为无法获取kubeconfig而error。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">config</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">InClusterConfig</span>()
-<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-   <span style="color:#a6e22e">setupLog</span>.<span style="color:#a6e22e">Error</span>(<span style="color:#a6e22e">err</span>, <span style="color:#e6db74">&#34;get in cluster config error&#34;</span>)
-   <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Exit</span>(<span style="color:#ae81ff">1</span>)
-}
-<span style="color:#a6e22e">mgr</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ctrl</span>.<span style="color:#a6e22e">NewManager</span>(<span style="color:#a6e22e">config</span>, <span style="color:#a6e22e">ctrl</span>.<span style="color:#a6e22e">Options</span>{
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">config</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rest</span>.<span style="color:#a6e22e">InClusterConfig</span>()
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">setupLog</span>.<span style="color:#a6e22e">Error</span>(<span style="color:#a6e22e">err</span>, <span style="color:#e6db74">&#34;get in cluster config error&#34;</span>)
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Exit</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">mgr</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ctrl</span>.<span style="color:#a6e22e">NewManager</span>(<span style="color:#a6e22e">config</span>, <span style="color:#a6e22e">ctrl</span>.<span style="color:#a6e22e">Options</span>{
+</span></span></code></pre></div></li>
 <li>
 <p>然后还要在manager/manager.yaml中做下修改：添加这一行，要不然InClusterConfig函数会提示找不到token文件：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">automountServiceAccountToken</span>: <span style="color:#66d9ef">true</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">automountServiceAccountToken</span>: <span style="color:#66d9ef">true</span>
+</span></span></code></pre></div></li>
 <li>
 <p>最后还要在config/rbac/role.yaml中加些权限：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">- <span style="color:#f92672">apiGroups</span>:
-    - <span style="color:#e6db74">&#34;coordination.k8s.io&#34;</span>
-  <span style="color:#f92672">resources</span>:
-    - <span style="color:#ae81ff">leases</span>
-  <span style="color:#f92672">verbs</span>:
-    - <span style="color:#ae81ff">create</span>
-    - <span style="color:#ae81ff">delete</span>
-    - <span style="color:#ae81ff">get</span>
-    - <span style="color:#ae81ff">list</span>
-    - <span style="color:#ae81ff">patch</span>
-    - <span style="color:#ae81ff">update</span>
-    - <span style="color:#ae81ff">watch</span>
-- <span style="color:#f92672">apiGroups</span>:
-    - <span style="color:#e6db74">&#34;&#34;</span>
-  <span style="color:#f92672">resources</span>:
-    - <span style="color:#ae81ff">pods</span>
-    - <span style="color:#ae81ff">configmaps</span>
-    - <span style="color:#ae81ff">events</span>
-  <span style="color:#f92672">verbs</span>:
-    - <span style="color:#ae81ff">create</span>
-    - <span style="color:#ae81ff">delete</span>
-    - <span style="color:#ae81ff">get</span>
-    - <span style="color:#ae81ff">list</span>
-    - <span style="color:#ae81ff">patch</span>
-    - <span style="color:#ae81ff">update</span>
-    - <span style="color:#ae81ff">watch</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#f92672">apiGroups</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#e6db74">&#34;coordination.k8s.io&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">resources</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">leases</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">verbs</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">create</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">delete</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">get</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">list</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">patch</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">update</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">watch</span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">apiGroups</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">resources</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">pods</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">configmaps</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">events</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">verbs</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">create</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">delete</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">get</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">list</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">patch</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">update</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">watch</span>
+</span></span></code></pre></div></li>
 </ol>
 <p>完成上述操作后，我们在集群中创建出CRD、role、roleBinding、serviceAccount：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># kubectl apply -f config/crd/bases/harryyann.github.io_mypods.yaml</span>
-<span style="color:#75715e"># kubectl apply -f config/rbac/role.yaml</span>
-<span style="color:#75715e"># kubectl apply -f config/rbac/role_binding.yaml</span>
-<span style="color:#75715e"># kubectl apply -f config/rbac/serviceAccount.yaml</span>
-</code></pre></div><p>然后我们通过make构建一下Operator的镜像，并push到镜像中心：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># make docker-build</span>
-<span style="color:#75715e"># make docker-push</span>
-</code></pre></div><p>镜像打好并push到远程仓库之后，我们在集群中创建namespace和operator的deployment，我这里给ns起名为test-mypod：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># kubectl apply -f config/manager/manager.yaml</span>
-</code></pre></div><p>然后就可以看到ns下有pod再跑了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># kubectl get pod -n test-mypod</span>
-NAME                             READY   STATUS    RESTARTS   AGE
-mypod-manager-56d6687f75-pqt6v   1/1     Running   <span style="color:#ae81ff">0</span>          18m
-</code></pre></div><p>查看一下它的日志：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># kubectl logs -f -n test-mypod mypod-manager-56d6687f75-pqt6v</span>
-1.6475719323468134e+09  INFO    controller-runtime.metrics      Metrics server is starting to listen    <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;addr&#34;</span>: <span style="color:#e6db74">&#34;:8080&#34;</span><span style="color:#f92672">}</span>
-1.6475719323471029e+09  INFO    setup   starting manager
-1.6475719323472993e+09  INFO    Starting server <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;path&#34;</span>: <span style="color:#e6db74">&#34;/metrics&#34;</span>, <span style="color:#e6db74">&#34;kind&#34;</span>: <span style="color:#e6db74">&#34;metrics&#34;</span>, <span style="color:#e6db74">&#34;addr&#34;</span>: <span style="color:#e6db74">&#34;[::]:8080&#34;</span><span style="color:#f92672">}</span>
-1.6475719323473573e+09  INFO    Starting server <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;kind&#34;</span>: <span style="color:#e6db74">&#34;health probe&#34;</span>, <span style="color:#e6db74">&#34;addr&#34;</span>: <span style="color:#e6db74">&#34;[::]:8081&#34;</span><span style="color:#f92672">}</span>
-I0318 02:52:12.347376       <span style="color:#ae81ff">1</span> leaderelection.go:248<span style="color:#f92672">]</span> attempting to acquire leader lease test-mypod/9ef2ee97.harryyann.github.io...
-I0318 02:52:29.431037       <span style="color:#ae81ff">1</span> leaderelection.go:258<span style="color:#f92672">]</span> successfully acquired lease test-mypod/9ef2ee97.harryyann.github.io
-1.647571949431093e+09   DEBUG   events  Normal  <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;object&#34;</span>: <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;kind&#34;</span>:<span style="color:#e6db74">&#34;ConfigMap&#34;</span>,<span style="color:#e6db74">&#34;namespace&#34;</span>:<span style="color:#e6db74">&#34;test-mypod&#34;</span>,<span style="color:#e6db74">&#34;name&#34;</span>:<span style="color:#e6db74">&#34;9ef2ee97.harryyann.github.io&#34;</span>,<span style="color:#e6db74">&#34;uid&#34;</span>:<span style="color:#e6db74">&#34;65e4bba0-1dde-4dae-b592-6279d1953b9e&#34;</span>,<span style="color:#e6db74">&#34;apiVersion&#34;</span>:<span style="color:#e6db74">&#34;v1&#34;</span>,<span style="color:#e6db74">&#34;resourceVersion&#34;</span>:<span style="color:#e6db74">&#34;313330506&#34;</span><span style="color:#f92672">}</span>, <span style="color:#e6db74">&#34;reason&#34;</span>: <span style="color:#e6db74">&#34;LeaderElection&#34;</span>, <span style="color:#e6db74">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;mypod-manager-56d6687f75-pqt6v_a7556a76-14a3-4c90-8fef-f74bb7144b5d became leader&#34;</span><span style="color:#f92672">}</span>
-1.6475719494311852e+09  DEBUG   events  Normal  <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;object&#34;</span>: <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;kind&#34;</span>:<span style="color:#e6db74">&#34;Lease&#34;</span>,<span style="color:#e6db74">&#34;namespace&#34;</span>:<span style="color:#e6db74">&#34;test-mypod&#34;</span>,<span style="color:#e6db74">&#34;name&#34;</span>:<span style="color:#e6db74">&#34;9ef2ee97.harryyann.github.io&#34;</span>,<span style="color:#e6db74">&#34;uid&#34;</span>:<span style="color:#e6db74">&#34;b3abbcb8-5d68-450c-b104-4c8a9d542e44&#34;</span>,<span style="color:#e6db74">&#34;apiVersion&#34;</span>:<span style="color:#e6db74">&#34;coordination.k8s.io/v1&#34;</span>,<span style="color:#e6db74">&#34;resourceVersion&#34;</span>:<span style="color:#e6db74">&#34;313330507&#34;</span><span style="color:#f92672">}</span>, <span style="color:#e6db74">&#34;reason&#34;</span>: <span style="color:#e6db74">&#34;LeaderElection&#34;</span>, <span style="color:#e6db74">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;mypod-manager-56d6687f75-pqt6v_a7556a76-14a3-4c90-8fef-f74bb7144b5d became leader&#34;</span><span style="color:#f92672">}</span>
-1.647571949431183e+09   INFO    controller.mypod        Starting EventSource    <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;harryyann.github.io&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;MyPod&#34;</span>, <span style="color:#e6db74">&#34;source&#34;</span>: <span style="color:#e6db74">&#34;kind source: *v1.MyPod&#34;</span><span style="color:#f92672">}</span>
-1.647571949431227e+09   INFO    controller.mypod        Starting Controller     <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;harryyann.github.io&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;MyPod&#34;</span><span style="color:#f92672">}</span>
-1.6475719495316322e+09  INFO    controller.mypod        Starting workers        <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;harryyann.github.io&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;MyPod&#34;</span>, <span style="color:#e6db74">&#34;worker count&#34;</span>: 1<span style="color:#f92672">}</span>
-</code></pre></div><p>看起来输出正常，我们的Operator可以运行了，接下来就是修改Reconcile的代码，让它实现该有的功能即可。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># kubectl apply -f config/crd/bases/harryyann.github.io_mypods.yaml</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># kubectl apply -f config/rbac/role.yaml</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># kubectl apply -f config/rbac/role_binding.yaml</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># kubectl apply -f config/rbac/serviceAccount.yaml</span>
+</span></span></code></pre></div><p>然后我们通过make构建一下Operator的镜像，并push到镜像中心：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># make docker-build</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># make docker-push</span>
+</span></span></code></pre></div><p>镜像打好并push到远程仓库之后，我们在集群中创建namespace和operator的deployment，我这里给ns起名为test-mypod：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># kubectl apply -f config/manager/manager.yaml</span>
+</span></span></code></pre></div><p>然后就可以看到ns下有pod再跑了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># kubectl get pod -n test-mypod</span>
+</span></span><span style="display:flex;"><span>NAME                             READY   STATUS    RESTARTS   AGE
+</span></span><span style="display:flex;"><span>mypod-manager-56d6687f75-pqt6v   1/1     Running   <span style="color:#ae81ff">0</span>          18m
+</span></span></code></pre></div><p>查看一下它的日志：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># kubectl logs -f -n test-mypod mypod-manager-56d6687f75-pqt6v</span>
+</span></span><span style="display:flex;"><span>1.6475719323468134e+09  INFO    controller-runtime.metrics      Metrics server is starting to listen    <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;addr&#34;</span>: <span style="color:#e6db74">&#34;:8080&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>1.6475719323471029e+09  INFO    setup   starting manager
+</span></span><span style="display:flex;"><span>1.6475719323472993e+09  INFO    Starting server <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;path&#34;</span>: <span style="color:#e6db74">&#34;/metrics&#34;</span>, <span style="color:#e6db74">&#34;kind&#34;</span>: <span style="color:#e6db74">&#34;metrics&#34;</span>, <span style="color:#e6db74">&#34;addr&#34;</span>: <span style="color:#e6db74">&#34;[::]:8080&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>1.6475719323473573e+09  INFO    Starting server <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;kind&#34;</span>: <span style="color:#e6db74">&#34;health probe&#34;</span>, <span style="color:#e6db74">&#34;addr&#34;</span>: <span style="color:#e6db74">&#34;[::]:8081&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>I0318 02:52:12.347376       <span style="color:#ae81ff">1</span> leaderelection.go:248<span style="color:#f92672">]</span> attempting to acquire leader lease test-mypod/9ef2ee97.harryyann.github.io...
+</span></span><span style="display:flex;"><span>I0318 02:52:29.431037       <span style="color:#ae81ff">1</span> leaderelection.go:258<span style="color:#f92672">]</span> successfully acquired lease test-mypod/9ef2ee97.harryyann.github.io
+</span></span><span style="display:flex;"><span>1.647571949431093e+09   DEBUG   events  Normal  <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;object&#34;</span>: <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;kind&#34;</span>:<span style="color:#e6db74">&#34;ConfigMap&#34;</span>,<span style="color:#e6db74">&#34;namespace&#34;</span>:<span style="color:#e6db74">&#34;test-mypod&#34;</span>,<span style="color:#e6db74">&#34;name&#34;</span>:<span style="color:#e6db74">&#34;9ef2ee97.harryyann.github.io&#34;</span>,<span style="color:#e6db74">&#34;uid&#34;</span>:<span style="color:#e6db74">&#34;65e4bba0-1dde-4dae-b592-6279d1953b9e&#34;</span>,<span style="color:#e6db74">&#34;apiVersion&#34;</span>:<span style="color:#e6db74">&#34;v1&#34;</span>,<span style="color:#e6db74">&#34;resourceVersion&#34;</span>:<span style="color:#e6db74">&#34;313330506&#34;</span><span style="color:#f92672">}</span>, <span style="color:#e6db74">&#34;reason&#34;</span>: <span style="color:#e6db74">&#34;LeaderElection&#34;</span>, <span style="color:#e6db74">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;mypod-manager-56d6687f75-pqt6v_a7556a76-14a3-4c90-8fef-f74bb7144b5d became leader&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>1.6475719494311852e+09  DEBUG   events  Normal  <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;object&#34;</span>: <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;kind&#34;</span>:<span style="color:#e6db74">&#34;Lease&#34;</span>,<span style="color:#e6db74">&#34;namespace&#34;</span>:<span style="color:#e6db74">&#34;test-mypod&#34;</span>,<span style="color:#e6db74">&#34;name&#34;</span>:<span style="color:#e6db74">&#34;9ef2ee97.harryyann.github.io&#34;</span>,<span style="color:#e6db74">&#34;uid&#34;</span>:<span style="color:#e6db74">&#34;b3abbcb8-5d68-450c-b104-4c8a9d542e44&#34;</span>,<span style="color:#e6db74">&#34;apiVersion&#34;</span>:<span style="color:#e6db74">&#34;coordination.k8s.io/v1&#34;</span>,<span style="color:#e6db74">&#34;resourceVersion&#34;</span>:<span style="color:#e6db74">&#34;313330507&#34;</span><span style="color:#f92672">}</span>, <span style="color:#e6db74">&#34;reason&#34;</span>: <span style="color:#e6db74">&#34;LeaderElection&#34;</span>, <span style="color:#e6db74">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;mypod-manager-56d6687f75-pqt6v_a7556a76-14a3-4c90-8fef-f74bb7144b5d became leader&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>1.647571949431183e+09   INFO    controller.mypod        Starting EventSource    <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;harryyann.github.io&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;MyPod&#34;</span>, <span style="color:#e6db74">&#34;source&#34;</span>: <span style="color:#e6db74">&#34;kind source: *v1.MyPod&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>1.647571949431227e+09   INFO    controller.mypod        Starting Controller     <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;harryyann.github.io&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;MyPod&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>1.6475719495316322e+09  INFO    controller.mypod        Starting workers        <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;harryyann.github.io&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;MyPod&#34;</span>, <span style="color:#e6db74">&#34;worker count&#34;</span>: 1<span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>看起来输出正常，我们的Operator可以运行了，接下来就是修改Reconcile的代码，让它实现该有的功能即可。</p>
 <h2 id="编写reconcile函数">编写Reconcile函数</h2>
 <p>Reconcile函数位于<code>controllers</code>目录下。它的定义是这样的：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">MyPodReconciler</span>) <span style="color:#a6e22e">Reconcile</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">req</span> <span style="color:#a6e22e">ctrl</span>.<span style="color:#a6e22e">Request</span>) (<span style="color:#a6e22e">ctrl</span>.<span style="color:#a6e22e">Result</span>, <span style="color:#66d9ef">error</span>)
-</code></pre></div><p>参数<strong>req中会包含当前所变更对象的namespace和name信息</strong>，通过这两个值，就可以获取到我们创建、修改、删除的MyPod对象，进而完成一些操作。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">MyPodReconciler</span>) <span style="color:#a6e22e">Reconcile</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">req</span> <span style="color:#a6e22e">ctrl</span>.<span style="color:#a6e22e">Request</span>) (<span style="color:#a6e22e">ctrl</span>.<span style="color:#a6e22e">Result</span>, <span style="color:#66d9ef">error</span>)
+</span></span></code></pre></div><p>参数<strong>req中会包含当前所变更对象的namespace和name信息</strong>，通过这两个值，就可以获取到我们创建、修改、删除的MyPod对象，进而完成一些操作。</p>
 <p>这部分主要是写逻辑，我就不细说了，代码我放在这个<a href="https://github.com/harryyann/mypod-operator">仓库</a>里了。</p>
 <h2 id="在集群上调试">在集群上调试</h2>
 <p>改完代码后，执行<code>make docker-build</code>构建镜像，执行<code>make docker-push</code>推送镜像。</p>
 <p>然后在集群中通过上设置deployment的<code>imagePullPolicy=Always</code>，然后删除manager的pod，他就会自动重建，并拉取最新的镜像。</p>
 <p>观察到日志输出是正常的：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-verilog" data-lang="verilog"><span style="color:#ae81ff">1.6476801020824914e+09</span>  INFO    controller.mypod        Starting EventSource    {<span style="color:#e6db74">&#34;reconciler group&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;harryyann.github.io&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;MyPod&#34;</span>, <span style="color:#e6db74">&#34;source&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;kind source: *v1.MyPod&#34;</span>}
-<span style="color:#ae81ff">1.6476801020826638e+09</span>  INFO    controller.mypod        Starting Controller     {<span style="color:#e6db74">&#34;reconciler group&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;harryyann.github.io&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;MyPod&#34;</span>}
-<span style="color:#ae81ff">1.647680102183413e+09</span>   INFO    controller.mypod        Starting workers        {<span style="color:#e6db74">&#34;reconciler group&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;harryyann.github.io&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;MyPod&#34;</span>, <span style="color:#e6db74">&#34;worker count&#34;</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>}
-</code></pre></div><p>然后我们用如下yaml创建一个MyPod对象：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">harryyann.github.io/v1</span>
-<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">MyPod</span>
-<span style="color:#f92672">metadata</span>:
-  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">mypod-sample</span>
-  <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">test-mypod</span>
-<span style="color:#f92672">spec</span>:
-  <span style="color:#f92672">podAnnotations</span>:
-    <span style="color:#f92672">app</span>: <span style="color:#ae81ff">mypod</span>
-  <span style="color:#f92672">podLabels</span>:
-    <span style="color:#f92672">app</span>: <span style="color:#ae81ff">mypod</span>
-  <span style="color:#f92672">podSpec</span>:
-    <span style="color:#f92672">containers</span>:
-    - <span style="color:#f92672">image</span>: <span style="color:#ae81ff">gcr.io/google-containers/pause:3.1</span>
-      <span style="color:#f92672">imagePullPolicy</span>: <span style="color:#ae81ff">IfNotPresent</span>
-      <span style="color:#f92672">name</span>: <span style="color:#ae81ff">main</span>
-      <span style="color:#f92672">resources</span>:
-        <span style="color:#f92672">limits</span>:
-          <span style="color:#f92672">cpu</span>: <span style="color:#ae81ff">50m</span>
-          <span style="color:#f92672">memory</span>: <span style="color:#ae81ff">50Mi</span>
-    <span style="color:#f92672">nodeSelector</span>:
-      <span style="color:#f92672">project</span>: <span style="color:#ae81ff">test</span>
-</code></pre></div><p>集群中就可以看到这个MyPod对象已经存在了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># kubectl get mypod -n test-mypod</span>
-NAME           AGE
-mypod-sample   4m33s
-</code></pre></div><p>然后我们观察manager的日志，发现pod创建成功了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-verilog" data-lang="verilog"><span style="color:#ae81ff">1.6476801088302636e+09</span>  INFO    controller.mypod        create pod mypod<span style="color:#f92672">-</span>sample success {<span style="color:#e6db74">&#34;reconciler group&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;harryyann.github.io&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;MyPod&#34;</span>, <span style="color:#e6db74">&#34;name&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;mypod-sample&#34;</span>, <span style="color:#e6db74">&#34;namespace&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;test-mypod&#34;</span>}
-</code></pre></div><p>在集群上查看，mypod-sample这个pod确实已经创建起来了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># kubectl get po -n test-mypod</span>
-NAME                             READY   STATUS    RESTARTS   AGE
-mypod-manager-56d6687f75-h8cwd   1/1     Running   <span style="color:#ae81ff">0</span>          6m20s
-mypod-sample                     1/1     Running   <span style="color:#ae81ff">0</span>          5m54s
-</code></pre></div><p>查看MyPod对象的Status字段也被填充好了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># kubectl get mypod -n test-mypod mypod-sample  -oyaml</span>
-apiVersion: harryyann.github.io/v1
-kind: MyPod
-metadata:
-  creationTimestamp: <span style="color:#e6db74">&#34;2022-03-19T10:12:31Z&#34;</span>
-  generation: <span style="color:#ae81ff">1</span>
-  name: mypod-sample
-  namespace: test-mypod
-  resourceVersion: <span style="color:#e6db74">&#34;314990422&#34;</span>
-  selfLink: /apis/harryyann.github.io/v1/namespaces/test-mypod/mypods/mypod-sample
-  uid: ec645507-23c0-4158-9d3f-cfe01f8d52db
-spec:
-  podLabels:
-    sym-app: mypod
-  podSpec:
-    containers:
-    - image: ncr.nie.netease.com/gcr.io/google-containers/pause:3.1
-      imagePullPolicy: IfNotPresent
-      name: main
-      resources:
-        limits:
-          cpu: 50m
-          memory: 50Mi
-    nodeSelector:
-      project: test
-status:
-  createdTimestamp: <span style="color:#ae81ff">0</span>
-  nodeIp: 7.34.19.17
-  podIp: 7.53.69.18
-  podPhase: Running
-</code></pre></div><p>这就证明我们的Operator生效了，如果有问题，就是调谐里的逻辑没写对，修改代码然后重复执行构建镜像，重新创建manager的pod的过程反复调试即可。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-verilog" data-lang="verilog"><span style="display:flex;"><span><span style="color:#ae81ff">1.6476801020824914e+09</span>  INFO    controller.mypod        Starting EventSource    {<span style="color:#e6db74">&#34;reconciler group&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;harryyann.github.io&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;MyPod&#34;</span>, <span style="color:#e6db74">&#34;source&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;kind source: *v1.MyPod&#34;</span>}
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1.6476801020826638e+09</span>  INFO    controller.mypod        Starting Controller     {<span style="color:#e6db74">&#34;reconciler group&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;harryyann.github.io&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;MyPod&#34;</span>}
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1.647680102183413e+09</span>   INFO    controller.mypod        Starting workers        {<span style="color:#e6db74">&#34;reconciler group&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;harryyann.github.io&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;MyPod&#34;</span>, <span style="color:#e6db74">&#34;worker count&#34;</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>}
+</span></span></code></pre></div><p>然后我们用如下yaml创建一个MyPod对象：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">harryyann.github.io/v1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">MyPod</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">mypod-sample</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">test-mypod</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">podAnnotations</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">app</span>: <span style="color:#ae81ff">mypod</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">podLabels</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">app</span>: <span style="color:#ae81ff">mypod</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">podSpec</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">containers</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">image</span>: <span style="color:#ae81ff">gcr.io/google-containers/pause:3.1</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">imagePullPolicy</span>: <span style="color:#ae81ff">IfNotPresent</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">name</span>: <span style="color:#ae81ff">main</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">resources</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">limits</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">cpu</span>: <span style="color:#ae81ff">50m</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">memory</span>: <span style="color:#ae81ff">50Mi</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">nodeSelector</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">project</span>: <span style="color:#ae81ff">test</span>
+</span></span></code></pre></div><p>集群中就可以看到这个MyPod对象已经存在了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># kubectl get mypod -n test-mypod</span>
+</span></span><span style="display:flex;"><span>NAME           AGE
+</span></span><span style="display:flex;"><span>mypod-sample   4m33s
+</span></span></code></pre></div><p>然后我们观察manager的日志，发现pod创建成功了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-verilog" data-lang="verilog"><span style="display:flex;"><span><span style="color:#ae81ff">1.6476801088302636e+09</span>  INFO    controller.mypod        create pod mypod<span style="color:#f92672">-</span>sample success {<span style="color:#e6db74">&#34;reconciler group&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;harryyann.github.io&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;MyPod&#34;</span>, <span style="color:#e6db74">&#34;name&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;mypod-sample&#34;</span>, <span style="color:#e6db74">&#34;namespace&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;test-mypod&#34;</span>}
+</span></span></code></pre></div><p>在集群上查看，mypod-sample这个pod确实已经创建起来了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># kubectl get po -n test-mypod</span>
+</span></span><span style="display:flex;"><span>NAME                             READY   STATUS    RESTARTS   AGE
+</span></span><span style="display:flex;"><span>mypod-manager-56d6687f75-h8cwd   1/1     Running   <span style="color:#ae81ff">0</span>          6m20s
+</span></span><span style="display:flex;"><span>mypod-sample                     1/1     Running   <span style="color:#ae81ff">0</span>          5m54s
+</span></span></code></pre></div><p>查看MyPod对象的Status字段也被填充好了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># kubectl get mypod -n test-mypod mypod-sample  -oyaml</span>
+</span></span><span style="display:flex;"><span>apiVersion: harryyann.github.io/v1
+</span></span><span style="display:flex;"><span>kind: MyPod
+</span></span><span style="display:flex;"><span>metadata:
+</span></span><span style="display:flex;"><span>  creationTimestamp: <span style="color:#e6db74">&#34;2022-03-19T10:12:31Z&#34;</span>
+</span></span><span style="display:flex;"><span>  generation: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  name: mypod-sample
+</span></span><span style="display:flex;"><span>  namespace: test-mypod
+</span></span><span style="display:flex;"><span>  resourceVersion: <span style="color:#e6db74">&#34;314990422&#34;</span>
+</span></span><span style="display:flex;"><span>  selfLink: /apis/harryyann.github.io/v1/namespaces/test-mypod/mypods/mypod-sample
+</span></span><span style="display:flex;"><span>  uid: ec645507-23c0-4158-9d3f-cfe01f8d52db
+</span></span><span style="display:flex;"><span>spec:
+</span></span><span style="display:flex;"><span>  podLabels:
+</span></span><span style="display:flex;"><span>    sym-app: mypod
+</span></span><span style="display:flex;"><span>  podSpec:
+</span></span><span style="display:flex;"><span>    containers:
+</span></span><span style="display:flex;"><span>    - image: ncr.nie.netease.com/gcr.io/google-containers/pause:3.1
+</span></span><span style="display:flex;"><span>      imagePullPolicy: IfNotPresent
+</span></span><span style="display:flex;"><span>      name: main
+</span></span><span style="display:flex;"><span>      resources:
+</span></span><span style="display:flex;"><span>        limits:
+</span></span><span style="display:flex;"><span>          cpu: 50m
+</span></span><span style="display:flex;"><span>          memory: 50Mi
+</span></span><span style="display:flex;"><span>    nodeSelector:
+</span></span><span style="display:flex;"><span>      project: test
+</span></span><span style="display:flex;"><span>status:
+</span></span><span style="display:flex;"><span>  createdTimestamp: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>  nodeIp: 7.34.19.17
+</span></span><span style="display:flex;"><span>  podIp: 7.53.69.18
+</span></span><span style="display:flex;"><span>  podPhase: Running
+</span></span></code></pre></div><p>这就证明我们的Operator生效了，如果有问题，就是调谐里的逻辑没写对，修改代码然后重复执行构建镜像，重新创建manager的pod的过程反复调试即可。</p>
 </div>
     <div class="post-footer">
       <div class="info">
@@ -721,8 +720,8 @@ status:
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></body>
 </html>

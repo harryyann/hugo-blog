@@ -31,7 +31,7 @@ Singleflight的使用 singleflight 库，直译过来就是单飞，这个库的
       <guid>https://yanghairui.life/post/golang%E7%9A%84mutex%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/</guid>
       
         <description>互斥锁 互斥锁的数据结构 互斥锁是并发程序中对一个共享资源进行访问控制的常用手段，Golang中提供了mutex作为互斥锁的实现。mutex的数据结构如下：
-// 定义在src/sync/mutex.go  type Mutex struct{ state int32 sema uint32 } 包括两个字段：</description>
+// 定义在src/sync/mutex.go  type Mutex struct{  state int32  sema uint32 } 包括两个字段：</description>
       
     </item>
     
@@ -43,7 +43,7 @@ Singleflight的使用 singleflight 库，直译过来就是单飞，这个库的
       <guid>https://yanghairui.life/post/golang%E7%9A%84channel%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/</guid>
       
         <description>Channel的底层数据结构 channel是golang在语言层面提供的goroutine通信机制，也是我们经常使用的数据结构，它的数据结构如下：
-// 在src/runtime/chan.go中定义  type hchan struct{ // 环形队列相关  qcount uint // 当前队列中剩余元素的个数  dataqsiz uint // 环形队列的长度，即可以存放的元素个数  buf unsafe.</description>
+// 在src/runtime/chan.go中定义  type hchan struct{  // 环形队列相关  qcount uint // 当前队列中剩余元素的个数  dataqsiz uint // 环形队列的长度，即可以存放的元素个数  buf unsafe.</description>
       
     </item>
     
@@ -68,7 +68,7 @@ Singleflight的使用 singleflight 库，直译过来就是单飞，这个库的
       <guid>https://yanghairui.life/post/deferselect%E5%92%8Crange%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/</guid>
       
         <description>Defer defer语句用于延迟函数的调用，每次defer都会把一个函数压入栈中，当前函数返回前，再把延迟的函数取出来并执行，所以多个defer语句是后写的先执行的。
-几个题目 问题1：以下输出什么？ func deferFuncParameter() { var aInt = 1 defer fmt.</description>
+几个题目 问题1：以下输出什么？ func deferFuncParameter() {  var aInt = 1   defer fmt.</description>
       
     </item>
     
@@ -81,7 +81,7 @@ Singleflight的使用 singleflight 库，直译过来就是单飞，这个库的
       
         <description>Map的底层数据结构 Golang的map数据类型底层使用的是哈希表实现，一个哈希表可以有多个哈希表节点，即bucket，一个bucket保存着map中的一个或者一组键值对。
 hmap的数据结构： map的实现实际上就是runtime包里的hmap：
-// 定义在src/runtime/map.go中  type hmap struct{ count int // 当前保存的元素个数  .</description>
+// 定义在src/runtime/map.go中  type hmap struct{  count int // 当前保存的元素个数  .</description>
       
     </item>
     
@@ -106,7 +106,7 @@ hmap的数据结构： map的实现实际上就是runtime包里的hmap：
       <guid>https://yanghairui.life/post/golang%E7%9A%84option%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/</guid>
       
         <description>配置选项问题 当我们需要创建一个对象时，往往需要对这个对象的某些成员参数进行配置，比如下面这个结构体：
-type Server struct { Addr string Port int Protocol string Timeout time.</description>
+type Server struct {  Addr string  Port int  Protocol string  Timeout time.</description>
       
     </item>
     
@@ -119,7 +119,7 @@ type Server struct { Addr string Port int Protocol string Timeout time.</descrip
       
         <description>Slice的底层数据结构 Golang的slice切片依托于数组实现，和数组的差别就是slice可以方便的扩容，实际使用中除了在少数情况我们明确知道数组长度时，大多数时候都是用的是slice，因为不用担心容量不够的问题。但是如果不了解它内部的实现机制，就有可能会遭遇一些莫名的现象。
 slice底层结构：
-// 源码位于src/runtime/slice.gotype slice struct{array unsafe.Pointerlen intcap int}array是一个unsafe.</description>
+// 源码位于src/runtime/slice.gotype slice struct{array unsafe.Pointerlen intcap int} array是一个unsafe.</description>
       
     </item>
     

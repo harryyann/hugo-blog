@@ -18,7 +18,7 @@
   </title>
 
   
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.96.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta
     name="description"
     content="
@@ -32,8 +32,8 @@
   
   <link
     rel="stylesheet"
-    href="/css/main.min.7ca9a7b7632c545387f4ab9f7f943afeab89e7ed1c092ce9fb39263257779ce5.css"
-    integrity="sha256-fKmnt2MsVFOH9Kuff5Q6/quJ5&#43;0cCSzp&#43;zkmMld3nOU="
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -41,8 +41,8 @@
   
   <link
     rel="stylesheet"
-    href="/css/markupHighlight.min.8f07fad4abedfd5eb1396c6fef85ba7ec00ec867a79fb545c9db18df87f6760a.css"
-    integrity="sha256-jwf61Kvt/V6xOWxv74W6fsAOyGenn7VFydsY34f2dgo="
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -67,8 +67,8 @@
   
   <script
     type="text/javascript"
-    src="/js/anatole-header.min.413f798d8aa82610bef17a5ca1d7e962ec185be395f1aeb3f45d1891af568b65.js"
-    integrity="sha256-QT95jYqoJhC&#43;8XpcodfpYuwYW&#43;OV8a6z9F0Yka9Wi2U="
+    src="/js/anatole-header.min.d0408165d31a17f17bba83038bf54e86121f85021bdf936382e636f0f77a952f.js"
+    integrity="sha256-0ECBZdMaF/F7uoMDi/VOhhIfhQIb35NjguY28Pd6lS8="
     crossorigin="anonymous"
   ></script>
 
@@ -77,8 +77,8 @@
     
     <script
       type="text/javascript"
-      src="/js/anatole-theme-switcher.min.fcf9526f15b3b4e08472de192969ab28a4cdcb32ac94f83e85a8b84e9b45acd2.js"
-      integrity="sha256-/PlSbxWztOCEct4ZKWmrKKTNyzKslPg&#43;hai4TptFrNI="
+      src="/js/anatole-theme-switcher.min.65e936b591bf81484a5ac438c8e4ae6454fb25516d58ce911e4888d7f230bdc5.js"
+      integrity="sha256-Zek2tZG/gUhKWsQ4yOSuZFT7JVFtWM6RHkiI1/IwvcU="
       crossorigin="anonymous"
     ></script>
 
@@ -278,7 +278,7 @@
         <img src="/images/profile5.jpg" alt="profile picture" />
         <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
         <div class="description">
-          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+          <p>Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
         </div>
       </div>
     </div>
@@ -330,8 +330,8 @@
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></div>
 </aside>
@@ -372,32 +372,32 @@
 <h3 id="makefile的编写">Makefile的编写</h3>
 <p>Makefile中需要指明要进行哪些操作，这些操作需要有哪些前置操作，或者需要哪些前置文件，最终又生成了什么文件。</p>
 <p>Makefile的通用格式为：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">&lt;target&gt; : &lt;prerequisites&gt;
-<span style="color:#f92672">[</span>tab<span style="color:#f92672">]</span>  &lt;commands&gt;
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&lt;target&gt; : &lt;prerequisites&gt;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>tab<span style="color:#f92672">]</span>  &lt;commands&gt;
+</span></span></code></pre></div><ul>
 <li>target是这个操作要实现的目标，可以只是一个标签，也可以是一个文件名</li>
 <li>prerequisites指的是这个操作的需要的前置条件，这个没有可以不写，前置条件既可以是一个文件名，也可以是一个标签</li>
 <li>tab是一个制表符，注意是制表符，不是空格</li>
 <li>commands就是我们需要执行的shell命令了，一个操作可以有一个或多个命令，多个命令可以用<code>\</code>进行换行</li>
 </ul>
 <p>举个例子</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-makefile" data-lang="makefile">NAME <span style="color:#f92672">=</span> test
-VERSION <span style="color:#f92672">=</span> <span style="color:#e6db74">`</span>date +%Y%m%d<span style="color:#e6db74">`</span>  <span style="color:#75715e"># 今天的日期</span>
-NCR <span style="color:#f92672">=</span> ncr.nie.com/yanghairui/
-
-<span style="color:#75715e"># docker-push是target,docker-build是这个操作的前置操作
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">docker-push</span><span style="color:#f92672">:</span> docker-build
-   docker push <span style="color:#66d9ef">$(</span>NCR<span style="color:#66d9ef">)$(</span>NAME<span style="color:#66d9ef">)</span>:<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>
-
-<span style="color:#a6e22e">docker-build</span><span style="color:#f92672">:</span> go-build
-   docker build . -t <span style="color:#66d9ef">$(</span>NCR<span style="color:#66d9ef">)$(</span>NAME<span style="color:#66d9ef">)</span>:<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>
-
-<span style="color:#a6e22e">go-build</span><span style="color:#f92672">:</span>
-   GO111MODULE<span style="color:#f92672">=</span>on <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>   GOOS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;linux&#34;</span> <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>   GOARCH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;amd64&#34;</span> <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>   go build -o test 
-</code></pre></div><p>在Makefile所在的目录输入<code>make</code>，然后按回车，会按以下顺序执行操作：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-makefile" data-lang="makefile"><span style="display:flex;"><span>NAME <span style="color:#f92672">=</span> test
+</span></span><span style="display:flex;"><span>VERSION <span style="color:#f92672">=</span> <span style="color:#e6db74">`</span>date +%Y%m%d<span style="color:#e6db74">`</span>  <span style="color:#75715e"># 今天的日期</span>
+</span></span><span style="display:flex;"><span>NCR <span style="color:#f92672">=</span> ncr.nie.com/yanghairui/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># docker-push是target,docker-build是这个操作的前置操作
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">docker-push</span><span style="color:#f92672">:</span> docker-build
+</span></span><span style="display:flex;"><span>   docker push <span style="color:#66d9ef">$(</span>NCR<span style="color:#66d9ef">)$(</span>NAME<span style="color:#66d9ef">)</span>:<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">docker-build</span><span style="color:#f92672">:</span> go-build
+</span></span><span style="display:flex;"><span>   docker build . -t <span style="color:#66d9ef">$(</span>NCR<span style="color:#66d9ef">)$(</span>NAME<span style="color:#66d9ef">)</span>:<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">go-build</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>   GO111MODULE<span style="color:#f92672">=</span>on <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>   GOOS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;linux&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>   GOARCH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;amd64&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>   go build -o test 
+</span></span></code></pre></div><p>在Makefile所在的目录输入<code>make</code>，然后按回车，会按以下顺序执行操作：</p>
 <ul>
 <li>上面这个例子执行会先执行go-build标签的内容，编译一个go项目</li>
 <li>然后执行docker-build，打一个docker镜像</li>
@@ -451,8 +451,8 @@ NCR <span style="color:#f92672">=</span> ncr.nie.com/yanghairui/
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></body>
 </html>

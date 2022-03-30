@@ -18,12 +18,11 @@
   </title>
 
   
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.96.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta
     name="description"
     content="
-      
-Per aspera ad astra.
+      Per aspera ad astra.
 循此苦旅，终抵群星。
 
 
@@ -35,8 +34,8 @@ Per aspera ad astra.
   
   <link
     rel="stylesheet"
-    href="/css/main.min.7ca9a7b7632c545387f4ab9f7f943afeab89e7ed1c092ce9fb39263257779ce5.css"
-    integrity="sha256-fKmnt2MsVFOH9Kuff5Q6/quJ5&#43;0cCSzp&#43;zkmMld3nOU="
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -44,8 +43,8 @@ Per aspera ad astra.
   
   <link
     rel="stylesheet"
-    href="/css/markupHighlight.min.8f07fad4abedfd5eb1396c6fef85ba7ec00ec867a79fb545c9db18df87f6760a.css"
-    integrity="sha256-jwf61Kvt/V6xOWxv74W6fsAOyGenn7VFydsY34f2dgo="
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -70,8 +69,8 @@ Per aspera ad astra.
   
   <script
     type="text/javascript"
-    src="/js/anatole-header.min.413f798d8aa82610bef17a5ca1d7e962ec185be395f1aeb3f45d1891af568b65.js"
-    integrity="sha256-QT95jYqoJhC&#43;8XpcodfpYuwYW&#43;OV8a6z9F0Yka9Wi2U="
+    src="/js/anatole-header.min.d0408165d31a17f17bba83038bf54e86121f85021bdf936382e636f0f77a952f.js"
+    integrity="sha256-0ECBZdMaF/F7uoMDi/VOhhIfhQIb35NjguY28Pd6lS8="
     crossorigin="anonymous"
   ></script>
 
@@ -80,8 +79,8 @@ Per aspera ad astra.
     
     <script
       type="text/javascript"
-      src="/js/anatole-theme-switcher.min.fcf9526f15b3b4e08472de192969ab28a4cdcb32ac94f83e85a8b84e9b45acd2.js"
-      integrity="sha256-/PlSbxWztOCEct4ZKWmrKKTNyzKslPg&#43;hai4TptFrNI="
+      src="/js/anatole-theme-switcher.min.65e936b591bf81484a5ac438c8e4ae6454fb25516d58ce911e4888d7f230bdc5.js"
+      integrity="sha256-Zek2tZG/gUhKWsQ4yOSuZFT7JVFtWM6RHkiI1/IwvcU="
       crossorigin="anonymous"
     ></script>
 
@@ -296,7 +295,7 @@ Docker也支持远程通过socket进行连接，可以选择开启或者不开�
         <img src="/images/profile5.jpg" alt="profile picture" />
         <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
         <div class="description">
-          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+          <p>Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
         </div>
       </div>
     </div>
@@ -348,8 +347,8 @@ Docker也支持远程通过socket进行连接，可以选择开启或者不开�
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></div>
 </aside>
@@ -394,51 +393,51 @@ Docker也支持远程通过socket进行连接，可以选择开启或者不开�
 <li>
 <p>创建根证书RSA私钥
 命令输入后会提示输入密码，输入两次后会生成<strong>ca-key.pem</strong>文件。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ openssl genrsa -aes256 -out ca-key.pem <span style="color:#ae81ff">4096</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ openssl genrsa -aes256 -out ca-key.pem <span style="color:#ae81ff">4096</span>
+</span></span></code></pre></div></li>
 <li>
 <p>用这个RSA密钥创建CA证书</p>
 <p>自己给自己签发证书，也可以交给第三方机构签发。这里我们自己签发。<code>-days</code>参数指定多少天后过期，这里设置1000天。这一步会生成<strong>ca.pem</strong>文件，就是CA证书。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ openssl req -new -x509 -days <span style="color:#ae81ff">1000</span> -key ca-key.pem -sha256 -subj <span style="color:#e6db74">&#34;/CN=*&#34;</span> -out ca.pem
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ openssl req -new -x509 -days <span style="color:#ae81ff">1000</span> -key ca-key.pem -sha256 -subj <span style="color:#e6db74">&#34;/CN=*&#34;</span> -out ca.pem
+</span></span></code></pre></div></li>
 <li>
 <p>创建服务端私钥</p>
 <p>这一步生成的<strong>server-key.pem</strong>就是服务端私钥。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ openssl req -subj <span style="color:#e6db74">&#34;/CN=*&#34;</span> -sha256 -new -key server-key.pem -out server.csr
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ openssl req -subj <span style="color:#e6db74">&#34;/CN=*&#34;</span> -sha256 -new -key server-key.pem -out server.csr
+</span></span></code></pre></div></li>
 <li>
 <p>生成服务端证书签名请求csr文件</p>
 <p>csr（certificate signing request），里面包含公钥和服务端信息。这一步会生成<strong>server.csr</strong>文件，就是服务端证书。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ openssl req -subj <span style="color:#e6db74">&#34;/CN=*&#34;</span> -sha256 -new -key server-key.pem -out server.csr
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ openssl req -subj <span style="color:#e6db74">&#34;/CN=*&#34;</span> -sha256 -new -key server-key.pem -out server.csr
+</span></span></code></pre></div></li>
 <li>
 <p>生成签名过的服务端证书</p>
 <p>服务端证书需要签名，这一步生成的<strong>server-cert.pem</strong>文件就是签名过的服务端证书</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ openssl x509 -req -days <span style="color:#ae81ff">1000</span> -sha256 -in server.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out server-cert.pem
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ openssl x509 -req -days <span style="color:#ae81ff">1000</span> -sha256 -in server.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out server-cert.pem
+</span></span></code></pre></div></li>
 <li>
 <p>生成客户端私钥</p>
 <p>接下来我们生成客户端的私钥<strong>key.pem</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ openssl genrsa -out key.pem <span style="color:#ae81ff">4096</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ openssl genrsa -out key.pem <span style="color:#ae81ff">4096</span>
+</span></span></code></pre></div></li>
 <li>
 <p>生成客户端证书签名请求</p>
 <p>生成的<strong>client.csr</strong>文件就是客户端签名请求</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ openssl req -subj <span style="color:#e6db74">&#34;/CN=client&#34;</span> -new -key key.pem -out client.csr
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ openssl req -subj <span style="color:#e6db74">&#34;/CN=client&#34;</span> -new -key key.pem -out client.csr
+</span></span></code></pre></div></li>
 <li>
 <p>生成<strong>exfile.cnf</strong>配置文件</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ echo extendedKeyUsage<span style="color:#f92672">=</span>clientAuth &gt; extfile.cnf
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ echo extendedKeyUsage<span style="color:#f92672">=</span>clientAuth &gt; extfile.cnf
+</span></span></code></pre></div></li>
 <li>
 <p>生成签名过的客户端证书</p>
 <p>期间要输入密码，生成的<strong>cert.pem</strong>就是签名过的客户端证书</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ openssl x509 -req -days <span style="color:#ae81ff">1000</span> -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out cert.pem -extfile extfile.cnf
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ openssl x509 -req -days <span style="color:#ae81ff">1000</span> -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out cert.pem -extfile extfile.cnf
+</span></span></code></pre></div></li>
 <li>
 <p>最后删除多余的中间文件</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ rm -rf ca.srl client.csr extfile.cnf server.csr
-</code></pre></div><p>剩下的文件都是我们需要的：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ rm -rf ca.srl client.csr extfile.cnf server.csr
+</span></span></code></pre></div><p>剩下的文件都是我们需要的：</p>
 <ul>
 <li>ca.pem：CA机构证书</li>
 <li>ca-key.pem：根证书RSA私钥</li>
@@ -454,9 +453,9 @@ Docker也支持远程通过socket进行连接，可以选择开启或者不开�
 <ol>
 <li>
 <p>首先打开打开<code>/lib/systemd/system/docker.service</code>文件，找到这行内容：</p>
-<pre><code>ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+<pre tabindex="0"><code>ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
 </code></pre><p>把这行替换为以下格式：</p>
-<pre><code>ExecStart=/usr/bin/dockerd --tlsverify --tlscacert=/ca.pem --tlscert=/server-cert.pem --tlskey=/server-key.pem -H tcp://0.0.0.0:2376 -H unix:///var/run/docker.sock
+<pre tabindex="0"><code>ExecStart=/usr/bin/dockerd --tlsverify --tlscacert=/ca.pem --tlscert=/server-cert.pem --tlskey=/server-key.pem -H tcp://0.0.0.0:2376 -H unix:///var/run/docker.sock
 </code></pre><p>注意几个参数指定的文件的位置：</p>
 <ul>
 <li>&ndash;tlscacert：CA根证书</li>
@@ -467,12 +466,12 @@ Docker也支持远程通过socket进行连接，可以选择开启或者不开�
 </li>
 <li>
 <p>然后如果我们的机器没有放通2376端口，需要放通一下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo iptables -I INPUT -p tcp --dport 2376-j ACCEPT
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ sudo iptables -I INPUT -p tcp --dport 2376-j ACCEPT
+</span></span></code></pre></div></li>
 <li>
 <p>最后重启docker daemon让配置生效</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ systemctl daemon-reload <span style="color:#f92672">&amp;&amp;</span> systemctl restart docker
-</code></pre></div><p>没报错就说明配置成功了</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ systemctl daemon-reload <span style="color:#f92672">&amp;&amp;</span> systemctl restart docker
+</span></span></code></pre></div><p>没报错就说明配置成功了</p>
 </li>
 </ol>
 <h3 id="客户端远程连接">客户端远程连接</h3>
@@ -484,17 +483,17 @@ Docker也支持远程通过socket进行连接，可以选择开启或者不开�
 <li>
 <p>然后我们给服务端ip设置个域名</p>
 <p>在<code>/etc/hosts</code>文件中添加一行，前面的服务端ip，后面是它的域名。</p>
-<pre><code>192.168.121.138 docker-daemon
+<pre tabindex="0"><code>192.168.121.138 docker-daemon
 </code></pre></li>
 <li>
 <p>然后就可以进行连接了。</p>
 <p>指定客户端的三个文件(这里假设都在<code>/root/work/</code>目录下)，通过-H指定服务端的地址</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ docker --tlsverify --tlscacert<span style="color:#f92672">=</span>/root/work/ca.pem --tlscert<span style="color:#f92672">=</span>/root/work/cert.pem --tlskey<span style="color:#f92672">=</span>/root/work/key.pem -H tcp://docker-daemon:2376 version
-</code></pre></div><p><img src="/images/docker_remote/version.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ docker --tlsverify --tlscacert<span style="color:#f92672">=</span>/root/work/ca.pem --tlscert<span style="color:#f92672">=</span>/root/work/cert.pem --tlskey<span style="color:#f92672">=</span>/root/work/key.pem -H tcp://docker-daemon:2376 version
+</span></span></code></pre></div><p><img src="/images/docker_remote/version.png" alt=""></p>
 <p>可以看到客户端和服务端的版本，其他命令也都是可以的。</p>
 <p>还可以把几个证书文件拷贝到<code>~/.docker/</code>目录下，这样在连接时就可以不指定&ndash;tlscacert、&ndash;tlscert和&ndash;tlskey这几个参数了，docker client会自动加载这几个文件的。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ docker --tlsverify -H<span style="color:#f92672">=</span>tcp://docker-daemon:2376 version
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ docker --tlsverify -H<span style="color:#f92672">=</span>tcp://docker-daemon:2376 version
+</span></span></code></pre></div></li>
 </ol>
 </div>
     <div class="post-footer">
@@ -541,8 +540,8 @@ Docker也支持远程通过socket进行连接，可以选择开启或者不开�
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></body>
 </html>

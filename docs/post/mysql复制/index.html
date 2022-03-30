@@ -18,7 +18,7 @@
   </title>
 
   
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.96.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta
     name="description"
     content="
@@ -32,8 +32,8 @@
   
   <link
     rel="stylesheet"
-    href="/css/main.min.7ca9a7b7632c545387f4ab9f7f943afeab89e7ed1c092ce9fb39263257779ce5.css"
-    integrity="sha256-fKmnt2MsVFOH9Kuff5Q6/quJ5&#43;0cCSzp&#43;zkmMld3nOU="
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -41,8 +41,8 @@
   
   <link
     rel="stylesheet"
-    href="/css/markupHighlight.min.8f07fad4abedfd5eb1396c6fef85ba7ec00ec867a79fb545c9db18df87f6760a.css"
-    integrity="sha256-jwf61Kvt/V6xOWxv74W6fsAOyGenn7VFydsY34f2dgo="
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
     crossorigin="anonymous"
     type="text/css"
   />
@@ -67,8 +67,8 @@
   
   <script
     type="text/javascript"
-    src="/js/anatole-header.min.413f798d8aa82610bef17a5ca1d7e962ec185be395f1aeb3f45d1891af568b65.js"
-    integrity="sha256-QT95jYqoJhC&#43;8XpcodfpYuwYW&#43;OV8a6z9F0Yka9Wi2U="
+    src="/js/anatole-header.min.d0408165d31a17f17bba83038bf54e86121f85021bdf936382e636f0f77a952f.js"
+    integrity="sha256-0ECBZdMaF/F7uoMDi/VOhhIfhQIb35NjguY28Pd6lS8="
     crossorigin="anonymous"
   ></script>
 
@@ -77,8 +77,8 @@
     
     <script
       type="text/javascript"
-      src="/js/anatole-theme-switcher.min.fcf9526f15b3b4e08472de192969ab28a4cdcb32ac94f83e85a8b84e9b45acd2.js"
-      integrity="sha256-/PlSbxWztOCEct4ZKWmrKKTNyzKslPg&#43;hai4TptFrNI="
+      src="/js/anatole-theme-switcher.min.65e936b591bf81484a5ac438c8e4ae6454fb25516d58ce911e4888d7f230bdc5.js"
+      integrity="sha256-Zek2tZG/gUhKWsQ4yOSuZFT7JVFtWM6RHkiI1/IwvcU="
       crossorigin="anonymous"
     ></script>
 
@@ -155,7 +155,7 @@
 
     ,
         "url" : "https:\/\/yanghairui.life\/post\/mysql%E5%A4%8D%E5%88%B6\/",
-        "wordCount" : "317",
+        "wordCount" : "316",
         "genre" : [ 
       
       "数据库"
@@ -278,7 +278,7 @@
         <img src="/images/profile5.jpg" alt="profile picture" />
         <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
         <div class="description">
-          <p><br />Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+          <p>Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
         </div>
       </div>
     </div>
@@ -330,8 +330,8 @@
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></div>
 </aside>
@@ -392,7 +392,7 @@
 </li>
 </ol>
 <h1 id="复制的执行过程">复制的执行过程</h1>
-<p><img src="/images/replication/replication2.png" alt="图片来自于<极客时间-MySQL实战45讲>"></p>
+<p><img src="/images/replication/replication2.png" alt="图片来自于&lt;极客时间-MySQL实战45讲&gt;"></p>
 <h4 id="主库">主库：</h4>
 <ol>
 <li>当有一个写请求时，先写内存的undo log，undo log主要用于事务回滚和<strong>MVCC</strong>。</li>
@@ -407,13 +407,13 @@
 <li>然后备库的sql线程会从relay log中读取日志，在本地重放。</li>
 </ol>
 <p>备库也可以作为其他备库的主库，再把这份数据同步到备库的备库中，只需要开启一个参数<code>log_slave_updates</code>为<code>ON</code>即可在备库上也会在重放时生成binlog。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;log_slave_updates&#34;</span>;
-<span style="color:#f92672">+-------------------+-------+</span>
-<span style="color:#f92672">|</span> Variable_name     <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
-<span style="color:#f92672">+-------------------+-------+</span>
-<span style="color:#f92672">|</span> log_slave_updates <span style="color:#f92672">|</span> <span style="color:#66d9ef">ON</span>    <span style="color:#f92672">|</span>
-<span style="color:#f92672">+-------------------+-------+</span>
-</code></pre></div><h1 id="复制的拓扑结构">复制的拓扑结构</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;log_slave_updates&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+-------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> Variable_name     <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+-------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> log_slave_updates <span style="color:#f92672">|</span> <span style="color:#66d9ef">ON</span>    <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+-------------------+-------+</span>
+</span></span></code></pre></div><h1 id="复制的拓扑结构">复制的拓扑结构</h1>
 <p>MySQL主备复制的限制</p>
 <ol>
 <li>一个备库只能有一个主库，一个主库可以有多个备库。</li>
@@ -448,7 +448,7 @@
 <h4 id="分发主库">分发主库</h4>
 <p>当使用一主多备的模式下，当备库过多，每个备库一个IO线程会对主库造成较高负载，尤其是当一个很大的数据插入操作时，主库的负载会显著上升，因为多个备库同时请求这块大数据。</p>
 <p>使用一个备库作为分发主库，它也是主库的备库，然后其他备库都作为这个备库的备库，分发主库的唯一作用就是向其他所有备库提供主库的binlog。并且因为分发主库不做任何的查询，所以可以设置存储引擎为blackhole。</p>
-<pre><code>Tips:blackhole
+<pre tabindex="0"><code>Tips:blackhole
 
 blackhole存储引擎，就像它的名字，只进不出，所有插入的数据都不会插入到B+树，只会记录binlog，一般也只用于分发主库的功能
 </code></pre><p><img src="/images/replication/replication5.png" alt=""></p>
@@ -462,12 +462,12 @@ blackhole存储引擎，就像它的名字，只进不出，所有插入的数�
 <li>percona-toolkit的pt-table-checksum工具，这个工具的原理就是给主库插入一条数据，然后看看备库中是否同步过去了</li>
 <li>在备库执行<code>show slave status</code>命令，字段<code>Seconds_Behind_Master</code>就显示了备库延迟了多少秒</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">MariaDB [(none)]<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> slave status<span style="color:#960050;background-color:#1e0010">\</span>G
-<span style="color:#f92672">***************************</span> <span style="color:#ae81ff">1</span>. row <span style="color:#f92672">***************************</span>
-......
-Seconds_Behind_Master: <span style="color:#ae81ff">0</span>
-......
-</code></pre></div><h2 id="主备延迟的主要原因">主备延迟的主要原因</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>MariaDB [(none)]<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> slave status<span style="color:#960050;background-color:#1e0010">\</span>G
+</span></span><span style="display:flex;"><span><span style="color:#f92672">***************************</span> <span style="color:#ae81ff">1</span>. row <span style="color:#f92672">***************************</span>
+</span></span><span style="display:flex;"><span>......
+</span></span><span style="display:flex;"><span>Seconds_Behind_Master: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>......
+</span></span></code></pre></div><h2 id="主备延迟的主要原因">主备延迟的主要原因</h2>
 <p>在网络正常时，日志从主库传给备库的耗时是很短的，所以主要是备库从relay log中重放导致的<code>Seconds_Behind_Master</code>的延迟。</p>
 <h3 id="relay-log重放慢的原因">Relay log重放慢的原因</h3>
 <ul>
@@ -484,13 +484,13 @@ Seconds_Behind_Master: <span style="color:#ae81ff">0</span>
 <p>MySQL在5.6版本支持了多个sql线程尝试解决这个问题。</p>
 <h3 id="备库sql线程的并行复制">备库sql线程的并行复制</h3>
 <p>MySQL5.6以后支持了备库多个sql线程进行relay log的重放操作。可以通过参数<code>slave_parallel_workers</code>参数指定sql线程的数量，默认是0：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;slave_parallel_workers&#34;</span>;
-<span style="color:#f92672">+------------------------+-------+</span>
-<span style="color:#f92672">|</span> Variable_name          <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
-<span style="color:#f92672">+------------------------+-------+</span>
-<span style="color:#f92672">|</span> slave_parallel_workers <span style="color:#f92672">|</span> <span style="color:#ae81ff">0</span>     <span style="color:#f92672">|</span>
-<span style="color:#f92672">+------------------------+-------+</span>
-</code></pre></div><h4 id="多个sql线程并行复制的事务执行顺序问题">多个sql线程并行复制的事务执行顺序问题</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#34;slave_parallel_workers&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+------------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> Variable_name          <span style="color:#f92672">|</span> Value <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+------------------------+-------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> slave_parallel_workers <span style="color:#f92672">|</span> <span style="color:#ae81ff">0</span>     <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+------------------------+-------+</span>
+</span></span></code></pre></div><h4 id="多个sql线程并行复制的事务执行顺序问题">多个sql线程并行复制的事务执行顺序问题</h4>
 <p><strong>MySQL5.6的并行复制策略</strong></p>
 <p><strong>按库分发</strong>。即如果事务操作的是不同数据库，那么可以被分发给不同的线程执行。这种方案明显分发效率很低。如果主库有多个Database，并且各个Database的压力平衡，会有一定效果。好处是简单，这种方案对binlog，外键等没有任何要求。</p>
 <p><strong>MariaDB的并行复制策略</strong></p>
@@ -500,7 +500,7 @@ Seconds_Behind_Master: <span style="color:#ae81ff">0</span>
 <li><strong>主库上可以并行的事务，那么备库也一定可以</strong></li>
 </ul>
 <p>基于以上两点，MariaDB通过添加<strong>commit_id</strong>识别出同一组提交的事务，然后把每组的事务分发到多个线程执行，执行完一组，再执行下一组。</p>
-<pre><code>MariaDB的同一组事务提交的时候，会有一个相同的commit_id，它是全局递增的，binlog中记录的每一行都会记录下commit_id
+<pre tabindex="0"><code>MariaDB的同一组事务提交的时候，会有一个相同的commit_id，它是全局递增的，binlog中记录的每一行都会记录下commit_id
 </code></pre><p>这种方案的不足：</p>
 <ol>
 <li>和主库的执行过程相比，仍有吞吐量上的差距，因为备库的重放过程是一个事务组一个事务组串行的，每一组都要等前一组事务执行完才能开始执行。主库上一组事务提交时，下一组事务是同时处于执行中状态的。</li>
@@ -512,7 +512,7 @@ Seconds_Behind_Master: <span style="color:#ae81ff">0</span>
 <li>DATABASE，那就是MySQL5.6的按库分发的策略</li>
 <li>LOGICAL_CLOCK，就是基于MariaDB的分发策略，进行了一点优化，MariaDB是在事务commit时确定的commit_id，而InnoDB的事务是两阶段提交的，当redo log处于prepare状态时，事务就已经是可以提交的了，事务的所有的关于锁的检查都已经处理完了，所以MySQL5.7版本中除了同一组提交的事务外，同时处于prepare，以及prepare到commit状态的事务也是可以并行执行的。</li>
 </ul>
-<pre><code>LOGICAL_CLOCK有两个和binlog提交相关的参数可以设置：
+<pre tabindex="0"><code>LOGICAL_CLOCK有两个和binlog提交相关的参数可以设置：
 binlog_group_commit_sync_delay：表示延迟多少微妙才调用fsync写入磁盘
 binlog_group_commit_sync_no_delay_count：表示累计多少次以后才调用fsync
 以上两个参数可以人为的拉长binlog写入磁盘的时间，制造出更多同时处于prepare阶段的事务，从而提升备库的并发度
@@ -546,7 +546,7 @@ binlog_group_commit_sync_no_delay_count：表示累计多少次以后才调用fs
 </li>
 </ol>
 <p><strong>关于GTID</strong>：</p>
-<pre><code>GTID代表执行过的事务的编号，在MySQL5.6版本引入，它是一个全局事务的ID，是一个事务在提交时生成的，全局递增。这里要注意和另一个事务ID transaction_id进行区分，transaction_id是在事务开始时分配的，GTID是在事务提交时分配的，所以虽然都是递增的，但GTID一定是连续的，而transaction_id可能会因为事务回滚造成不连续。
+<pre tabindex="0"><code>GTID代表执行过的事务的编号，在MySQL5.6版本引入，它是一个全局事务的ID，是一个事务在提交时生成的，全局递增。这里要注意和另一个事务ID transaction_id进行区分，transaction_id是在事务开始时分配的，GTID是在事务提交时分配的，所以虽然都是递增的，但GTID一定是连续的，而transaction_id可能会因为事务回滚造成不连续。
 
 每个数据库实例都会维护一个GTID集合记录自己执行过的事务，备库中的`Retrieved_Gtid_Set`维护的是从主库接收到的GTID集合，`Executed_Gtid_Set`则表示备库已经执行的GTID集合。
 
@@ -566,21 +566,21 @@ GTID主要是解决主备切换时需要寻找位点的问题，有了GTID后切
 <li>如果返回值&gt;=0，则说明备库已经同步过那个主库的binlog位置了</li>
 <li>否则，就说明这个备库还没同步到，此时可以有多种方案，可以选择到主库执行该查询，或者换个备库重复上述过程，或者在这个备库再执行一遍这套操作。到主库查询比较快，如果继续访问备库，就要设个最大重试次数或者超时时间，避免无限等待。</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> master status;
-<span style="color:#f92672">+------------------+-----------+--------------+------------------+</span>
-<span style="color:#f92672">|</span> File             <span style="color:#f92672">|</span> Position  <span style="color:#f92672">|</span> Binlog_Do_DB <span style="color:#f92672">|</span> Binlog_Ignore_DB <span style="color:#f92672">|</span>
-<span style="color:#f92672">+------------------+-----------+--------------+------------------+</span>
-<span style="color:#f92672">|</span> mysql<span style="color:#f92672">-</span>bin.<span style="color:#ae81ff">000003</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">173798701</span> <span style="color:#f92672">|</span>              <span style="color:#f92672">|</span>                  <span style="color:#f92672">|</span>
-<span style="color:#f92672">+------------------+-----------+--------------+------------------+</span>
-<span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> sec)
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#a6e22e">master_pos_wait</span>(<span style="color:#e6db74">&#34;mysql-bin.000003&#34;</span>, <span style="color:#ae81ff">173798701</span>, <span style="color:#ae81ff">1</span>);
-<span style="color:#f92672">+---------------------------------------------------+</span>
-<span style="color:#f92672">|</span> <span style="color:#a6e22e">master_pos_wait</span>(<span style="color:#e6db74">&#34;mysql-bin.000003&#34;</span>, <span style="color:#ae81ff">173798701</span>, <span style="color:#ae81ff">1</span>) <span style="color:#f92672">|</span>
-<span style="color:#f92672">+---------------------------------------------------+</span>
-<span style="color:#f92672">|</span>                                                 <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span>
-<span style="color:#f92672">+---------------------------------------------------+</span>
-<span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> sec)
-</code></pre></div><p><strong>等GTID</strong>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> master status;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+------------------+-----------+--------------+------------------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> File             <span style="color:#f92672">|</span> Position  <span style="color:#f92672">|</span> Binlog_Do_DB <span style="color:#f92672">|</span> Binlog_Ignore_DB <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+------------------+-----------+--------------+------------------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> mysql<span style="color:#f92672">-</span>bin.<span style="color:#ae81ff">000003</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">173798701</span> <span style="color:#f92672">|</span>              <span style="color:#f92672">|</span>                  <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+------------------+-----------+--------------+------------------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> sec)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>Mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#a6e22e">master_pos_wait</span>(<span style="color:#e6db74">&#34;mysql-bin.000003&#34;</span>, <span style="color:#ae81ff">173798701</span>, <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+---------------------------------------------------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> <span style="color:#a6e22e">master_pos_wait</span>(<span style="color:#e6db74">&#34;mysql-bin.000003&#34;</span>, <span style="color:#ae81ff">173798701</span>, <span style="color:#ae81ff">1</span>) <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+---------------------------------------------------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span>                                                 <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+---------------------------------------------------+</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">000</span> sec)
+</span></span></code></pre></div><p><strong>等GTID</strong>：</p>
 <p>和等主库位点类似的，同样也有一个等GTID的命令可以使用：<code>select wait_for_executed_gtid_set(gtid_set, timeout);</code></p>
 <p>这条命令的含义是等待，直到这个从库执行过的事务中包含传入的gtid_set，返回0，如果超时就返回1。</p>
 <p>等GTID相比于等主库位点的好处是：等主库位点的方案中，执行完一个事务，还要使用<code>show master status</code>命令得到binlog的文件名和位置，而在<strong>MySQL5.7.6版本开始，可以在执行完一个更新类的事务后，返回这个事务的GTID给客户端</strong>，这样就比等位点少了一次主库的查询操作。</p>
@@ -599,8 +599,8 @@ GTID主要是解决主备切换时需要寻找位点的问题，有了GTID后切
 <p>同时，异步方案，如果主库突然宕机，而binlog还没有发送给备库时，这部分数据就有可能会在备库丢失。</p>
 <h2 id="半同步方案">半同步方案</h2>
 <p>即<strong>semi-sync</strong>，在MySQL5.7中通过一下命令可以开启：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"><span style="color:#66d9ef">set</span> global rpl_semi_sync_master_wait_point <span style="color:#f92672">=</span> AFTER_SYNC;
-</code></pre></div><h4 id="semi-sync的设计">semi-sync的设计</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span><span style="color:#66d9ef">set</span> global rpl_semi_sync_master_wait_point <span style="color:#f92672">=</span> AFTER_SYNC;
+</span></span></code></pre></div><h4 id="semi-sync的设计">semi-sync的设计</h4>
 <ol>
 <li>主库中一个事务提交的时候，会把binlog发给备库</li>
 <li>备库收到了binlog之后，会返回主库一个ACK，以确认自己收到了</li>
@@ -669,8 +669,8 @@ GTID主要是解决主备切换时需要寻找位点的问题，有了GTID后切
   
   <script
     type="text/javascript"
-    src="/js/medium-zoom.min.bdc7b23aff63497a79433b3920b03e2473399d90ad4c2d87cf7c08d33d61966f.js"
-    integrity="sha256-vceyOv9jSXp5Qzs5ILA&#43;JHM5nZCtTC2Hz3wI0z1hlm8="
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
     crossorigin="anonymous"
   ></script></body>
 </html>
