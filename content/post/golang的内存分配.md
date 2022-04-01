@@ -181,7 +181,7 @@ Go语言在运行时，每个goroutine都维护着自己的栈区，一个gorout
 
 ## 小于32KB的内存分配
 
-当程序发生了小于32KB的小块内存申请时，Go会从一个叫做**mcache**的本地缓存给程序分配内存。这样的一个内存块叫mspan。mcache是和GMP模型中的P绑定的（关于GMP可以查看[Goroutine的调度模型]()这篇文章），如下：
+当程序发生了小于32KB的小块内存申请时，Go会从一个叫做**mcache**的本地缓存给程序分配内存。这样的一个内存块叫mspan。mcache是和GMP模型中的P绑定的（关于GMP可以查看[Goroutine的调度模型](https://yanghairui.life/post/goroutine%E7%9A%84%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B/)这篇文章），如下：
 
 ![](/images/neicun/32.png)
 

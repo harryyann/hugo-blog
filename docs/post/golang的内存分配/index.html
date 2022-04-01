@@ -504,7 +504,7 @@
 </li>
 </ul>
 <h2 id="小于32kb的内存分配">小于32KB的内存分配</h2>
-<p>当程序发生了小于32KB的小块内存申请时，Go会从一个叫做<strong>mcache</strong>的本地缓存给程序分配内存。这样的一个内存块叫mspan。mcache是和GMP模型中的P绑定的（关于GMP可以查看<a href="">Goroutine的调度模型</a>这篇文章），如下：</p>
+<p>当程序发生了小于32KB的小块内存申请时，Go会从一个叫做<strong>mcache</strong>的本地缓存给程序分配内存。这样的一个内存块叫mspan。mcache是和GMP模型中的P绑定的（关于GMP可以查看<a href="https://yanghairui.life/post/goroutine%E7%9A%84%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B/">Goroutine的调度模型</a>这篇文章），如下：</p>
 <p><img src="/images/neicun/32.png" alt=""></p>
 <p>当前运行的goroutine会从mcache中查找可用的mspan，由于同一时刻，一个P中只有一个goroutine在运行，从本地P的mcache中分配内存通过原子操作不需要加锁，所以这种分配效率很高，同时由于P和M的绑定，也使得goroutine和M的亲缘性更好。</p>
 <p>mspan的大小并不是一样的，而是按照大小，从8KB到32KB分了不同种类的mspan，主要是为了不产生浪费，需要多少拿多少。</p>
