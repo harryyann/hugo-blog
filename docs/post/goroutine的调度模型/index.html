@@ -90,7 +90,9 @@
   
   <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Goroutine的调度模型"/>
-<meta name="twitter:description" content=""/>
+<meta name="twitter:description" content="Goroutine Goroutine是一个与其他 goroutines 并行运行在同一地址空间的Go函数或者方法，一个运行的Go程序由一个或多个goroutines组成。
+Go程序在执行时实际上是通过Go的runtime与操作系统内核进行交互。Go程序中创建的goroutines、内存对象等都是交由runtime去管理的，如下图：
+Goroutine和Thread的区别 内存占用不同 创建一个goroutine的栈的大小，在 go1.4 版本以后是 2KB，运行过程中如果栈不够再进行扩容（这部分内容可以查看Go的内存管理这篇文章）。"/>
 
 
 
@@ -111,7 +113,7 @@
         "alternativeHeadline": "",
         "description": "
       
-        
+        Goroutine Goroutine是一个与其他 goroutines 并行运行在同一地址空间的Go函数或者方法，一个运行的Go程序由一个或多个goroutines组成。\nGo程序在执行时实际上是通过Go的runtime与操作系统内核进行交互。Go程序中创建的goroutines、内存对象等都是交由runtime去管理的，如下图：\nGoroutine和Thread的区别 内存占用不同 创建一个goroutine的栈的大小，在 go1.4 版本以后是 2KB，运行过程中如果栈不够再进行扩容（这部分内容可以查看Go的内存管理这篇文章）。
 
 
       
@@ -141,9 +143,9 @@
             "name": "杨海瑞"
         },
         "copyrightYear" : "2022",
-        "dateCreated": "2022-04-01T14:43:20.00Z",
-        "datePublished": "2022-04-01T14:43:20.00Z",
-        "dateModified": "2022-04-01T14:43:20.00Z",
+        "dateCreated": "2022-02-19T14:43:20.00Z",
+        "datePublished": "2022-02-19T14:43:20.00Z",
+        "dateModified": "2022-02-19T14:43:20.00Z",
         "publisher":{
             "@type":"Organization",
             "name": "杨海瑞",
@@ -161,9 +163,31 @@
 
     ,
         "url" : "https:\/\/yanghairui.life\/post\/goroutine%E7%9A%84%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B\/",
-        "wordCount" : "0",
-        "genre" : [ ],
-        "keywords" : [ ]
+        "wordCount" : "147",
+        "genre" : [ 
+      
+      "golang"
+
+    ],
+        "keywords" : [ 
+      
+      "golang"
+
+    
+      
+        ,
+
+      
+      "GMP"
+
+    
+      
+        ,
+
+      
+      "Work-Stealing"
+
+    ]
     }
   </script>
 
@@ -351,20 +375,150 @@
             <em class="fas fa-calendar-day"></em>
             <span class="date"
               >
-                Fri, Apr 1, 2022
+                Sat, Feb 19, 2022
 
 
               </span
             >
             <em class="fas fa-stopwatch"></em>
-            <span class="reading-time">阅读时间 0 分钟</span>
+            <span class="reading-time">阅读时间 1 分钟</span>
           </div>
 
         
-      </div></div>
+      </div><h1 id="goroutine">Goroutine</h1>
+<p>Goroutine是一个与其他  goroutines 并行运行在同一地址空间的Go函数或者方法，一个运行的Go程序由一个或多个goroutines组成。</p>
+<p>Go程序在执行时实际上是通过Go的runtime与操作系统内核进行交互。Go程序中创建的goroutines、内存对象等都是交由runtime去管理的，如下图：</p>
+<p><img src="/images/goroutine/goroutine.png" alt=""></p>
+<h2 id="goroutine和thread的区别">Goroutine和Thread的区别</h2>
+<h4 id="内存占用不同">内存占用不同</h4>
+<p>创建一个goroutine的栈的大小，在 go1.4 版本以后是 2KB，运行过程中如果栈不够再进行扩容（这部分内容可以查看<a href="https://yanghairui.life/post/golang%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/">Go的内存管理</a>这篇文章）。</p>
+<p>而一个标准的POSIX线程的创建，默认都会比较大(1 ~ 8MB栈内存)，而且还需要一个称为 “guard page” 的内存空间用于隔离不同的线程栈空间。而且线程的栈空间一旦创建完成就不能变化，会有 ”溢栈“ 的风险。</p>
+<h4 id="创建销毁的开销不同">创建销毁的开销不同</h4>
+<p>POSIX线程都是内核级别的交互，创建和销毁的开销都较大。</p>
+<p>而goroutine是完全用户态的，交由runtime去维护，创建和销毁的开销都非常小，基本上平时写程序都是随意创建。</p>
+<h4 id="调度切换">调度切换</h4>
+<p>线程与线程的切换，不考虑陷入内核的话，平均会消耗1000到1500纳秒（主要是因为上下文保存的成本高，较多寄存器，还有很多公平性要保证，和复杂的时间计算统计）。</p>
+<p>而goroutine的切换，平均约为200纳秒（纯用户态切换，只有3个寄存器），并且还没有陷入内核的问题，切换成本要大大低于线程的切换。</p>
+<h4 id="复杂性">复杂性</h4>
+<p>多线程之间通讯，要通过共享空间，多个线程访问同一块内存空间，由于数据竞争，就要加锁，开销就比较大。并且线程也是不能无限制的去创建的。如果使用多路复用，就要有大量的callback，代码的可读性也会较差。</p>
+<p>Goroutine之间通讯可以通过channel，性能就好的多。并且goroutine的阻塞，并不会导致内核的线程阻塞，runtime会换其他的goroutine到这个线程执行，所以多核CPU的利用率很高。</p>
+<h2 id="goroutine的mn模型">Goroutine的M:N模型</h2>
+<p>Go程序在运行时，runtime会创建多个内核线程，之后我们创建的goroutines都会经过runtime调度到这些内核线程中执行，goroutine由于非常轻量，所以可以创建大量的goroutines，然后分配到runtime创建的几个内核线程中，多个goroutines之间可能是并发(由一个内核线程执行)，也可能是并行(分配到了不同的线程执行)。Goroutines的数量一般都会远大于线程数，所以也叫做 M:N 模型。</p>
+<p><img src="/images/goroutine/mn.png" alt=""></p>
+<p>如上图，g1等就是goroutine，这些goroutines被分配到了多个内核线程中去执行。</p>
+<h1 id="gmp模型">GMP模型</h1>
+<h2 id="gm调度器模型">GM调度器模型</h2>
+<p><strong>G</strong>，就是Goroutine的缩写，每次我们<code>go func()</code>时都会创建一个G，它的底层是<code>runtime.g</code>的结构体，包含了当前goroutine的状态、堆栈等上下文信息。</p>
+<p><strong>M</strong>，就是工作线程，Machine的缩写，底层是<code>runtime.m</code>结构体。所有的M都是有线程栈的。如果不对线程栈提供内存的话，系统会给该线程栈提供内存（不同操作系统的默认线程栈大小不同），如果指定了线程栈，则在M执行G时，会将M的stack指向G的stack，M的PC寄存器指向G的PC寄存器。</p>
+<p>GM调度器模型是在Go1.2之前的goroutine调度模型，它的执行过程如下图：</p>
+<p><img src="/images/goroutine/gm.png" alt=""></p>
+<p>首先会有一个全局队列，里面挂着一些待运行的G，由于是队列是全局的，所以要访问就需要加锁。然后多个M会从全局队列中获取G然后运行。</p>
+<p>当一个G由于系统调用被阻塞，运行这个G的M就也会被阻塞，这是就需要再创建/唤醒一个新的M来运行其他没有阻塞的G，M可以按照需要不停的创建，而活跃的M个数（处于非阻塞）要求小于系统变量 GOMAXPROCS。</p>
+<h4 id="gm模型的问题">GM模型的问题</h4>
+<p><strong>单一全局互斥锁</strong>：即全局队列的那把大锁，会导致所有对队列中G的操作都要加锁，效率很低。</p>
+<p><strong>G的传递问题</strong>：当正在M中运行的一个G，它的代码里又创建了一个G（goroutine里创建goroutine），这个G依然会被放在全局队列中等待调度，这就导致调度的延迟增大以及额外的性能开销（直接在本地M上执行不就好了）。</p>
+<p><strong>每个M都持有内存缓存</strong>：每个M都会有自己的内存缓存mcache（mcache相关内容可以查看<a href="https://yanghairui.life/post/golang%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/">golang的内存分配</a>这篇文章），而只有M在运行G时会使用到这个内存缓存，当M处于系统调用时并不需要，而我们实际开发中，处于系统调用阻塞的线程，和在运行的线程比例高达100:1，即大部分时候M的内存缓存都是不需要的，造成了很大内存浪费。同时M缓存的内存<strong>亲缘性</strong>也比较差，比如当一个G在M上跑了一会然后进行系统调用阻塞住，这个G就会从M上摘下来挂到全局队列中，等这个G的系统调用执行完，就可能分配到其他的M上，导致这个M的缓存中存储的这个G的上下文就浪费了。</p>
+<p><strong>严重的M阻塞/解锁</strong>：在大量G系统调用的情况下，M会被经常的阻塞和唤醒，这增加了很多开销。</p>
+<hr>
+<p>由于上述的GM模型限制了Go并发程序的伸缩性，尤其是那些高吞吐或者并行计算要求高（系统调用多）的程序。于是就产生了新的GMP模型。</p>
+<h2 id="gmp调度器模型">GMP调度器模型</h2>
+<p><strong>P</strong>：Processor的缩写，是一个抽象的概念，并不是真的物理处理器。P实际上代表了M所需要的上下文环境，它负责衔接M和G的调度。P可以理解为一个队列，它里面会存着一些待运行的G（即有两种队列，全局队列和每个P的队列），当P中有G需要运行时，就需要创建或者唤醒一个M来执行它的G。P的数量可以通过 <code>GOMAXPROCS</code> 这个变量来设定，在 go1.5 之后默认是机器的核数，之前是1。</p>
+<p>由于P的引入，上面说的M的内存缓存就移动到了P中，整个调度就变成了下图这样：</p>
+<p><img src="/images/goroutine/gmp.png" alt=""></p>
+<p>每个M都需要绑定P才能执行G，每个M可能会在自己绑定的P的队列，或者其他P的队列，或者是全局队列中找到G来执行。</p>
+<p>P的队列，还是可能会被自己的M或者其他的M的并发访问，它使用了<strong>LockFree</strong>的算法实现原子操作来避免加锁，从而提升性能。</p>
+<h4 id="工作窃取">工作窃取</h4>
+<p>每个M都是运行自己P中的G，当自己P中没有待运行的G了，就会先去全局队列中找找（全局队列的访问是要加锁的），然后捞到自己的P中，如果全局队列中也没有G了，就会从其他P中 “偷” 一些G到自己这里，这就是 <strong>Work-Stealing</strong> 算法。</p>
+<h4 id="系统调用">系统调用</h4>
+<p>当一个G进行系统调用时，M和G都会进入阻塞，而此时P的状态会变成 syscall，意味着这个P的G正处在系统调用中，此时这个P是不能立刻调度给其他的M的，如果在短时间系统调用就能结束，M被唤醒，那么M还会优先获取这个 syscall 状态的P，这样有利于数据的局部性。</p>
+<p>当这个系统调用持续时间太长，导致P中后续的G无法被执行，此时这个P就会跟M彻底解绑。runtime会有一个特殊的G叫做 <strong>sysmon</strong>，他也会绑定一个M去执行，sysmon 会定时去扫描，执行syscall的G如果超过了一个system tick(10ms)，就会把它对应的P设为idle（空闲的意思），放到一个idle的P队列中，等待被其他M绑定，那么P中剩下的G就可以被其他M执行了。</p>
+<p><img src="/images/goroutine/syscall.png" alt=""></p>
+<p>在这个G的系统调用结束后，这个M还是会优先尝试获取原来的P，执行P中剩余的G，如果P已经解绑并挂到了idle列表，则这个M会去idle列表中尝试绑定其他的P。如果idle列表中也没有P的话，则会把刚刚解阻塞的G放回到全局队列中，如下图：</p>
+<p><img src="/images/goroutine/push.png" alt=""></p>
+<h4 id="创建新的m">创建新的M</h4>
+<p>当由于系统调用导致需要将P放到idle列表等待绑定到其他的M上时，如果有正在寻找P的M则可以完成绑定，如果没有，则需要创建一个新的M，这种情况下，<strong>Go是无法限制M的数量的</strong>。所以写程序时要注意，如果有大量的goroutine都会陷入到系统调用中时，可能会因为创建大量的M导致OOM。</p>
+<h4 id="线程自旋">线程自旋</h4>
+<p>两种情况会导致M自旋的产生：</p>
+<ol>
+<li>
+<p>没有P的M找P绑定</p>
+</li>
+<li>
+<p>P中没有G的M找G运行</p>
+</li>
+</ol>
+<p>以上两种情况时，M会进行自旋，就是循环执行一个逻辑，比如循环去检查idle列表去找P，自旋的好处就是如果很快就有可用的P，可以快速的完成绑定，不需要M进行休眠和唤醒导致的开销，降低了上下文的切换，坏处也很明显，如果迟迟自旋都没有结果，CPU就会白白浪费在这无意义的轮询中。</p>
+<p>所以Go中最多只能保持 <code>GOMAXPROCS</code> 个M进行自旋。同时如果类型1导致的自旋存在时，类型2的自旋就不能停止，因为一旦停止，自己的P就可能解绑，导致P被类型1的那个M抢走。</p>
+<p>在新的G被创建，M进入系统调用，M从空闲被唤醒这三种状态变化前，调度器会确保至少有一个自旋的M存在，除非没有空闲的P：</p>
+<ul>
+<li>对于新的G被创建时，需要保留一个处于类型2自旋的M，这样这个G就可以很快被运行。</li>
+<li>当M进入系统调用时，他的P就会解绑放到idle列表中等着被其他M绑定，这时保持一个类型1自旋的M，就可以让这个P尽快的绑定到M。</li>
+<li>M从空闲变为活跃，意味着可能一个处于自旋的M进入了工作状态，这时要检查并确保还有一个M在自旋，防止还有上述的两种情况存在。</li>
+</ul>
+<h2 id="gmp模型对gm模型三个问题的解决">GMP模型对GM模型三个问题的解决</h2>
+<h4 id="单一全局互斥锁">单一全局互斥锁</h4>
+<p>G被划分到了多个P和全局队列中，全局队列的访问依然是要获取锁，但是使用的场景明显变少了，大部分都是从P中获取G，且多个M窃取P中的G时，对P的访问是LockFree的原子操作，不需要加锁。</p>
+<h4 id="g的传递问题">G的传递问题</h4>
+<p>G中创建新G时，新的G就保存在同一个P中，而同一个P是和同一个M绑定的（在不产生长时间的系统调用时），所以G和M的亲缘性也可以保证，同时G的上下文是在P中保存的，数据的局部性也很好。</p>
+<h4 id="每个m都持有内存缓存">每个M都持有内存缓存</h4>
+<p>内存缓存被放到了P中，而P的个数是固定的，远小于M的数量，所以不会有过多的消耗</p>
+<h4 id="严重的m阻塞解锁">严重的M阻塞/解锁</h4>
+<p>通过引入M的自旋，保证任何时候都有处于自旋状态的M，避免在等待可用P和G时，发生M的频繁阻塞和唤醒。</p>
+<h2 id="sysmon">Sysmon</h2>
+<p>Sysmon 也叫监控线程，它无需P，直接和M绑定，是一个死循环，每20微秒到10毫秒循环一次，循环完一次就睡一会。如果每次循环时都没干什么事，睡的时间就会长点，减少CPU的浪费。</p>
+<p>Sysmon 会做以下几件事：</p>
+<ul>
+<li>释放限制5分钟的 span 物理内存</li>
+<li>如果超过2分钟没有垃圾回收，就强制触发一次垃圾回收</li>
+<li>长时间未处理的 netpoll 添加到全局队列</li>
+<li>向长时间运行的G任务发出抢占调度</li>
+<li>解绑因 syscall 长时间阻塞的P</li>
+</ul>
+<h2 id="network-poller">Network poller</h2>
+<p>Go的所有I/O都是阻塞的，然后通过goroutine和channel来处理并发，因为所有I/O逻辑都是同步的，不需要回调，不需要Feature等数据结构，代码的可读性非常好。</p>
+<p>G发起网络I/O被阻塞时，并不会导致M被阻塞，从而不会导致大量的M被创建，将异步I/O转换为阻塞I/O的部分成为 netpoller 。因此，有序G由于网络I/O阻塞后，恢复阻塞时，需要等待M和P的调度才能继续执行，所以可能会某些时候导致网络延迟变高，这也是目前Go的一个缺陷。</p>
+<h4 id="network-poller被调度回来的时机">Network poller被调度回来的时机</h4>
+<p>由于网络I/O导致阻塞的G，在解阻塞时，会在三个场景下被调度回来：</p>
+<ul>
+<li>sysmon的发现，如上所说</li>
+<li>schedule函数的调用，就是M的P中没有G找G的函数</li>
+<li>GC：每次GC结束start the world时</li>
+</ul>
+<h1 id="go程序的启动">Go程序的启动</h1>
+<p>首先会创建一个m0和g0，m0就是程序的主线程，g0负责管理和调度goroutine，就是schedule()函数。schedule()函数的作用是帮助P中没有G的M寻找可执行的G。</p>
+<p>然后创建 <code>GOMAXPROCS</code> 个P，绑定m0和g0，所有P都存储在idle列表中，等待被M绑定。</p>
+<p>新建任务g到p0的队列，m0的g0会创建一个指向runtime.main()函数的G，并放到p0的本地队列中。runtime.main()函数会启动sysmon线程，启动GC协程，执行代码中的所有init函数，最后执行程序的main()函数。</p>
+<p>准备运行的新G将唤醒P，这个P会创建一个和自己绑定的M绑定到一个内核线程中。</p>
+<h2 id="特殊的g0">特殊的g0</h2>
+<p>每次启动一个M，都会创建出一个g0，即每个M都有自己的g0，g0也是 runtime.m 结构体的第一个成员。g0的作用就是给这个M切换不同的G运行。</p>
+<p>g0基于两种断点会将G调度到M上：</p>
+<ul>
+<li>当G阻塞时，由于系统调用、互斥锁、或者chan阻塞，阻塞的G会进入睡眠模式，并允许Go安排和运行等待其他的G。</li>
+<li>在函数调用期间，如果G必须要拓展它的堆栈，这个断点允许Go运行其他的G避免由于这个G导致CPU被占用。</li>
+</ul>
+<p>在以上两种情况下g0会将当前运行的G替换为另一个G，然后选择的G替换g0在线程上运行。G的创建，也是g0完成的。并且与常规的G不同，g0有一个固定大小且比 2KB 更大的栈空间。</p>
+<p>除此以外，g0还要处理以下事情：</p>
+<ul>
+<li>defer函数的分配</li>
+<li>GC收集，比如STW，扫描G的堆栈和标记，清除操作</li>
+<li>栈扩容，当需要的时候由g0进行扩栈操作</li>
+</ul>
+</div>
     <div class="post-footer">
       <div class="info">
         
+          <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
+
+
+
+
+        
+
+        
+          <span class="separator"><a class="tag" href="/tags/golang/">golang</a><a class="tag" href="/tags/gmp/">GMP</a><a class="tag" href="/tags/work-stealing/">Work-Stealing</a></span>
+
+
+
 
         
       </div>

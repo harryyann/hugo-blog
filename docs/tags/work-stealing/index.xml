@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Work-Stealing on Website of Harry Yang</title>
+    <link>https://yanghairui.life/tags/work-stealing/</link>
+    <description>Recent content in Work-Stealing on Website of Harry Yang</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 19 Feb 2022 14:43:20 +0800</lastBuildDate><atom:link href="https://yanghairui.life/tags/work-stealing/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Goroutine的调度模型</title>
+      <link>https://yanghairui.life/post/goroutine%E7%9A%84%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B/</link>
+      <pubDate>Sat, 19 Feb 2022 14:43:20 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/post/goroutine%E7%9A%84%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B/</guid>
+      
+        <description>Goroutine Goroutine是一个与其他 goroutines 并行运行在同一地址空间的Go函数或者方法，一个运行的Go程序由一个或多个goroutines组成。
+Go程序在执行时实际上是通过Go的runtime与操作系统内核进行交互。Go程序中创建的goroutines、内存对象等都是交由runtime去管理的，如下图：
+Goroutine和Thread的区别 内存占用不同 创建一个goroutine的栈的大小，在 go1.4 版本以后是 2KB，运行过程中如果栈不够再进行扩容（这部分内容可以查看Go的内存管理这篇文章）。</description>
+      
+    </item>
+    
+  </channel>
+</rss>

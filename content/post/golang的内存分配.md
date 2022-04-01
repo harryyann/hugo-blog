@@ -2,7 +2,7 @@
 title: "Golang的内存分配原理"
 date: 2022-02-21T18:35:14+08:00
 Description: ""
-Tags: [golang]
+Tags: [golang, 内存]
 Categories: [golang]
 DisableComments: false
 ---
