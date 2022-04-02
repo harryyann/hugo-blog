@@ -6,13 +6,46 @@
     <description>Recent content in Tags on Website of Harry Yang</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 21 Feb 2022 18:35:14 +0800</lastBuildDate><atom:link href="https://yanghairui.life/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 22 Feb 2022 21:31:10 +0800</lastBuildDate><atom:link href="https://yanghairui.life/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GC</title>
+      <link>https://yanghairui.life/tags/gc/</link>
+      <pubDate>Tue, 22 Feb 2022 21:31:10 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/tags/gc/</guid>
+      
+        <description></description>
+      
+    </item>
+    
     <item>
       <title>golang</title>
       <link>https://yanghairui.life/tags/golang/</link>
-      <pubDate>Mon, 21 Feb 2022 18:35:14 +0800</pubDate>
+      <pubDate>Tue, 22 Feb 2022 21:31:10 +0800</pubDate>
       
       <guid>https://yanghairui.life/tags/golang/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+    <item>
+      <title>三色标记</title>
+      <link>https://yanghairui.life/tags/%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0/</link>
+      <pubDate>Tue, 22 Feb 2022 21:31:10 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/tags/%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0/</guid>
+      
+        <description></description>
+      
+    </item>
+    
+    <item>
+      <title>写屏障</title>
+      <link>https://yanghairui.life/tags/%E5%86%99%E5%B1%8F%E9%9A%9C/</link>
+      <pubDate>Tue, 22 Feb 2022 21:31:10 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/tags/%E5%86%99%E5%B1%8F%E9%9A%9C/</guid>
       
         <description></description>
       

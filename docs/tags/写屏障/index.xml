@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>写屏障 on Website of Harry Yang</title>
+    <link>https://yanghairui.life/tags/%E5%86%99%E5%B1%8F%E9%9A%9C/</link>
+    <description>Recent content in 写屏障 on Website of Harry Yang</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 22 Feb 2022 21:31:10 +0800</lastBuildDate><atom:link href="https://yanghairui.life/tags/%E5%86%99%E5%B1%8F%E9%9A%9C/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Golang的垃圾回收机制</title>
+      <link>https://yanghairui.life/post/golang%E7%9A%84gc/</link>
+      <pubDate>Tue, 22 Feb 2022 21:31:10 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/post/golang%E7%9A%84gc/</guid>
+      
+        <description>GC 编程语言的内存管理方式就两种：自动和手动。像C/C++、Rust这种极致追求性能的语言就是要程序员手动进行内存空间的使用和释放。而像Java、Go等语言就是使用自动的方式进行内存管理，通过内存分配器就行内存分配，通过垃圾收集器进行垃圾回收。
+GC，全称 Garbage Collection，即垃圾回收，就是一种自动内存管理的机制。通过垃圾回收程序员可以专注于写程序，不用考虑内存的释放问题。
+常见的GC方式 主要包括两种：
+  引用计数GC</description>
+      
+    </item>
+    
+  </channel>
+</rss>

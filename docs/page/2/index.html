@@ -312,6 +312,63 @@
     >
       
       <div class="post-title">
+        <h3><a href="/post/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9A%84%E6%96%B9%E6%A1%88/">分库分表的实现方式</a></h3>
+      </div>
+      <div class="post-content">
+        <div class="p_part">
+          <p>
+            
+              分库分表 数据库的数据量增大会直接影响读写的性能，比如一次查询操作，扫描 5 万条数据和 500 万条数据，查询速度肯定是不同的。分库分表就是把一个表拆分成多个库的多个表，这些表可以在同一个服务器上，也可以在不同的服务器上，总而言之，就是要通过拆分，减小单库单表的读写压力。
+那么什么时候才需要分库分表呢？
+参考阿里巴巴的《Java 开发手册》中数据库部分的建表规约： **单表行数超过 500 万行或者单表容量超过 2GB，才推荐进行分库分表。**由于不同的服务器配置、数据的存储结构都不同，所以这个数据并不确切，但可以作为一个参考。
+
+
+            
+          </p>
+          <a href="/post/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9A%84%E6%96%B9%E6%A1%88/" class="read_more">继续阅读</a></div>
+      </div>
+
+      
+      <div class="post-footer">
+        <div class="meta">
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Thu, Sep 30, 2021
+
+
+              </span
+            >
+            
+              <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
+
+
+
+
+            
+
+            
+              <span class="separator"><a class="tag" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><a class="tag" href="/tags/mysql/">MySQL</a><a class="tag" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></span>
+
+
+
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div
+      class="post 
+        animated fadeInDown
+
+      "
+    >
+      
+      <div class="post-title">
         <h3><a href="/post/kubernetes%E7%9A%84operator/">使用Kubebuilder编写Operator</a></h3>
       </div>
       <div class="post-content">
@@ -802,62 +859,6 @@ type Server struct {  Addr string  Port int  Protocol string  Timeout time.
 
             
               <span class="separator"><a class="tag" href="/tags/golang/">golang</a><a class="tag" href="/tags/%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/">编程模式</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
-        <h3><a href="/post/k8s%E7%9A%84rbac%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/">K8s的RBAC权限控制机制</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              RBAC(Role-Based Access Control) 基于角色的权限控制，其实只有三个最基本的概念：
- Role：角色，每个角色都定义了一组对k8s API对象的操作权限，就是一系列权限的集合 Subject：权限被作用者，即Role提供的权限要作用到的用户，人，或机器 RoleBinding：通过RoleBinding把Role和Subject绑定到一起  总之，就是通过Role来定义权限，通过Subject来认证，通过RoleBinding将Role和Subject绑定到一起，那么Subject即可拥有Role所定义的权限了。
-
-
-            
-          </p>
-          <a href="/post/k8s%E7%9A%84rbac%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/" class="read_more">继续阅读</a></div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Fri, Jun 25, 2021
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/k8s/">k8s</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/k8s/">k8s</a><a class="tag" href="/tags/golang/">golang</a></span>
 
 
 

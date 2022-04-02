@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="zh-cn"
+  data-theme=""
+><head>
+  <title>
+    
+      杨海瑞
+        |
+        Golang的垃圾回收机制
+
+
+      
+
+
+    
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.96.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta
+    name="description"
+    content="
+      Per aspera ad astra.
+循此苦旅，终抵群星。
+
+
+
+    "
+  />
+  
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://yanghairui.life/post/golang%E7%9A%84gc/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.d0408165d31a17f17bba83038bf54e86121f85021bdf936382e636f0f77a952f.js"
+    integrity="sha256-0ECBZdMaF/F7uoMDi/VOhhIfhQIb35NjguY28Pd6lS8="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.65e936b591bf81484a5ac438c8e4ae6454fb25516d58ce911e4888d7f230bdc5.js"
+      integrity="sha256-Zek2tZG/gUhKWsQ4yOSuZFT7JVFtWM6RHkiI1/IwvcU="
+      crossorigin="anonymous"
+    ></script>
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Golang的垃圾回收机制"/>
+<meta name="twitter:description" content="GC 编程语言的内存管理方式就两种：自动和手动。像C/C&#43;&#43;、Rust这种极致追求性能的语言就是要程序员手动进行内存空间的使用和释放。而像Java、Go等语言就是使用自动的方式进行内存管理，通过内存分配器就行内存分配，通过垃圾收集器进行垃圾回收。
+GC，全称 Garbage Collection，即垃圾回收，就是一种自动内存管理的机制。通过垃圾回收程序员可以专注于写程序，不用考虑内存的释放问题。
+常见的GC方式 主要包括两种：
+  引用计数GC"/>
+
+
+
+  
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "post",
+        "name": "Golang的垃圾回收机制",
+        "headline": "Golang的垃圾回收机制",
+        "alternativeHeadline": "",
+        "description": "
+      
+        GC 编程语言的内存管理方式就两种：自动和手动。像C\/C\u002b\u002b、Rust这种极致追求性能的语言就是要程序员手动进行内存空间的使用和释放。而像Java、Go等语言就是使用自动的方式进行内存管理，通过内存分配器就行内存分配，通过垃圾收集器进行垃圾回收。\nGC，全称 Garbage Collection，即垃圾回收，就是一种自动内存管理的机制。通过垃圾回收程序员可以专注于写程序，不用考虑内存的释放问题。\n常见的GC方式 主要包括两种：\n  引用计数GC
+
+
+      
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/post\/golang%E7%9A%84gc\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2022",
+        "dateCreated": "2022-02-22T21:31:10.00Z",
+        "datePublished": "2022-02-22T21:31:10.00Z",
+        "dateModified": "2022-02-22T21:31:10.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/post\/golang%E7%9A%84gc\/",
+        "wordCount" : "86",
+        "genre" : [ 
+      
+      "golang"
+
+    ],
+        "keywords" : [ 
+      
+      "golang"
+
+    
+      
+        ,
+
+      
+      "GC"
+
+    
+      
+        ,
+
+      
+      "三色标记"
+
+    
+      
+        ,
+
+      
+      "写屏障"
+
+    ]
+    }
+  </script>
+
+
+
+</head>
+<body>
+    <header><div
+  class="page-top 
+    animated fadeInDown
+
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>
+  <nav>
+    <ul class="nav__list" id="navMenu">
+      <div class="nav__links">
+        
+        
+          
+          <li>
+            <a
+              
+              href="/"
+              
+              title=""
+              >Home</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/post/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/portfolio/"
+              
+              title=""
+              >Portfolio</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >About</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/contact/"
+              
+              title=""
+              >Contact</a
+            >
+          </li>
+
+        
+      </div>
+      <ul>
+        
+        
+          <li>
+            <a class="theme-switch" title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </li>
+
+        
+      </ul>
+    </ul>
+  </nav>
+</div>
+</header>
+    <div class="wrapper">
+      <aside><div
+  class="sidebar
+    animated fadeInDown
+
+  "
+>
+  <div class="sidebar__content">
+    <div class="logo-title">
+      <div class="title">
+        <img src="/images/profile5.jpg" alt="profile picture" />
+        <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
+        <div class="description">
+          <p>Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+        <li>
+          <a href="https://stackoverflow.com/users/12924262/horace-yang" rel="me" aria-label="StackOverFlow" title="StackOverFlow">
+            <i class="fab fa-stack-overflow fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://github.com/harryyann" rel="me" aria-label="GitHub" title="GitHub">
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://www.zhihu.com/people/yang-hai-rui-88" rel="me" aria-label="zhihu" title="zhihu">
+            <i class="fab fa-zhihu fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=941811450@qq.com" rel="me" aria-label="e-mail" title="e-mail">
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+    </ul>
+  </div><footer class="footer footer--sidebar">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
+    crossorigin="anonymous"
+  ></script></div>
+</aside>
+      <main>
+        <div class="autopagerize_page_element">
+          <div class="content">
+  <div
+    class="post 
+      animated fadeInDown
+
+    "
+  >
+    <div class="post-content">
+      
+      <div class="post-title">
+        <h1>Golang的垃圾回收机制</h1>
+        
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Tue, Feb 22, 2022
+
+
+              </span
+            >
+            <em class="fas fa-stopwatch"></em>
+            <span class="reading-time">阅读时间 1 分钟</span>
+          </div>
+
+        
+      </div><h1 id="gc">GC</h1>
+<p>编程语言的内存管理方式就两种：自动和手动。像C/C++、Rust这种极致追求性能的语言就是要程序员手动进行内存空间的使用和释放。而像Java、Go等语言就是使用自动的方式进行内存管理，通过内存分配器就行内存分配，通过垃圾收集器进行垃圾回收。</p>
+<p><code>GC</code>，全称 <code>Garbage Collection</code>，即垃圾回收，就是一种自动内存管理的机制。通过垃圾回收程序员可以专注于写程序，不用考虑内存的释放问题。</p>
+<h2 id="常见的gc方式">常见的GC方式</h2>
+<p>主要包括两种：</p>
+<ul>
+<li>
+<p><strong>引用计数</strong>GC</p>
+<p>每个对象自身包含一个被引用的计数器，当计数器归零时自动得到回收。因为此方法缺陷较多，在追求高性能时通常不被应用。Python、Objective-C 等均为引用计数式 GC，Python的话是引用计数和隔代回收相结合的方式。</p>
+</li>
+<li>
+<p><strong>追踪式</strong>GC</p>
+<p>从根对象出发，根据对象之间的引用信息，一步步推进直到扫描完毕整个堆并确定需要保留的对象，从而回收所有可回收的对象。Go、 Java、V8 对 JavaScript 的实现等均为追踪式 GC。Go的垃圾回收叫做三色标记法。</p>
+</li>
+</ul>
+<h2 id="stw">STW</h2>
+<p>即 <code>Stop the world</code> 或者 <code>Start the world</code>，在GC的一些阶段需要停止所有的 mutator，以确定当前的引用关系，这就导致程序运行过程中会突然停一下，然后再继续运行，所有有GC的语言都无法避免这个问题，也是Go、Java这种语言无法应用于操作系统等极致追求性能的场景下的原因。减少STW的时间，也是所有GC算法要重点优化的对象。Go语言早期版本STW的时间长达几百毫秒，现在已经优化到了半毫秒以下。</p>
+<h2 id="根对象">根对象</h2>
+<p>根对象在垃圾回收的术语中又叫做根集合，它是垃圾回收器在标记过程时最先检查的对象，包括：</p>
+<ul>
+<li>全局变量：程序在编译期就能确定的那些存在于程序整个生命周期的变量。</li>
+<li>执行栈：每个 goroutine 都包含自己的执行栈，这些执行栈上包含栈上的变量及指向分配的堆内存区块的指针。</li>
+<li>寄存器：寄存器的值可能表示一个指针，参与计算的这些指针可能指向某些赋值器分配的堆内存区块。</li>
+</ul>
+<p>根对象都是 mutator 不需要其他对象就可以直接访问到的对象，并且通过根对象可以追踪到其他所有存活的对象</p>
+<h1 id="go的gc实现">Go的GC实现</h1>
+<h2 id="三色标记法">三色标记法</h2>
+<p>Go的GC经过了多个版本，不断优化，从1.5版本开始使用三色标记法才算稳定。</p>
+<p><strong>三色标记法</strong>，属于追踪式GC。整个过程分为两个阶段：标记(Mark)和清除(Sweep)，所以也叫做Mark-Sweep垃圾回收算法。</p>
+<p>三色抽象规定了三种不同类型的对象，并用不同的颜色表示：</p>
+<ul>
+<li>白色对象：潜在的垃圾，可能会被垃圾收集器回收。未被回收期访问到的在回收开始阶段，所有对象均为白色。</li>
+<li>灰色对象：活跃的对象，因为存在指向白色对象的外部指针，垃圾收集器会扫描这些对象的子对象。</li>
+<li>黑色对象：活跃的对象，包括不存在任何引用外部指针的对象，和从根对象可达的对象，垃圾收集器不会扫描黑色对象的子对象。</li>
+</ul>
+<p>三色标记法优化了标记清除法在执行时要长时间STW的问题。初始时将所有内存标记为白色。</p>
+<p>然后将根对象集合加入待扫描队列中（即变成灰色）。</p>
+<p>然后进入一个根对象，并将根对象变成黑色，然后开启多个goroutine并发扫描这个根对象的子对象，把子对象都变成灰色，依次类推，逐层寻找，直到尽头，把所有根对象和根对象可达的对象都置为黑色。</p>
+<p>然后剩下的所有根对象和根对象的子对象都无法到达的白色对象，就是可以回收的垃圾，如下图的 s2。</p>
+<p><img src="/images/gc/1.png" alt=""></p>
+<p>对象的颜色实现方式是，在每个span中有一个名叫 gcmarkBits 的位图属性，这个属性用于设置对象的颜色。</p>
+<h2 id="写屏障">写屏障</h2>
+<p>在用三色标记法进行垃圾回收的过程中主要有四个阶段，其中，标记(Mark)和清扫(Sweep)过程都是并发执行的，但是标记阶段的前后，需要一小点时间STW，来做GC的准备工作和栈的重扫re-scan（后续会详细说明）。</p>
+<p>并发垃圾回收，在Mark阶段，需要在程序执行对象在动态变化时，去做标记，所以要想保证标记的正确性，需要识别出那些增量的对象，三色标记法通过达成两个三色不变性(达成其一即可)来实现：</p>
+<ul>
+<li>强三色不变性：黑色对象不会指向白色对象，只会指向黑色对象，或者灰色对象。因为黑色对象是不能被回收的，它指向的对象也不能被回收。</li>
+<li>弱三色不变性：黑色对象指向的白色对象必须包含一条从灰色对象经由多个白色对象的可达路径。即可能黑色对象指向了白色对象，但是一定不是唯一一个指向该白色对象的对象，一定还要有其他灰色对象(或者灰色对象的下游对象)指向了这个白色对象，也就是说此时正在灰色对象的扫描过程中，一段时间后，这个白色对象也会变成灰色和黑色。</li>
+</ul>
+<p>两个法则其实都是对黑色对象指向白色对象的约束。下面这个例子，就出现了黑色对象指向了白色对象的情景：</p>
+<p><img src="/images/gc/2.png" alt=""></p>
+<p>上图中，一开始灰色对象B指向了白色对象C，然后黑色对象A也指向了白色对象C，然后由于某些原因，B和C之间的关系断开了，则就形成了黑色对象A指向了白色对象C的场景。此时因为C还是白色，按照规则他就会被垃圾收集器回收，这就出现了对象的丢失，这显然是不合理的。</p>
+<p>所以为了避免这个问题，就需要进行STW，让程序暂停，防止用户进程对对象之间引用关系的干扰。但是STW对用户程序有很大影响，为了尽可能地提高GC的效率，减少STW的时间，于是就有了<strong>写屏障</strong>技术。</p>
+<p>Go的写屏障，将会<strong>拦截掉白色指针插入黑色对象</strong>的操作，并标记这个白色对象为灰色状态，这样就不存在黑色对象引用白色对象的情况了，<strong>满足强三色不变性</strong>。如下图所示，C对象将会变成灰色对象，然后再将指针插入到A：</p>
+<p><img src="/images/gc/3.png" alt=""></p>
+<p>由于栈上的操作很密集，我们应用程序大部分时候都在操作栈，如果在栈上也进行写屏障，那么性能下降很厉害，Go的做法就是，<strong>写屏障只在堆上执行，栈中不使用写屏障</strong>。那么这样就会导致栈中会出现黑色对象指向白色对象的情形，对于这个问题的解决方法是re-scan，即重扫，重扫一遍所有对象之后，这个白色对象就变成黑色对象了，这个过程需要STW，以防止还有其他对象的变更。重扫导致的耗时可能在10~100ms之间，这也是 go1.5 版本的一个缺陷。</p>
+<p>同时，GC的准备阶段，初始化GC任务，包括开启写屏障、开启辅助GC和统计根对象列表的过程也需要STW一小段时间。</p>
+<h2 id="删屏障">删屏障</h2>
+<p>删除屏障也是用来拦截写操作的，但是和写屏障不同，它不是通过给白色节点变色实现的，而是通过<strong>保护灰色节点指向白色节点的指针</strong>来实现的。还是上面那个例子，在删除指针 e 时将对象c标记为灰色，这样C下游的对象也会最终变成黑色，这种方式<strong>达成了弱三色不变性</strong>。这种方式的回收精度较低，因为一个对象即使是被删除了最后一个指向它的指针，它也还能活过这一轮GC（因为被标记成灰色了），在下一轮才能被清理。</p>
+<h2 id="混合写屏障">混合写屏障</h2>
+<p>写屏障和删屏障一个是在白色对象插入黑色对象时保护白色对象，一个是白色对象删除和灰色对象的连接时保护白色对昂，两种方式各有优缺点：</p>
+<ul>
+<li>对于写屏障，在标记开始时无需STW，可以直接开始并发执行，但是结束时需要STW来重新re-scan栈。</li>
+<li>对于删屏障，则需要在一开始时进行STW扫描堆栈进行初始的快照，这样才能知道哪个白色对象和灰色对象断连了，而结束时才无需STW。</li>
+</ul>
+<p>Go1.8 版本使用了混合写屏障和删屏障，同时允许黑色对象引用白色对象时将白色变灰，和在白色对象删除和灰色对象的联系时将白色对象变灰。</p>
+<p>同样的，两种写屏障和删屏障都是作用在堆上的，没有作用在栈上，栈中的对象在开始进行标记时，都会变成黑色并在整个GC阶段一直保持，这样在标记结束后，由于栈中都是黑色，就不用再re-scan了。同时在GC标记时，堆上所有新创建的对象都标记成黑色，以防黑色的栈对象指向了堆上新创建的白色对象，出现错误删除。</p>
+<p>Go1.8通过混合写屏障解决了go1.5版本re-sacn导致的STW几十毫秒的问题。</p>
+<h2 id="清扫过程">清扫过程</h2>
+<p>清扫时会删除掉所有白色对象，这个删除并不是把对应内存地址上都置为0，而是通过一个span上的标志位 allocBits，这个位表示这个span是否被分配，1表示被分配，0表示未使用。所以清扫过程就是把span上的这个标志位恢复即可。</p>
+<p>清扫过程实际上是在发生在两种情况下：</p>
+<ol>
+<li>Go会启动一个后台goroutine叫做bgsweep()，它是定期休眠状态，一旦开始清扫，就会挨个mspan去清扫。</li>
+<li>当申请内存时lazy触发。当goroutine需要在mheap上分配新内存时，就会触发该操作，这种清理导致的延迟会分散到每次的内存分配中。</li>
+</ol>
+<hr>
+<p>GC的过程还在随着版本不断优化，这篇文章只是大致做一个介绍，如果有空我会再仔细研究研究。</p>
+</div>
+    <div class="post-footer">
+      <div class="info">
+        
+          <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
+
+
+
+
+        
+
+        
+          <span class="separator"><a class="tag" href="/tags/golang/">golang</a><a class="tag" href="/tags/gc/">GC</a><a class="tag" href="/tags/%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0/">三色标记</a><a class="tag" href="/tags/%E5%86%99%E5%B1%8F%E9%9A%9C/">写屏障</a></span>
+
+
+
+
+        
+      </div>
+    </div>
+
+    
+  </div>
+
+
+          </div>
+        </div>
+      </main>
+    </div><footer class="footer footer--base">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
+    crossorigin="anonymous"
+  ></script></body>
+</html>

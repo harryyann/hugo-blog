@@ -312,6 +312,64 @@
     >
       
       <div class="post-title">
+        <h3><a href="/post/golang%E7%9A%84gc/">Golang的垃圾回收机制</a></h3>
+      </div>
+      <div class="post-content">
+        <div class="p_part">
+          <p>
+            
+              GC 编程语言的内存管理方式就两种：自动和手动。像C/C++、Rust这种极致追求性能的语言就是要程序员手动进行内存空间的使用和释放。而像Java、Go等语言就是使用自动的方式进行内存管理，通过内存分配器就行内存分配，通过垃圾收集器进行垃圾回收。
+GC，全称 Garbage Collection，即垃圾回收，就是一种自动内存管理的机制。通过垃圾回收程序员可以专注于写程序，不用考虑内存的释放问题。
+常见的GC方式 主要包括两种：
+  引用计数GC
+
+
+            
+          </p>
+          <a href="/post/golang%E7%9A%84gc/" class="read_more">继续阅读</a></div>
+      </div>
+
+      
+      <div class="post-footer">
+        <div class="meta">
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Tue, Feb 22, 2022
+
+
+              </span
+            >
+            
+              <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
+
+
+
+
+            
+
+            
+              <span class="separator"><a class="tag" href="/tags/golang/">golang</a><a class="tag" href="/tags/gc/">GC</a><a class="tag" href="/tags/%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0/">三色标记</a><a class="tag" href="/tags/%E5%86%99%E5%B1%8F%E9%9A%9C/">写屏障</a></span>
+
+
+
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div
+      class="post 
+        animated fadeInDown
+
+      "
+    >
+      
+      <div class="post-title">
         <h3><a href="/post/golang%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/">Golang的内存分配原理</a></h3>
       </div>
       <div class="post-content">
@@ -807,63 +865,6 @@ Singleflight的使用 singleflight 库，直译过来就是单飞，这个库的
 
             
               <span class="separator"><a class="tag" href="/tags/golang/">golang</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
-        <h3><a href="/post/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9A%84%E6%96%B9%E6%A1%88/">分库分表的实现方式</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              分库分表 数据库的数据量增大会直接影响读写的性能，比如一次查询操作，扫描 5 万条数据和 500 万条数据，查询速度肯定是不同的。分库分表就是把一个表拆分成多个库的多个表，这些表可以在同一个服务器上，也可以在不同的服务器上，总而言之，就是要通过拆分，减小单库单表的读写压力。
-那么什么时候才需要分库分表呢？
-参考阿里巴巴的《Java 开发手册》中数据库部分的建表规约： **单表行数超过 500 万行或者单表容量超过 2GB，才推荐进行分库分表。**由于不同的服务器配置、数据的存储结构都不同，所以这个数据并不确切，但可以作为一个参考。
-
-
-            
-          </p>
-          <a href="/post/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9A%84%E6%96%B9%E6%A1%88/" class="read_more">继续阅读</a></div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Thu, Sep 30, 2021
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><a class="tag" href="/tags/mysql/">MySQL</a><a class="tag" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></span>
 
 
 
