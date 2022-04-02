@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="zh-cn"
+  data-theme=""
+><head>
+  <title>
+    
+      杨海瑞
+        |
+        MySQL的ORDER BY语句的工作方式
+
+
+      
+
+
+    
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.96.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta
+    name="description"
+    content="
+      Per aspera ad astra.
+循此苦旅，终抵群星。
+
+
+
+    "
+  />
+  
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://yanghairui.life/post/mysql%E7%9A%84%E6%8E%92%E5%BA%8F%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.d0408165d31a17f17bba83038bf54e86121f85021bdf936382e636f0f77a952f.js"
+    integrity="sha256-0ECBZdMaF/F7uoMDi/VOhhIfhQIb35NjguY28Pd6lS8="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.65e936b591bf81484a5ac438c8e4ae6454fb25516d58ce911e4888d7f230bdc5.js"
+      integrity="sha256-Zek2tZG/gUhKWsQ4yOSuZFT7JVFtWM6RHkiI1/IwvcU="
+      crossorigin="anonymous"
+    ></script>
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="MySQL的ORDER BY语句的工作方式"/>
+<meta name="twitter:description" content="在日常开发应用时，经常会碰到根据某个字段排序后显示结果，那么 MySQL 底层对这种需要排序的查询到底是怎么处理的呢？
+首先我们构造一张表：
+CREATE TABLE `t` (  `id` int(11) NOT NULL,  `city` varchar(16) NOT NULL,  `name` varchar(16) NOT NULL,  `age` int(11) NOT NULL,  `addr` varchar(128) DEFAULT NULL,  PRIMARY KEY (`id`),  KEY `city` (`city`) ) ENGINE=InnoDB; 这个表有 id、city、name、age等几个字段，主键是 id，city 字段创建了普通索引。"/>
+
+
+
+  
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "post",
+        "name": "MySQL的ORDER BY语句的工作方式",
+        "headline": "MySQL的ORDER BY语句的工作方式",
+        "alternativeHeadline": "",
+        "description": "
+      
+        在日常开发应用时，经常会碰到根据某个字段排序后显示结果，那么 MySQL 底层对这种需要排序的查询到底是怎么处理的呢？\n首先我们构造一张表：\nCREATE TABLE `t` (  `id` int(11) NOT NULL,  `city` varchar(16) NOT NULL,  `name` varchar(16) NOT NULL,  `age` int(11) NOT NULL,  `addr` varchar(128) DEFAULT NULL,  PRIMARY KEY (`id`),  KEY `city` (`city`) ) ENGINE=InnoDB; 这个表有 id、city、name、age等几个字段，主键是 id，city 字段创建了普通索引。
+
+
+      
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/post\/mysql%E7%9A%84%E6%8E%92%E5%BA%8F%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2022",
+        "dateCreated": "2022-02-20T13:26:00.00Z",
+        "datePublished": "2022-02-20T13:26:00.00Z",
+        "dateModified": "2022-02-20T13:26:00.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/post\/mysql%E7%9A%84%E6%8E%92%E5%BA%8F%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F\/",
+        "wordCount" : "199",
+        "genre" : [ 
+      
+      "数据库"
+
+    ],
+        "keywords" : [ 
+      
+      "MySQL"
+
+    ]
+    }
+  </script>
+
+
+
+</head>
+<body>
+    <header><div
+  class="page-top 
+    animated fadeInDown
+
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>
+  <nav>
+    <ul class="nav__list" id="navMenu">
+      <div class="nav__links">
+        
+        
+          
+          <li>
+            <a
+              
+              href="/"
+              
+              title=""
+              >Home</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/post/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/portfolio/"
+              
+              title=""
+              >Portfolio</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >About</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/contact/"
+              
+              title=""
+              >Contact</a
+            >
+          </li>
+
+        
+      </div>
+      <ul>
+        
+        
+          <li>
+            <a class="theme-switch" title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </li>
+
+        
+      </ul>
+    </ul>
+  </nav>
+</div>
+</header>
+    <div class="wrapper">
+      <aside><div
+  class="sidebar
+    animated fadeInDown
+
+  "
+>
+  <div class="sidebar__content">
+    <div class="logo-title">
+      <div class="title">
+        <img src="/images/profile5.jpg" alt="profile picture" />
+        <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
+        <div class="description">
+          <p>Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+        <li>
+          <a href="https://stackoverflow.com/users/12924262/horace-yang" rel="me" aria-label="StackOverFlow" title="StackOverFlow">
+            <i class="fab fa-stack-overflow fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://github.com/harryyann" rel="me" aria-label="GitHub" title="GitHub">
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://www.zhihu.com/people/yang-hai-rui-88" rel="me" aria-label="zhihu" title="zhihu">
+            <i class="fab fa-zhihu fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=941811450@qq.com" rel="me" aria-label="e-mail" title="e-mail">
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+    </ul>
+  </div><footer class="footer footer--sidebar">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
+    crossorigin="anonymous"
+  ></script></div>
+</aside>
+      <main>
+        <div class="autopagerize_page_element">
+          <div class="content">
+  <div
+    class="post 
+      animated fadeInDown
+
+    "
+  >
+    <div class="post-content">
+      
+      <div class="post-title">
+        <h1>MySQL的ORDER BY语句的工作方式</h1>
+        
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Sun, Feb 20, 2022
+
+
+              </span
+            >
+            <em class="fas fa-stopwatch"></em>
+            <span class="reading-time">阅读时间 1 分钟</span>
+          </div>
+
+        
+      </div><p>在日常开发应用时，经常会碰到根据某个字段排序后显示结果，那么 MySQL 底层对这种需要排序的查询到底是怎么处理的呢？</p>
+<p>首先我们构造一张表：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#f92672">`</span>t<span style="color:#f92672">`</span> (
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">`</span>id<span style="color:#f92672">`</span> <span style="color:#66d9ef">int</span>(<span style="color:#ae81ff">11</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">`</span>city<span style="color:#f92672">`</span> <span style="color:#66d9ef">varchar</span>(<span style="color:#ae81ff">16</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">`</span>name<span style="color:#f92672">`</span> <span style="color:#66d9ef">varchar</span>(<span style="color:#ae81ff">16</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">`</span>age<span style="color:#f92672">`</span> <span style="color:#66d9ef">int</span>(<span style="color:#ae81ff">11</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">`</span>addr<span style="color:#f92672">`</span> <span style="color:#66d9ef">varchar</span>(<span style="color:#ae81ff">128</span>) <span style="color:#66d9ef">DEFAULT</span> <span style="color:#66d9ef">NULL</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#f92672">`</span>id<span style="color:#f92672">`</span>),
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">KEY</span> <span style="color:#f92672">`</span>city<span style="color:#f92672">`</span> (<span style="color:#f92672">`</span>city<span style="color:#f92672">`</span>)
+</span></span><span style="display:flex;"><span>) <span style="color:#66d9ef">ENGINE</span><span style="color:#f92672">=</span>InnoDB;
+</span></span></code></pre></div><p>这个表有 <code>id</code>、<code>city</code>、<code>name</code>、<code>age</code>等几个字段，主键是 <code>id</code>，<code>city</code> 字段创建了普通索引。</p>
+<p>假设一个查询语句是这样的：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span><span style="color:#66d9ef">select</span> city,name,age <span style="color:#66d9ef">from</span> t <span style="color:#66d9ef">where</span> city<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;杭州&#39;</span> <span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> name <span style="color:#66d9ef">limit</span> <span style="color:#ae81ff">1000</span>;
+</span></span></code></pre></div><p>查询所有 city=&ldquo;杭州&rdquo; 的city 、name和 age字段，然后按照 name 字段排序，并且限制1000条。</p>
+<p>首先我们通过 <code>explain</code> 语句查看这条语句的执行计划：</p>
+<p><img src="/images/orderby/explain.webp" alt=""></p>
+<p>观察到 extra 字段中说明 <code>Using filesort</code>，这意味着该语句需要在MySQL排序后才能输出结果。MySQL对数据集的排序是使用一块专用的内存，叫做 sort buffer，sort buffer是位于MySQL server层的。</p>
+<p><strong>sort buffer</strong>：每个查询线程，MySQL都会给它分配一个固定大小的sort buffer用于排序，sort buffer的大小通过参数 <code>sort_buffer_size</code> 控制，默认是 256kb。</p>
+<h4 id="全字段排序">全字段排序</h4>
+<p>使用sort buffer后，上述这条语句的最常规的执行过程大概如下：</p>
+<ol>
+<li>首先初始化这个线程的 sort buffer，确定需要查询name、age、age 三个字段；</li>
+<li>查询where条件是 <code>city=&quot;杭州&quot;</code>，city 字段可以查询索引，通过访问二级索引找到所有 city=&ldquo;杭州&rdquo; 的行的主键 id ；</li>
+<li>然后用主键回表，查询到对应的完整行，取出name、city 和 age 三个字段，存入到 sort buffer 中；</li>
+<li>一行一行的用主键查询出所有需要的行，然后在sort buffer中按照name做排序；</li>
+<li>排好序后，取前1000行数据返回给客户端。</li>
+</ol>
+<p>上述的这个过程，就叫做<strong>全字段排序</strong>，就是说所有字段都加载到了sort buffer然后做统一的排序后返回。</p>
+<p>其中，第4步，按照name排序的从操作，可能是完全在内存中完成的，也可能要利用外部的磁盘文件协助排序，主要是根据需要排序的数据量的大小，如果数据量 sort buffer放的下，则就可以直接用内存完成排序，如果数据量过大导致 sort buffer 放不下，则需要借助外部的磁盘文件。借助磁盘文件排序使用的是归并排序算法。</p>
+<h4 id="row_id-排序">row_id 排序</h4>
+<p>在上述的全字段排序中，如果我们select要查询的行数太多，导致 sort buffer 严重不足，就会使用大量的磁盘文件排序，导致大量的磁盘IO，性能会很差。</p>
+<p>MySQL中规定了一个参数 <code>max_length_for_sort_data</code>，这个参数指定了 sort buffer 中一行数据的大小，如果一行太大超过了这个参数，MySQL就会放弃使用全字段排序的方式，改为使用<strong>raw_id 排序</strong>。</p>
+<p>raw_id 排序的过程大致如下：</p>
+<ol>
+<li>首先初始化sort buffer，只确定放入两个字段 id 和 name；</li>
+<li>然后查询 city 的索引，找出满足条件的行 id；</li>
+<li>然后回表，通过 id 拿到整行数据，但是每行只取出 id 和 name 两个字段存入sort buffer，不取city 和 age 字段，使得取出的一行数据小于 <code>max_length_for_sort_data</code>的大小；</li>
+<li>根据 id 一行一行取完后，然后在 sort buffer 进行根据name的排序；</li>
+<li>最后按照排好的顺序，根据 id 再次回表查询到 city 和 age 两个字段；</li>
+<li>组合后将 city、name 和 age 三个字段返回客户端。</li>
+</ol>
+<p>整个过程会访问一次 city 的二级索引，然后两次回表操作。</p>
+<hr>
+<p>很明显，上述两种 order by 的实现方式，raw_id排序相比全字段排序，多回了一次表，性能肯定会受影响。所以MySQL只有在 sort buffer 可能不够的情况下才会使用 raw_id 这种排序方式，还是会优先使用全字段排序。</p>
+<h4 id="优化">优化</h4>
+<p>一、sort buffer的优化</p>
+<p>不管是全字段排序，还是 raw_id 排序，都需要在sort buffer里进行排序，这都是因为从存储引擎取出的数据本身是乱序的，如果我们存储时就是有序的，那么查询时就不需要用到sort buffer了，性能就能大大优化。</p>
+<p>那么上面那个例子，怎么才能让根据 city 查询出来的行，天然就是按照 name 排序呢，答案就是建索引，我们给(city, name)两个字段建立一个联合索引，那么当我们访问这个联合索引取出<code>city=&quot;杭州&quot;</code>的数据时，name字段就是天然有序的了(联合索引相关内容可以查看<a href="https://yanghairui.life/post/mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">MySQL的索引</a>这篇文章)。</p>
+<p>那么整个过程就变成：</p>
+<ol>
+<li>通过(city, name)这个联合索引找出满足<code>city=&quot;杭州&quot;</code>这个条件的记录，联合索引可以把city、name和id查出来，并且name是排好序的；</li>
+<li>然后根据id进行回表，直接取出name、city、age三个字段的值，可以一边回表一遍返回，因为name是已经排好序的了。</li>
+</ol>
+<p>二、回表的优化</p>
+<p>上述的过程还是需要回表，如果我们可以直接通过二级索引就拿到需要的city、name、age的值不是更好，那么解决方式也很容易想到，把(city, name)联合索引改成(city, name, age)三个字段的联合索引，则我们就可以通过这个联合索引，拿到所有想要的字段，不需要再回表了。这就是<strong>覆盖索引</strong>优化。</p>
+<p>当然了，如果这种类型的查询并不那么多的话，三个字段的联合索引还是比较占空间和插入效率的，所以还是需要根据实际情况酌情考虑，选择一个最有性价比的方案。</p>
+</div>
+    <div class="post-footer">
+      <div class="info">
+        
+          <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
+
+
+
+
+        
+
+        
+          <span class="separator"><a class="tag" href="/tags/mysql/">MySQL</a></span>
+
+
+
+
+        
+      </div>
+    </div>
+
+    
+  </div>
+
+
+          </div>
+        </div>
+      </main>
+    </div><footer class="footer footer--base">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
+    crossorigin="anonymous"
+  ></script></body>
+</html>

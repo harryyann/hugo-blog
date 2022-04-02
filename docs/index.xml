@@ -20,6 +20,19 @@
     </item>
     
     <item>
+      <title>MySQL的ORDER BY语句的工作方式</title>
+      <link>https://yanghairui.life/post/mysql%E7%9A%84%E6%8E%92%E5%BA%8F%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F/</link>
+      <pubDate>Sun, 20 Feb 2022 13:26:00 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/post/mysql%E7%9A%84%E6%8E%92%E5%BA%8F%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F/</guid>
+      
+        <description>在日常开发应用时，经常会碰到根据某个字段排序后显示结果，那么 MySQL 底层对这种需要排序的查询到底是怎么处理的呢？
+首先我们构造一张表：
+CREATE TABLE `t` (  `id` int(11) NOT NULL,  `city` varchar(16) NOT NULL,  `name` varchar(16) NOT NULL,  `age` int(11) NOT NULL,  `addr` varchar(128) DEFAULT NULL,  PRIMARY KEY (`id`),  KEY `city` (`city`) ) ENGINE=InnoDB; 这个表有 id、city、name、age等几个字段，主键是 id，city 字段创建了普通索引。</description>
+      
+    </item>
+    
+    <item>
       <title>Goroutine的调度模型</title>
       <link>https://yanghairui.life/post/goroutine%E7%9A%84%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B/</link>
       <pubDate>Sat, 19 Feb 2022 14:43:20 +0800</pubDate>
