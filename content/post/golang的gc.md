@@ -20,11 +20,11 @@ draft: false
 
 - **引用计数**GC
 
-  每个对象自身包含一个被引用的计数器，当计数器归零时自动得到回收。因为此方法缺陷较多，在追求高性能时通常不被应用。Python、Objective-C 等均为引用计数式 GC，Python的话是引用计数和隔代回收相结合的方式。
+  每个对象自身包含一个被引用的计数器，当计数器归零时自动得到回收。因为此方法缺陷较多，实时维护应用计数导致开销很大，在追求高性能时通常不被应用。优点就是对象可以及时的被回收，Python、Objective-C 等均为引用计数式 GC，Python的话是引用计数和隔代回收相结合的方式。
 
 - **追踪式**GC
 
-  从根对象出发，根据对象之间的引用信息，一步步推进直到扫描完毕整个堆并确定需要保留的对象，从而回收所有可回收的对象。Go、 Java、V8 对 JavaScript 的实现等均为追踪式 GC。Go的垃圾回收叫做三色标记法。
+  从根对象出发，根据对象之间的引用信息，一步步推进直到扫描完毕整个堆并确定需要保留的对象，从而回收所有可回收的对象。这种方式解决了引用计数的缺点，缺点就是需要**STW**。Go、 Java、V8 对 JavaScript 的实现等均为追踪式 GC。
 
 ## STW
 
@@ -116,6 +116,36 @@ Go1.8通过混合写屏障解决了go1.5版本re-sacn导致的STW几十毫秒的
 
 1. Go会启动一个后台goroutine叫做bgsweep()，它是定期休眠状态，一旦开始清扫，就会挨个mspan去清扫。
 2. 当申请内存时lazy触发。当goroutine需要在mheap上分配新内存时，就会触发该操作，这种清理导致的延迟会分散到每次的内存分配中。
+
+## GC的触发时机
+
+一、内存分配量到达阈值时会触发GC
+
+每次内存分配时都会检查当前内存分配量是否已达到阀值，如果达到阀值则立即启动GC。
+
+```
+阀值 = 上次GC内存分配量 * 内存增长率
+```
+
+内存增长率由环境变量 GOGC 控制，默认为100，即每当内存扩大一倍时启动GC。
+
+二、定期触发GC
+
+默认情况下，最长2分钟触发一次GC，这个间隔在`src/runtime/proc.go:forcegcperiod` 变量中被声明：
+
+```go
+// forcegcperiod is the maximum time in nanoseconds between garbage
+// collections. If we go this long without a garbage collection, one
+// is forced to run.
+//
+// This is a variable for testing purposes. It normally doesn't change.
+var forcegcperiod int64 = 2 * 60 * 1e9
+
+```
+
+三、手动触发
+
+程序代码中也可以使用 `runtime.GC()`来手动触发一次GC。这主要用于GC性能测试和统计。
 
 ---
 

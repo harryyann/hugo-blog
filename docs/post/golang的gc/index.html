@@ -164,7 +164,7 @@ GC，全称 Garbage Collection，即垃圾回收，就是一种自动内存管�
 
     ,
         "url" : "https:\/\/yanghairui.life\/post\/golang%E7%9A%84gc\/",
-        "wordCount" : "86",
+        "wordCount" : "152",
         "genre" : [ 
       
       "golang"
@@ -401,11 +401,11 @@ GC，全称 Garbage Collection，即垃圾回收，就是一种自动内存管�
 <ul>
 <li>
 <p><strong>引用计数</strong>GC</p>
-<p>每个对象自身包含一个被引用的计数器，当计数器归零时自动得到回收。因为此方法缺陷较多，在追求高性能时通常不被应用。Python、Objective-C 等均为引用计数式 GC，Python的话是引用计数和隔代回收相结合的方式。</p>
+<p>每个对象自身包含一个被引用的计数器，当计数器归零时自动得到回收。因为此方法缺陷较多，实时维护应用计数导致开销很大，在追求高性能时通常不被应用。优点就是对象可以及时的被回收，Python、Objective-C 等均为引用计数式 GC，Python的话是引用计数和隔代回收相结合的方式。</p>
 </li>
 <li>
 <p><strong>追踪式</strong>GC</p>
-<p>从根对象出发，根据对象之间的引用信息，一步步推进直到扫描完毕整个堆并确定需要保留的对象，从而回收所有可回收的对象。Go、 Java、V8 对 JavaScript 的实现等均为追踪式 GC。Go的垃圾回收叫做三色标记法。</p>
+<p>从根对象出发，根据对象之间的引用信息，一步步推进直到扫描完毕整个堆并确定需要保留的对象，从而回收所有可回收的对象。这种方式解决了引用计数的缺点，缺点就是需要<strong>STW</strong>。Go、 Java、V8 对 JavaScript 的实现等均为追踪式 GC。</p>
 </li>
 </ul>
 <h2 id="stw">STW</h2>
@@ -467,6 +467,21 @@ GC，全称 Garbage Collection，即垃圾回收，就是一种自动内存管�
 <li>Go会启动一个后台goroutine叫做bgsweep()，它是定期休眠状态，一旦开始清扫，就会挨个mspan去清扫。</li>
 <li>当申请内存时lazy触发。当goroutine需要在mheap上分配新内存时，就会触发该操作，这种清理导致的延迟会分散到每次的内存分配中。</li>
 </ol>
+<h2 id="gc的触发时机">GC的触发时机</h2>
+<p>一、内存分配量到达阈值时会触发GC</p>
+<p>每次内存分配时都会检查当前内存分配量是否已达到阀值，如果达到阀值则立即启动GC。</p>
+<pre tabindex="0"><code>阀值 = 上次GC内存分配量 * 内存增长率
+</code></pre><p>内存增长率由环境变量 GOGC 控制，默认为100，即每当内存扩大一倍时启动GC。</p>
+<p>二、定期触发GC</p>
+<p>默认情况下，最长2分钟触发一次GC，这个间隔在<code>src/runtime/proc.go:forcegcperiod</code> 变量中被声明：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// forcegcperiod is the maximum time in nanoseconds between garbage
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// collections. If we go this long without a garbage collection, one
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// is forced to run.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// This is a variable for testing purposes. It normally doesn&#39;t change.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">forcegcperiod</span> <span style="color:#66d9ef">int64</span> = <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">60</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">1e9</span>
+</span></span></code></pre></div><p>三、手动触发</p>
+<p>程序代码中也可以使用 <code>runtime.GC()</code>来手动触发一次GC。这主要用于GC性能测试和统计。</p>
 <hr>
 <p>GC的过程还在随着版本不断优化，这篇文章只是大致做一个介绍，如果有空我会再仔细研究研究。</p>
 </div>

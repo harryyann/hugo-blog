@@ -179,7 +179,7 @@ Go语言在运行时，每个goroutine都维护着自己的栈区，一个gorout
 
   对象。用来存储一个变量数据内存空间，一个span在初始化时，会被切割成一堆等大的object，假设一个object是16B，span是一个page 8K，那么span就会被切割成 8K/16B = 512个object 。
 
-## 小于32KB的内存分配
+## 大于16B小于32KB的内存分配
 
 当程序发生了小于32KB的小块内存申请时，Go会从一个叫做**mcache**的本地缓存给程序分配内存。这样的一个内存块叫mspan。mcache是和GMP模型中的P绑定的（关于GMP可以查看[Goroutine的调度模型](https://yanghairui.life/post/goroutine%E7%9A%84%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B/)这篇文章），如下：
 
@@ -203,7 +203,7 @@ mheap里的arena区域是go中真正的堆区，这里存储了所有在堆上�
 
 因为Go没法使用mcache和mcentral管理超过32KB的内存申请，会直接从堆上（mheap）分配对应大小的内存页（每页是8KB），如果没有就只能直接去操作系统上要了。
 
-## 小于16KB的内存分配
+## 小于16B的内存分配
 
 对于小于16字节的对象（且无指针），Go将其划分为了tiny对象，tiny对象存在的主要目的是为了处理极小的字符串和独立的转义变量。
 
