@@ -163,7 +163,7 @@ Goroutine和Thread的区别 内存占用不同 创建一个goroutine的栈的大
 
     ,
         "url" : "https:\/\/yanghairui.life\/post\/goroutine%E7%9A%84%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B\/",
-        "wordCount" : "147",
+        "wordCount" : "152",
         "genre" : [ 
       
       "golang"
@@ -503,6 +503,9 @@ Goroutine和Thread的区别 内存占用不同 创建一个goroutine的栈的大
 <li>GC收集，比如STW，扫描G的堆栈和标记，清除操作</li>
 <li>栈扩容，当需要的时候由g0进行扩栈操作</li>
 </ul>
+<h2 id="goroutine的总体调度过程">Goroutine的总体调度过程</h2>
+<p>M首先从本地的P中拿G，没有就去全局队列里拿一半的G放到自己的P中，没有就从 netpoller 取出一些G并放到全局队列，还没有就随机选择一个P，从别的P中抢一半过来。</p>
+<p>同时每个P每61次都会从全局队列中取一个G放到自己的队列中，防止全局队列的G饿死。</p>
 </div>
     <div class="post-footer">
       <div class="info">
