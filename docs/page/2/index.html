@@ -595,6 +595,62 @@
     >
       
       <div class="post-title">
+        <h3><a href="/post/redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">Redis数据类型、操作指令和底层实现原理</a></h3>
+      </div>
+      <div class="post-content">
+        <div class="p_part">
+          <p>
+            
+              字符串 SDS 字符串在 Redis 中的实现叫做SDS(Symple Dynamic Strings)，简单动态字符串。redis中所有场景中出现的字符串，基本都是由SDS来实现的，包括：
+ 所有非数字的key。例如set msg &quot;hello world&quot; 中的&quot;msg&quot;这个key； 字符串数据类型的值。例如set msg &quot;hello world&quot;中的msg的值&quot;hello wolrd&quot;； 非字符串数据类型中的“字符串值”。例如RPUSH fruits &quot;apple&quot; &quot;banana&quot; &quot;cherry&quot;中的”apple” “banana” “cherry”。  SDS的数据结构如下（3.
+
+
+            
+          </p>
+          <a href="/post/redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="read_more">继续阅读</a></div>
+      </div>
+
+      
+      <div class="post-footer">
+        <div class="meta">
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Sat, Sep 11, 2021
+
+
+              </span
+            >
+            
+              <span class="separator"><a class="category" href="/categories/%E7%BC%93%E5%AD%98/">缓存</a></span>
+
+
+
+
+            
+
+            
+              <span class="separator"><a class="tag" href="/tags/redis/">redis</a><a class="tag" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></span>
+
+
+
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div
+      class="post 
+        animated fadeInDown
+
+      "
+    >
+      
+      <div class="post-title">
         <h3><a href="/post/golang%E7%9A%84%E6%8C%87%E9%92%88/">Golang的指针和内存对齐</a></h3>
       </div>
       <div class="post-content">
@@ -789,62 +845,6 @@ hmap的数据结构： map的实现实际上就是runtime包里的hmap：
             <span class="date"
               >
                 Tue, Jul 13, 2021
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/golang/">golang</a><a class="tag" href="/tags/%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/">编程模式</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
-        <h3><a href="/post/golang%E7%9A%84option%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/">Golang编程模式：functional options</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              配置选项问题 当我们需要创建一个对象时，往往需要对这个对象的某些成员参数进行配置，比如下面这个结构体：
-type Server struct {  Addr string  Port int  Protocol string  Timeout time.
-
-
-            
-          </p>
-          <a href="/post/golang%E7%9A%84option%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/" class="read_more">继续阅读</a></div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Mon, Jul 12, 2021
 
 
               </span

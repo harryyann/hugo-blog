@@ -312,6 +312,62 @@
     >
       
       <div class="post-title">
+        <h3><a href="/post/golang%E7%9A%84option%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/">Golang编程模式：functional options</a></h3>
+      </div>
+      <div class="post-content">
+        <div class="p_part">
+          <p>
+            
+              配置选项问题 当我们需要创建一个对象时，往往需要对这个对象的某些成员参数进行配置，比如下面这个结构体：
+type Server struct {  Addr string  Port int  Protocol string  Timeout time.
+
+
+            
+          </p>
+          <a href="/post/golang%E7%9A%84option%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/" class="read_more">继续阅读</a></div>
+      </div>
+
+      
+      <div class="post-footer">
+        <div class="meta">
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Mon, Jul 12, 2021
+
+
+              </span
+            >
+            
+              <span class="separator"><a class="category" href="/categories/golang/">golang</a></span>
+
+
+
+
+            
+
+            
+              <span class="separator"><a class="tag" href="/tags/golang/">golang</a><a class="tag" href="/tags/%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/">编程模式</a></span>
+
+
+
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <div
+      class="post 
+        animated fadeInDown
+
+      "
+    >
+      
+      <div class="post-title">
         <h3><a href="/post/k8s%E7%9A%84rbac%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/">K8s的RBAC权限控制机制</a></h3>
       </div>
       <div class="post-content">
@@ -798,62 +854,6 @@ IO线程 innodb中大量使用了AIO（异步IO）来处理写请求，以提高
             <span class="date"
               >
                 Fri, May 7, 2021
-
-
-              </span
-            >
-            
-              <span class="separator"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span>
-
-
-
-
-            
-
-            
-              <span class="separator"><a class="tag" href="/tags/mysql/">MySQL</a></span>
-
-
-
-
-            
-          </div>
-        </div>
-      </div>
-    </div>
-
-  
-    <div
-      class="post 
-        animated fadeInDown
-
-      "
-    >
-      
-      <div class="post-title">
-        <h3><a href="/post/mysql%E5%A4%8D%E5%88%B6/">MySQL的复制</a></h3>
-      </div>
-      <div class="post-content">
-        <div class="p_part">
-          <p>
-            
-              复制 复制是让一台服务器的数据和其他服务器保持同步。MySQL的复制是通过binlog实现的，binlog有三种类型：
- statement：记录的就是SQL语句，优点是人类可读，并且占用空间较小，但是基于该类型binlog的复制可能会产生不一致，比如执行某个特定函数，在复制后的结果可能和之前不一样。 raw：记录的是具体的每一行的变化细节，可以保证复制的正确性，保证数据一致，但是一行一行的记录占用空间较大。实际使用中采用raw的比较多。 mixed：是statement和raw的结合，一般的语句修改都采用statement格式保存，当碰到一些可能引起复制不一致的函数时，改为采用raw保存。这样既能缩小日志占用空间，也可以保证复制的数据一致性。  复制的过程  主库产生binlog 备库的IO线程，请求主库的binlog，并将binlog保存到自己本地的中继日志relay log中 备库的sql线程读取relay log，通过重放relay log完成复制  后续会进行详细说明，大体的过程如下图：
-
-
-            
-          </p>
-          <a href="/post/mysql%E5%A4%8D%E5%88%B6/" class="read_more">继续阅读</a></div>
-      </div>
-
-      
-      <div class="post-footer">
-        <div class="meta">
-          <div class="info">
-            <em class="fas fa-calendar-day"></em>
-            <span class="date"
-              >
-                Thu, May 6, 2021
 
 
               </span

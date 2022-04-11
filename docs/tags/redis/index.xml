@@ -6,7 +6,19 @@
     <description>Recent content in Redis on Website of Harry Yang</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sat, 15 May 2021 16:52:40 +0800</lastBuildDate><atom:link href="https://yanghairui.life/tags/redis/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 11 Sep 2021 00:51:55 +0800</lastBuildDate><atom:link href="https://yanghairui.life/tags/redis/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Redis数据类型、操作指令和底层实现原理</title>
+      <link>https://yanghairui.life/post/redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</link>
+      <pubDate>Sat, 11 Sep 2021 00:51:55 +0800</pubDate>
+      
+      <guid>https://yanghairui.life/post/redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</guid>
+      
+        <description>字符串 SDS 字符串在 Redis 中的实现叫做SDS(Symple Dynamic Strings)，简单动态字符串。redis中所有场景中出现的字符串，基本都是由SDS来实现的，包括：
+ 所有非数字的key。例如set msg &amp;quot;hello world&amp;quot; 中的&amp;quot;msg&amp;quot;这个key； 字符串数据类型的值。例如set msg &amp;quot;hello world&amp;quot;中的msg的值&amp;quot;hello wolrd&amp;quot;； 非字符串数据类型中的“字符串值”。例如RPUSH fruits &amp;quot;apple&amp;quot; &amp;quot;banana&amp;quot; &amp;quot;cherry&amp;quot;中的”apple” “banana” “cherry”。  SDS的数据结构如下（3.</description>
+      
+    </item>
+    
     <item>
       <title>Redis的持久化机制</title>
       <link>https://yanghairui.life/post/redis%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6/</link>
