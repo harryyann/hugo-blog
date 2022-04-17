@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html
+  dir="ltr"
+  lang="zh-cn"
+  data-theme=""
+><head>
+  <title>
+    
+      杨海瑞
+        |
+        Kafka读写快的4点原因总结
+
+
+      
+
+
+    
+  </title>
+
+  
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.96.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta
+    name="description"
+    content="
+      Per aspera ad astra.
+循此苦旅，终抵群星。
+
+
+
+    "
+  />
+  
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/main.min.e33d750f1308c1bc80df765e933b806556fb5b7598d040a6a4d3a9019812b993.css"
+    integrity="sha256-4z11DxMIwbyA33ZekzuAZVb7W3WY0ECmpNOpAZgSuZM="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  
+  <link
+    rel="stylesheet"
+    href="/css/markupHighlight.min.058b31f17db60602cc415fd63b0427e7932fbf35c70d8e341a4c39385f5f6f3e.css"
+    integrity="sha256-BYsx8X22BgLMQV/WOwQn55MvvzXHDY40Gkw5OF9fbz4="
+    crossorigin="anonymous"
+    type="text/css"
+  />
+  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous"
+  />
+  
+  <link rel="shortcut icon" href="/favicons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+
+  <link rel="canonical" href="https://yanghairui.life/post/kafka%E8%AF%BB%E5%86%99%E5%BF%AB%E7%9A%84%E5%8E%9F%E5%9B%A0%E6%80%BB%E7%BB%93/" />
+
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/anatole-header.min.d0408165d31a17f17bba83038bf54e86121f85021bdf936382e636f0f77a952f.js"
+    integrity="sha256-0ECBZdMaF/F7uoMDi/VOhhIfhQIb35NjguY28Pd6lS8="
+    crossorigin="anonymous"
+  ></script>
+
+  
+    
+    
+    <script
+      type="text/javascript"
+      src="/js/anatole-theme-switcher.min.65e936b591bf81484a5ac438c8e4ae6454fb25516d58ce911e4888d7f230bdc5.js"
+      integrity="sha256-Zek2tZG/gUhKWsQ4yOSuZFT7JVFtWM6RHkiI1/IwvcU="
+      crossorigin="anonymous"
+    ></script>
+
+  
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Kafka读写快的4点原因总结"/>
+<meta name="twitter:description" content="Partiton 并行写 Kafka的每个消息都会发到某个topic下的一个partition，而不同的partition的leader副本往往是位于不同的broker机器上的，所以消息如果不是发给同一个partition，实际上都是可以并行处理的，发挥多个机器并行处理的优势。
+顺序写 对于同一个partiton来说，写入操作都是顺序写，磁盘的顺序IO要比随机IO快的多，甚至可以超过内存的随机IO速度。
+Page-cache Kafka使用page cache来批量的进行刷盘操作。Page cache是操作系统内核态的buffer。使用内核态buffer的好处就是，如果Kafka的broker重启了，page cache的数据依然不会丢，除非机器宕机，这是一种保证数据完整和效率之间的权衡。"/>
+
+
+
+  
+
+
+  
+  
+  
+  
+  <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "articleSection": "post",
+        "name": "Kafka读写快的4点原因总结",
+        "headline": "Kafka读写快的4点原因总结",
+        "alternativeHeadline": "",
+        "description": "
+      
+        Partiton 并行写 Kafka的每个消息都会发到某个topic下的一个partition，而不同的partition的leader副本往往是位于不同的broker机器上的，所以消息如果不是发给同一个partition，实际上都是可以并行处理的，发挥多个机器并行处理的优势。\n顺序写 对于同一个partiton来说，写入操作都是顺序写，磁盘的顺序IO要比随机IO快的多，甚至可以超过内存的随机IO速度。\nPage-cache Kafka使用page cache来批量的进行刷盘操作。Page cache是操作系统内核态的buffer。使用内核态buffer的好处就是，如果Kafka的broker重启了，page cache的数据依然不会丢，除非机器宕机，这是一种保证数据完整和效率之间的权衡。
+
+
+      
+
+
+    ",
+        "inLanguage": "zh-cn",
+        "isFamilyFriendly": "true",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/yanghairui.life\/post\/kafka%E8%AF%BB%E5%86%99%E5%BF%AB%E7%9A%84%E5%8E%9F%E5%9B%A0%E6%80%BB%E7%BB%93\/"
+        },
+        "author" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "creator" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "accountablePerson" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightHolder" : {
+            "@type": "Person",
+            "name": "杨海瑞"
+        },
+        "copyrightYear" : "2022",
+        "dateCreated": "2022-03-12T00:19:51.00Z",
+        "datePublished": "2022-03-12T00:19:51.00Z",
+        "dateModified": "2022-03-12T00:19:51.00Z",
+        "publisher":{
+            "@type":"Organization",
+            "name": "杨海瑞",
+            "url": "https://yanghairui.life",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https:\/\/yanghairui.life\/favicons\/favicon-32x32.png",
+                "width":"32",
+                "height":"32"
+            }
+        },
+        "image": 
+      [
+      ]
+
+    ,
+        "url" : "https:\/\/yanghairui.life\/post\/kafka%E8%AF%BB%E5%86%99%E5%BF%AB%E7%9A%84%E5%8E%9F%E5%9B%A0%E6%80%BB%E7%BB%93\/",
+        "wordCount" : "24",
+        "genre" : [ 
+      
+      "消息中间件"
+
+    ],
+        "keywords" : [ 
+      
+      "kafka"
+
+    
+      
+        ,
+
+      
+      "零拷贝"
+
+    ]
+    }
+  </script>
+
+
+
+</head>
+<body>
+    <header><div
+  class="page-top 
+    animated fadeInDown
+
+  "
+>
+  <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>
+  <nav>
+    <ul class="nav__list" id="navMenu">
+      <div class="nav__links">
+        
+        
+          
+          <li>
+            <a
+              
+              href="/"
+              
+              title=""
+              >Home</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/post/"
+              
+              title=""
+              >Posts</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/portfolio/"
+              
+              title=""
+              >Portfolio</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/about/"
+              
+              title=""
+              >About</a
+            >
+          </li>
+
+        
+          
+          <li>
+            <a
+              
+              href="/contact/"
+              
+              title=""
+              >Contact</a
+            >
+          </li>
+
+        
+      </div>
+      <ul>
+        
+        
+          <li>
+            <a class="theme-switch" title="Switch Theme">
+              <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+          </li>
+
+        
+      </ul>
+    </ul>
+  </nav>
+</div>
+</header>
+    <div class="wrapper">
+      <aside><div
+  class="sidebar
+    animated fadeInDown
+
+  "
+>
+  <div class="sidebar__content">
+    <div class="logo-title">
+      <div class="title">
+        <img src="/images/profile5.jpg" alt="profile picture" />
+        <h3 title=""><a href="/">Harry Yang&#39;s Website</a></h3>
+        <div class="description">
+          <p>Per aspera ad astra.<br />循此苦旅，终抵群星。<br /></p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+        <li>
+          <a href="https://stackoverflow.com/users/12924262/horace-yang" rel="me" aria-label="StackOverFlow" title="StackOverFlow">
+            <i class="fab fa-stack-overflow fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://github.com/harryyann" rel="me" aria-label="GitHub" title="GitHub">
+            <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="https://www.zhihu.com/people/yang-hai-rui-88" rel="me" aria-label="zhihu" title="zhihu">
+            <i class="fab fa-zhihu fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+        <li>
+          <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=941811450@qq.com" rel="me" aria-label="e-mail" title="e-mail">
+            <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+          </a>
+        </li>
+
+      
+    </ul>
+  </div><footer class="footer footer--sidebar">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
+    crossorigin="anonymous"
+  ></script></div>
+</aside>
+      <main>
+        <div class="autopagerize_page_element">
+          <div class="content">
+  <div
+    class="post 
+      animated fadeInDown
+
+    "
+  >
+    <div class="post-content">
+      
+      <div class="post-title">
+        <h1>Kafka读写快的4点原因总结</h1>
+        
+          <div class="info">
+            <em class="fas fa-calendar-day"></em>
+            <span class="date"
+              >
+                Sat, Mar 12, 2022
+
+
+              </span
+            >
+            <em class="fas fa-stopwatch"></em>
+            <span class="reading-time">阅读时间 1 分钟</span>
+          </div>
+
+        
+      </div><h1 id="partiton">Partiton</h1>
+<h2 id="并行写">并行写</h2>
+<p>Kafka的每个消息都会发到某个topic下的一个partition，而不同的partition的leader副本往往是位于不同的broker机器上的，所以消息如果不是发给同一个partition，实际上都是可以并行处理的，发挥多个机器并行处理的优势。</p>
+<h2 id="顺序写">顺序写</h2>
+<p>对于同一个partiton来说，写入操作都是顺序写，磁盘的顺序IO要比随机IO快的多，甚至可以超过内存的随机IO速度。</p>
+<h1 id="page-cache">Page-cache</h1>
+<p>Kafka使用page cache来批量的进行刷盘操作。Page cache是操作系统内核态的buffer。使用内核态buffer的好处就是，如果Kafka的broker重启了，page cache的数据依然不会丢，除非机器宕机，这是一种保证数据完整和效率之间的权衡。</p>
+<p>Page cache会包含多个buffer cache，用于文件系统的数据缓存，写入都是先写入buffer，然后再批量刷盘：</p>
+<ul>
+<li>IO Scheduler会将连续的小块写组装成一个大块写来提高性能；</li>
+<li>IO Scheduler还会尝试将一些写操作重排，从而减少磁盘的磁头移动。</li>
+</ul>
+<p>对于读操作，也是会先读page cache，如果生产和消费速度相当，甚至直接在cache中就可以交换数据，落盘反而成了一个异步操作。</p>
+<h1 id="zero-copy">Zero-copy</h1>
+<p>Kafka的数据由生产者发送到落盘，和磁盘文件通过网络发送给消费者的两个过程，都使用了零拷贝技术。</p>
+<h1 id="批处理和数据压缩">批处理和数据压缩</h1>
+<p>Kafka的客户端在通过网络发送数据给broker时，会在一个批处理中累计多条记录（包括读和写），发送记录的批处理分摊了网络往返的开销，使得带宽利用率得到提升。</p>
+<p>生产者还可以将数据压缩后再发送给broker，从而减少网络数据的传输量，支持的算法有Snappy、GZip、LZ4等。数据压缩一般都是和批处理配套使用进行优化的。</p>
+</div>
+    <div class="post-footer">
+      <div class="info">
+        
+          <span class="separator"><a class="category" href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/">消息中间件</a></span>
+
+
+
+
+        
+
+        
+          <span class="separator"><a class="tag" href="/tags/kafka/">kafka</a><a class="tag" href="/tags/%E9%9B%B6%E6%8B%B7%E8%B4%9D/">零拷贝</a></span>
+
+
+
+
+        
+      </div>
+    </div>
+
+    
+  </div>
+
+
+          </div>
+        </div>
+      </main>
+    </div><footer class="footer footer--base">
+  <div class="by_farbox">
+    <ul class="footer__list">
+      <li class="footer__item">
+        &copy;
+        
+          2021-2022
+
+        
+      </li>
+      
+    </ul>
+  </div>
+</footer>
+  
+  <script
+    type="text/javascript"
+    src="/js/medium-zoom.min.4a40b20209bc12e56cf77caff5feaa93fecd6b0d97d51b33afb0265a732ce636.js"
+    integrity="sha256-SkCyAgm8EuVs93yv9f6qk/7Naw2X1Rszr7AmWnMs5jY="
+    crossorigin="anonymous"
+  ></script></body>
+</html>

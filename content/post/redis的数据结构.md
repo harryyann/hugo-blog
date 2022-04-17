@@ -707,52 +707,56 @@ Redis中每一层节点的提取，并不是均匀的，而是类似快速排序
 
 3. `del key [key ...]`
 
-   删除多个key。
+   删除多个key，不存在就忽略。
 
-4. ` expire key seconds`
+4. `unlink key [key ...]`
+
+   同样删除多个key，不存在就忽略，但是和del不同，它是非阻塞的，它会在其他线程中回收内存，顾名思义，它是断开key和value的连接，真正的删除操作会在后续异步完成。
+
+5. ` expire key seconds`
 
    给key重新设置一个过期时间。
 
-5. `exists key [key ...]`
+6. `exists key [key ...]`
 
    检测一些key是否存在，返回的是输入的key中存在的个数。
 
-6. `type key`
+7. `type key`
 
    判断key的数据类型。
 
-7. `ttl key`
+8. `ttl key`
 
    查看key的过期时间，-1就是没有过期时间。
 
-8. `pttl key`
+9. `pttl key`
 
    一样，就是返回的是毫秒。
 
-9. `rename key newkey`
+10. `rename key newkey`
 
    给某个key设置一个新key名。
 
-10. `object subcommand [arguments [arguments ...]]`
+11. `object subcommand [arguments [arguments ...]]`
 
     object允许我们从内部查看一个key的底层对象。比如我们之前一直使用的`object encoding key`来查看一个key的底层编码格式。
 
-11. `randomkey`
+12. `randomkey`
 
     随机返回一个key。
 
-12. `dump`和`restore`
+13. `dump`和`restore`
 
     用于rdb序列化，和数据恢复。
 
-13. `migrate`
+14. `migrate`
 
     dump、restore、del三个命令的集合。
 
-14. `select index`
+15. `select index`
 
     选择数据库。
 
-15. `flushdb` 或 `flushall`
+16. `flushdb` 或 `flushall`
 
     清空数据库，flushdb只清空当前数据库，flushall清除所有数据库的数据。
