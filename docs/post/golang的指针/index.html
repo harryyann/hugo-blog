@@ -163,7 +163,7 @@
 
     ,
         "url" : "https:\/\/yanghairui.life\/post\/golang%E7%9A%84%E6%8C%87%E9%92%88\/",
-        "wordCount" : "277",
+        "wordCount" : "320",
         "genre" : [ 
       
       "golang"
@@ -464,8 +464,8 @@
 </span></span></code></pre></div><h1 id="内存对齐">内存对齐</h1>
 <h2 id="内存对齐的原因">内存对齐的原因</h2>
 <ul>
-<li>并不是所有硬件平台都能访问任意地址上的任意数据。</li>
-<li>性能，访问未对齐的内存，处理器需要做两次内存访问，而对齐的内存只需要访问一次。</li>
+<li>可移植性：并不是所有硬件平台都能访问任意地址上的任意数据。平台具有差异性，这样如果是任意访问，代码就不具备可移植性，将分配的内存对齐，就有了可移植性了。</li>
+<li>性能：访问未对齐的内存，处理器需要做两次内存访问，而对齐的内存只需要访问一次。比如32位机器，cpu字长是4字节，64位机器是8字节，如果变量没对齐，就可以要读多次才能拿到数据，如果对齐了，那就一次就能拿到，虽然这可能会有一定的空间浪费。</li>
 </ul>
 <h2 id="内存对齐的方式">内存对齐的方式</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(int64(<span style="color:#ae81ff">0</span>))) <span style="color:#75715e">// &#34;8&#34;
@@ -522,7 +522,27 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Offsetof</span>(<span style="color:#a6e22e">SizeOfH</span>{}.<span style="color:#a6e22e">D</span>) <span style="color:#75715e">// 16
 </span></span></span></code></pre></div><p>以上结构体在内存中的布局：</p>
 <p><img src="/images/pointer/struct4.png" alt=""></p>
-<h2 id="golang中常用类型的内存大小">golang中常用类型的内存大小</h2>
+<h2 id="空结构体是否占用内存">空结构体是否占用内存</h2>
+<p>如果空结构体作为结构体的内置字段：当变量位于结构体的前面和中间时，不会占用内存；当该变量位于结构体的末尾位置时，需要进行内存对齐，内存占用大小和前一个变量的大小保持一致。</p>
+<p>比如，这样排列的<code>struct{}</code>就不会占用内存：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">C</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">struct</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int64</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">c</span> <span style="color:#66d9ef">int64</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">D</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int64</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">b</span> <span style="color:#66d9ef">struct</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">c</span> <span style="color:#66d9ef">int64</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>而这样的就会占用，大小和int64一样，占8个字节：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">E</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int64</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int64</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">c</span> <span style="color:#66d9ef">struct</span>{}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="golang中常用类型的内存大小">Golang中常用类型的内存大小</h2>
 <ul>
 <li>bool：1字节</li>
 <li>int、uint、uintptr、*T、map、func、chan：1机器字节（根据机器是32位还是64位，分别占4个和8个字节）</li>
@@ -530,6 +550,13 @@
 <li>interface：2机器字节</li>
 <li>[]T：3机器字节</li>
 <li>intN、uintN、floatN、complexN：N/8个字节</li>
+</ul>
+<h2 id="总结">总结</h2>
+<ul>
+<li>unsafe.Sizeof(x) 返回了变量x的内存占用大小；</li>
+<li>两个结构体，即使包含变量类型的数量相同，但是位置不同，占用的内存大小也不同，由此引出了内存对齐；</li>
+<li>空结构体作为成员变量时，是否占用内存和所处位置有关；</li>
+<li>实际开发中，我们可以通过调整成员在结构体中的位置排布，优化内存占用（一般按照变量内存大小顺序来排列，整体占用内存更小）</li>
 </ul>
 </div>
     <div class="post-footer">

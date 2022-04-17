@@ -684,16 +684,74 @@ Redis中每一层节点的提取，并不是均匀的，而是类似快速排序
 
     同样的，和scan命令、hscan命令、sscan命令类似。
 
+# Bitmap
+
+Bitmap就是位图，用一段连续的二进制数组（0和1），可以通过偏移量offset来定位元素，bitmap通过最小的单位bit表示0和1，时间复杂度O(1)，特别适合一些大数据量下的，**使用二值统计的场景**。
+
+Redis的bitmap是基于String类型的位操作，而redis字符串的最大长度是512M，所以bitmap的offset值也是有上限的，即`8 * 1024 * 1024 * 512`个bit，即`2^32`次方个比特位。
+
+## 常用命令
+
+- `setbit key offset value`：
+
+  给某个key的某个offset处置为value，value只能是0或者1。注意的是，如果第一次创建，offset特别大，就要创建一个特别大的字节数组，这么大块内存分配可能会导致Redis阻塞。创建完成后，如果不扩容，那么所有的操作都是O(1)的时间复杂度。
+
+- `getbit key offset`
+
+  获取指定key指定offset上的位的值。
+
+  一个bitmap被初始化时，除了被赋了1的位，其他位上都默认是0。由于Bitmap底层是String，所有还可以直接设置一个String，然后这个String依然可以使用bitmap读，这适合需要将很多位初始化为1的情况。比如这样：
+
+  ```mysql
+  127.0.0.1:6379> set bitkey 42
+  OK
+  127.0.0.1:6379> getbit bitkey 2
+  (integer) 1
+  127.0.0.1:6379> getbit bitkey 5
+  (integer) 1
+  ```
+
+- `bitcount key [start end]`
+
+  统计给定字符串中，比特位为1的数量，默认统计整个字符串，也可以指定start和end，satrt和end可以是负数，-1就是最后一个字节，-2就是倒数第二个字节。
+
+  注意start和end都是字节，不是位。
+
+- `bitpos key bit [start [end]]`
+
+  返回字符串中，从左到右，第一个比特值为指定的bit的offset值。
+
+  不指定start和end就是整个字符串从0位开始，同样，这里的start和end都是字节，不是位。
+
+- `bitop operation destkey key [key ...]`
+
+  对多个字符串进行位操作，并将结果保存到destkey中。operation可以是AND、OR、XOR、NOT。
+
+## 使用场景
+
+#### 快速判断一个大数据集中，某个元素是否存在
+
+可以开一个bitmap，先遍历这个大数据集，按照数据把对应的位置为1，然后就可以O(1)的时间复杂度获取某个元素是否存在了。你需要事先直到数据集中的元素的范围，才能创建一个合适的bitmap。
+
+#### 统计用户登录情况
+
+可以每个用户id为key，设置一个bitmap，如果要记录一年，那就是365个bit的bitmap，每一天登录了，就把对应的位置为1即可。可以用bitcount命令获取这个用户一年中登录的天数。
+
+#### 群里已读未读消息的判断
+
+可以用消息id作为bitmap的key，然后一个用户读了，就把这个用户id对应的比特位置为1，未读就是0。依然用bitcount命令可以很方便的统计出已读和未读的成员数量，同时也可以知道具体是哪个用户读了，哪个用户未读。
+
+
+
 # 其他数据类型
 
-目前位置，Redis共有9种数据类型，除了以上5种以外，还有下列四种：
+目前位置，Redis共有9种数据类型，除了以上6种以外，还有下列3种：
 
-- bitmap：位图
 - geohash：地理位置坐标
 - hyperloglog：基数统计类型
 - BloomFilter：布隆过滤器
 
-后续有机会再进行研究。
+剩下的后续有机会再进行研究。
 
 # 关于Key的一些常用指令
 
