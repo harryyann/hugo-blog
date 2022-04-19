@@ -163,7 +163,7 @@ Redis持久化的方式 快照方式RDB RDB(Redis DataBase)，某一个时刻，
 
     ,
         "url" : "https:\/\/yanghairui.life\/post\/redis%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6\/",
-        "wordCount" : "234",
+        "wordCount" : "244",
         "genre" : [ 
       
       "缓存"
@@ -460,6 +460,18 @@ dir ./
 <li>RDB是根据配置的策略进行持久化的，redis挂掉会<strong>丢失上次持久化到现在的数据量</strong>。</li>
 <li>RDB需要fork子进程进行持久化，且会加载内存中的所有数据，如果数据集很大，<strong>fork的操作可能很耗资源</strong>，虽然持久化的过程是不阻塞主线程的，但是创建子进程的时间可能会偏长，甚至高达几毫秒到一秒。</li>
 </ul>
+<h2 id="rdb的cow机制">RDB的COW机制</h2>
+<h4 id="copy-on-write">copy-on-write</h4>
+<p>COW（copy-on-write）写时复制机制，是一种当多个线程需要操作同一份数据时，减少内存分配的机制。</p>
+<p>在Redis主线程fork一个子进程执行<code>bgsave</code>或者<code>bgrewriteaof</code>命令时，子进程会和父进程共享一个内存空间，如果父进程此时没有写操作，那么子进程就可以顺利读取数据写入磁盘，只有在父进程发生写操作修改内存数据时，才会真正去分配内存空间并复制数据，而且也只是复制被修改的内存页中的数据，并不是全部的内存数据；</p>
+<p>COW机制的主要好处是</p>
+<ul>
+<li>减少分配和复制资源时带来的瞬时延迟</li>
+<li>减少不必要的内存分配</li>
+</ul>
+<p>可以看出，COW机制在写少读多时很有效，但是如果写操作变多，那复制的性能就会变差。</p>
+<p>所以如果是dict出现rehash时，那么写入操作将是不可避免的，在执行<code>bgsave</code>或者<code>bgrewriteaof</code>创建子进程生成RDB文件时，为了提高COW的效率，dict的负载因子阈值就会提升到5，以减少写入操作。</p>
+<p>COW机制在Go的原子操作中也有很多应用。</p>
 <h1 id="aof">AOF</h1>
 <p>AOF（Append Only File）中文是附加到文件，顾名思义 AOF 可以把 Redis 每个键值对操作都记录到文件（appendonly.aof）中。</p>
 <h2 id="aof的配置">AOF的配置</h2>

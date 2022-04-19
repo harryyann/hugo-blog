@@ -236,7 +236,7 @@ load_factor = ht[0].used / ht[0].size
 
 即ht[0]中使用的节点数，除以总共的节点数，以此来评判哈希表装载情况。Redis规定常规情况下当负载因子大于 1 时会触发rehash自动扩容，即如果ht[0]的长度是4，当存储了4个键值对时就需要扩容；当负载因子小于 0.1 时则会触发自动缩容。
 
-如果服务器正在执行 `bgsave` 或者 `bgrewriteaof` 命令时，此时扩容的条件就变成了负载因子大于 5 (这两个命令可以参考文章[Redis的持久化](https://yanghairui.life/post/redis%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6/))。
+如果服务器正在执行 `bgsave` 或者 `bgrewriteaof` 命令时，此时扩容的条件就变成了负载因子大于 5，主要是为了提高copy-on-write机制的效率 (这里可以参考文章[Redis的持久化](https://yanghairui.life/post/redis%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6/))。
 
 #### 渐进式的扩缩容方式
 

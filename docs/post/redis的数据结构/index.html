@@ -567,7 +567,7 @@
 <p>通过哈希表的负载因子来评判一个哈希表是否存储了过多的数据，负载因子的计算方式是：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>load_factor <span style="color:#f92672">=</span> ht[<span style="color:#ae81ff">0</span>].used <span style="color:#f92672">/</span> ht[<span style="color:#ae81ff">0</span>].size
 </span></span></code></pre></div><p>即ht[0]中使用的节点数，除以总共的节点数，以此来评判哈希表装载情况。Redis规定常规情况下当负载因子大于 1 时会触发rehash自动扩容，即如果ht[0]的长度是4，当存储了4个键值对时就需要扩容；当负载因子小于 0.1 时则会触发自动缩容。</p>
-<p>如果服务器正在执行 <code>bgsave</code> 或者 <code>bgrewriteaof</code> 命令时，此时扩容的条件就变成了负载因子大于 5 (这两个命令可以参考文章<a href="https://yanghairui.life/post/redis%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6/">Redis的持久化</a>)。</p>
+<p>如果服务器正在执行 <code>bgsave</code> 或者 <code>bgrewriteaof</code> 命令时，此时扩容的条件就变成了负载因子大于 5，主要是为了提高copy-on-write机制的效率 (这里可以参考文章<a href="https://yanghairui.life/post/redis%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6/">Redis的持久化</a>)。</p>
 <h4 id="渐进式的扩缩容方式">渐进式的扩缩容方式</h4>
 <p>Redis 对哈希表进行扩容的方式大致如下：</p>
 <ol>
