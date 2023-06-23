@@ -8,7 +8,7 @@ draft: false
 
 **gmail**: `horace27149@gmail.com`
 
-**wechat**: `redamancy40520`
+**wechat**: `eWFuZ2hhaXJ1aQo`
 
 
 
