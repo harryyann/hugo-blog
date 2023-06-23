@@ -27,14 +27,14 @@ pygmentsCodefencesGuessSyntax = false
 
 [params]
 disableThemeSwitcher = false
-title = "Harry Yang's Website"
+title = "Harry's Website"
 author = "杨海瑞"
-copyright = "2021-2022"
+copyright = "2022-2023"
 description = """
 Per aspera ad astra.
 循此苦旅，终抵群星。
 """
-profilePicture = "images/profile5.jpg"
+profilePicture = "images/profile-2023-06-23.jpg"
 keywords = "tech/life"
 favicon = "favicons/"
 contentRatio = 0.75
@@ -78,15 +78,15 @@ icon = "fab fa-github"
 title = "GitHub"
 url = "https://github.com/harryyann"
 
-[[params.socialIcons]]
-icon = "fab fa-zhihu"
-title = "zhihu"
-url = "https://www.zhihu.com/people/yang-hai-rui-88"
-
-[[params.socialIcons]]
-icon = "fas fa-envelope"
-title = "e-mail"
-url = "http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=941811450@qq.com"
+# [[params.socialIcons]]
+# icon = "fab fa-zhihu"
+# title = "zhihu"
+# url = "https://www.zhihu.com/people/yang-hai-rui-88"
+#
+# [[params.socialIcons]]
+# icon = "fas fa-envelope"
+# title = "e-mail"
+# url = "http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=941811450@qq.com"
 
 ## Menu items
 [menu]

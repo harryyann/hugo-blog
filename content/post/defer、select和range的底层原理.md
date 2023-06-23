@@ -8,7 +8,7 @@ DisableComments: false
 draft: false
 ---
 
-# Defer
+# 一、Defer
 
 defer语句用于延迟函数的调用，每次defer都会把一个函数压入栈中，当前函数返回前，再把延迟的函数取出来并执行，所以多个defer语句是**后写的先执行**的。
 
@@ -150,7 +150,7 @@ defer的数据结构和一般函数类似，也有栈地址，程序计数器，
 
 
 
-# Select
+# 二、Select
 
 select是golang语言层面提供的IO多路复用的机制，可以同时检测多个channel是否ready。
 
@@ -287,7 +287,7 @@ func selectgo(cas0 *scase, order0 *uint16, ncases int) (int, bool)
 - 对于select语句中读操作，要判断是否成功读取，因为关闭的channel也可以读取，此时ok=false，可能会读到错误的信息。
 
 
-# Range
+# 三、Range
 
 range是一种迭代遍历手段，可操作的类型有数组，切片，Map，channel等。
 

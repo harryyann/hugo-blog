@@ -6,7 +6,7 @@ Categories: [golang]
 draft: false
 ---
 
-# Map的底层数据结构
+# 一、Map的底层数据结构
 
 Golang的map数据类型底层使用的是哈希表实现，一个哈希表可以有多个哈希表节点，即bucket，一个bucket保存着map中的一个或者一组键值对。
 
@@ -80,7 +80,7 @@ type bmap struct {
 
 原理上和上述描述的都是一样的。
 
-# 哈希冲突
+# 二、哈希冲突
 
 当有两个key经过哈希运算时低8位相同从而导致被分配到了同一个bucket上，这就说明出现了哈希冲突，而一个bucket可以存放8个key-value，所以会将高八位哈希值存在tophash字段上，然后把key-value存在data字段上。当8个位置都存满了，就会使用类似链表的方式把这个bucket链向一个新的bucket。overflow字段就是指向这个新bucket的字段(顾名思义，overflow就是溢出的意思)。
 
@@ -134,7 +134,7 @@ oldbuckets就是旧的数组，只有一个bucket，且这一个bucket中存了7
 
 
 
-# Map查找key的过程
+# 三、Map查找key的过程
 
 1. 根据key值算出哈希值；
 2. 取哈希值低8位与hmap.B取模后确定落在buckets数组中的哪一个bucket上；
@@ -144,7 +144,7 @@ oldbuckets就是旧的数组，只有一个bucket，且这一个bucket中存了7
 6. 如果当前处于搬迁过程，则优先从oldbuckets数组中查找；
 7. 如果查找不到，也不会返回空值，而是返回对应数据类型的0值(int就是0，string就是"")。
 
-# Map插入key的过程
+# 四、Map插入key的过程
 
 1. 根据key值算出哈希值；
 2. 取哈希值低位与hmap.B取模确定bucket位置；

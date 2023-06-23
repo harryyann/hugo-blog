@@ -6,7 +6,7 @@ Categories: [golang]
 draft: false
 ---
 
-# Channel的底层数据结构
+# 一、Channel的底层数据结构
 
 channel是golang在语言层面提供的goroutine通信机制，也是我们经常使用的数据结构，它的数据结构如下：
 
@@ -111,7 +111,7 @@ lock字段是一个mutex，明显channel是并发安全的。channel同一时刻
 
 
 
-## 读数据的过程
+# 二、读数据的过程
 
 读数据分为四种情况：有写阻塞且chan没有缓冲区、有写阻塞且chan有缓冲区、没有写阻塞且缓冲区中有数据、没有写阻塞且缓冲区中无数据。
 
@@ -137,7 +137,7 @@ chan有缓冲区，且写阻塞，此时一定是chan的缓冲区满了，此时
 
 ![](/images/chan/read.png)
 
-# Channel的关闭的问题
+# 三、Channel的关闭的问题
 
 关闭channel时会对等待队列中的G做如下操作：
 
@@ -164,7 +164,7 @@ if ok{
 }
 ```
 
-# Channel的常见用法
+# 四、Channel的常见用法
 
 ## 单向chan
 

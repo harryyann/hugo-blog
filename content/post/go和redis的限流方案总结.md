@@ -1,5 +1,5 @@
 ---
-title: "Go和Redis的限流方案总结"
+title: "Golang和Redis的限流方案总结"
 date: 2022-04-18T04:29:55+08:00
 Description: ""
 Tags: [微服务, Redis, Go, Kratos]
