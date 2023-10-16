@@ -47,7 +47,7 @@ select city,name,age from t where city='杭州' order by name limit 1000;
 
 使用sort buffer后，上述这条语句的最常规的执行过程大概如下：
 
-1. 首先初始化这个线程的 sort buffer，确定需要查询name、age、age 三个字段；
+1. 首先初始化这个线程的 sort buffer，确定需要查询name、city、age 三个字段；
 2. 查询where条件是 `city="杭州"`，city 字段可以查询索引，通过访问二级索引找到所有 city="杭州" 的行的主键 id ；
 3. 然后用主键回表，查询到对应的完整行，取出name、city 和 age 三个字段，存入到 sort buffer 中；
 4. 一行一行的用主键查询出所有需要的行，然后在sort buffer中按照name做排序；
